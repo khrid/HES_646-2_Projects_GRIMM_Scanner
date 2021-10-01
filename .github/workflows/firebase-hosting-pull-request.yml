@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: test
-      url: ${{ steps.deploy.outputs.url }}
+      url: ${{ steps.deploy.outputs.urls }}
     steps:
       - name: "checkout"
         id: "checkout"
