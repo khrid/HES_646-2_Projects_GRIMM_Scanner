@@ -8,9 +8,15 @@ jobs:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: sudo snap install flutter --classic && flutter channel beta && flutter config --enable-web && flutter build web
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: "checkout"
+        id: "checkout"
+        uses: actions/checkout@v2
+      - name: "get flutter & build"
+        id: "build"
+        run: sudo snap install flutter --classic && flutter channel beta && flutter config --enable-web && flutter build web
+      - name: "deploy"
+        id: "deploy"
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GRIMM_SCANNER }}'
