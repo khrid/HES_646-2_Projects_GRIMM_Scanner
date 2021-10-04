@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: develop
-      url: '${{ secrets.FIREBASE_DEVELOP_URL }}'
+      url: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - run: sudo snap install flutter --classic && flutter channel beta && flutter config --enable-web && flutter build web
