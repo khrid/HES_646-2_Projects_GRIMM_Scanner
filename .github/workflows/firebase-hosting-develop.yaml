@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: develop
-      url: https://grimm-scanner-develop.web.app/
+      url: https://grimm-scanner--develop-dei4ulvh.web.app
     steps:
       - uses: actions/checkout@v2
       - run: sudo snap install flutter --classic && flutter channel beta && flutter config --enable-web && flutter build web
