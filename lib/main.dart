@@ -1,12 +1,13 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/home.dart';
 
 Future<void> main() async {
-  //WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(App());
 }
 
@@ -27,7 +28,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void initializeFlutterFire() async {
     try {
       // Wait for Firebase to initialize and set `_initialized` state to true
-      //await Firebase.initializeApp();
+      await Firebase.initializeApp();
       setState(() {
         _initialized = true;
         print("Flutterfire initialized successfully");
@@ -40,9 +41,17 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     }
   }
 
+  void getTestFirebaseValue() async {
+    DocumentSnapshot ds =
+    await FirebaseFirestore.instance.collection("tests").doc(
+        "OqwvFM4JOPZAUWCeiDhv").get();
+    print("Value retrieved from Firebase Firestore : "+ds.get("target"));
+  }
+
   @override
   void initState() {
-    //initializeFlutterFire();
+    initializeFlutterFire();
+    getTestFirebaseValue();
     super.initState();
   }
 
@@ -61,8 +70,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         home: Home(
           title: '',
         )
-        //home: const (title: '⛑️ GRIMM Scanner ⛑️'),
-        );
+      //home: const (title: '⛑️ GRIMM Scanner ⛑️'),
+    );
   }
 }
 
