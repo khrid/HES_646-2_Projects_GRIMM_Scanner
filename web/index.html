@@ -39,7 +39,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-remote-config.js"></script>
-<!--
+
 <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
@@ -105,7 +105,7 @@
     }
 
 </script>
-<script type="module">
+<!--<script type="module">
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-analytics.js";
@@ -143,14 +143,13 @@
   };
 
   // Initialize Firebase
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      firebase.analytics();
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
 </script>
 
 <!-- This script installs service_worker.js to provide PWA functionality to
      application. For more information, see:
-     https://developers.google.com/web/fundamentals/primers/service-workers -->
+     https://developers.google.com/web/fundamentals/primers/service-workers
 <script>
         if ('serviceWorker' in navigator) {
           window.addEventListener('flutter-first-frame', function () {
@@ -158,6 +157,6 @@
           });
         }
       </script>
-<script src="main.dart.js" type="application/javascript"></script>
+<script src="main.dart.js" type="application/javascript"></script> -->
 </body>
 </html>

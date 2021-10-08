@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/home.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp();
   runApp(App());
 }
 
@@ -27,7 +27,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void initializeFlutterFire() async {
     try {
       // Wait for Firebase to initialize and set `_initialized` state to true
-      await Firebase.initializeApp();
+      //await Firebase.initializeApp();
       setState(() {
         _initialized = true;
         print("Flutterfire initialized successfully");
@@ -42,7 +42,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    initializeFlutterFire();
+    //initializeFlutterFire();
     super.initState();
   }
 
