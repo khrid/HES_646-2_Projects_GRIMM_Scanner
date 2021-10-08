@@ -50,7 +50,6 @@ class CustomDrawer extends StatelessWidget {
       {required IconData icon,
       required String text,
       GestureTapCallback? onTap}) {
-    assert(text != null);
     return ListTile(
       title: Row(
         children: <Widget>[
@@ -66,20 +65,17 @@ class CustomDrawer extends StatelessWidget {
   }
 
     _createStickyBottomItems() {
-    return Container(
-        // This align moves the children to the bottom
-        child: Align(
-            alignment: FractionalOffset.bottomCenter,
-            // This container holds all the children that will be aligned
-            // on the bottom and should not scroll with the above ListView
-            child: Container(
-                child: Column(
-              children: const <Widget>[
-                Divider(),
-                ListTile(
-                  title: Text("0.0.1"),
-                )
-              ],
-            ))));
+    return Align(
+        alignment: FractionalOffset.bottomCenter,
+        // This container holds all the children that will be aligned
+        // on the bottom and should not scroll with the above ListView
+        child: Column(
+          children: const <Widget>[
+        Divider(),
+        ListTile(
+          title: Text("0.0.2"),
+        )
+          ],
+        ));
   }
 }
