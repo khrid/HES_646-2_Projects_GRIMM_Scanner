@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "505728833508",
+    "project_id": "grimm-scanner",
+    "storage_bucket": "grimm-scanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:505728833508:android:a3f1c40e813956e16c19f1",
+        "android_client_info": {
+          "package_name": "ch.grimmvs.scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "505728833508-8p79o168t432jpjhl8c5ug0gplgq52gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQxCGXA8eoMmWIVdu7rs16wOVF8Yz759M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "505728833508-8p79o168t432jpjhl8c5ug0gplgq52gb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
