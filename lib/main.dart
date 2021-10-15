@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/scan.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,10 +44,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   void getTestFirebaseValue() async {
-    DocumentSnapshot ds =
-    await FirebaseFirestore.instance.collection("tests").doc(
-        "OqwvFM4JOPZAUWCeiDhv").get();
-    print("Value retrieved from Firebase Firestore : "+ds.get("target"));
+    DocumentSnapshot ds = await FirebaseFirestore.instance
+        .collection("tests")
+        .doc("OqwvFM4JOPZAUWCeiDhv")
+        .get();
+    print("Value retrieved from Firebase Firestore : " + ds.get("target"));
   }
 
   @override
@@ -58,18 +61,17 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     /*analytics.logEvent(
         name: "test_event", parameters: <String, dynamic>{'sender': 'david'});*/
-
+    // Ensure that plugin services are initialized so that `availableCameras()`
+    // can be called before `runApp()`
     // TODO: implement build
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'GRIMM Scanner',
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-        ),
-        //navigatorObservers: <NavigatorObserver>[observer],
-        home: Home(
-          title: '',
-        )
+      debugShowCheckedModeBanner: false,
+      title: 'GRIMM Scanner',
+      theme: ThemeData(
+        primarySwatch: Colors.grey,
+      ),
+      //navigatorObservers: <NavigatorObserver>[observer],
+      home: const Home(),
       //home: const (title: '⛑️ GRIMM Scanner ⛑️'),
     );
   }
