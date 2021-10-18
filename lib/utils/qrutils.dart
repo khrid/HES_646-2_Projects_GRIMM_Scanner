@@ -1,18 +1,26 @@
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter/widgets.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class QRUtils {
-  Future<void> scanQR() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
+  /// Renvoie un Widget QrImage avec le paramètre [text] encodé dans un QR code
+  static Widget generateQrWidgetFromString(String text) {
+    return QrImage(
+      data: text,
+      // le texte à encoder dans un QR code
+      version: QrVersions.auto,
+      // la version du QR (+ de texte => version + haute)
+      size: 150.0,
+      // la taille
+      errorStateBuilder: (cxt, err) {
+        // en cas d'erreur de génération
+        return const Center(
+          child: Text(
+            "🐛 Erreur lors de le génération du code QR 🐛",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 20.0),
+          ),
+        );
+      },
+    );
   }
 }
