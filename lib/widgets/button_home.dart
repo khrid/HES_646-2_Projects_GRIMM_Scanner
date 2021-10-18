@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomHomeButton extends StatelessWidget {
   CustomHomeButton({Key? key, required this.title, this.onPressed}) : super(key: key);
-  String title;
+  final String title;
   var onPressed;
 
   @override
