@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
 class Home extends StatefulWidget {
@@ -12,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  String _scanBarcode = 'Unknown';
+  String _qrCode = 'Unknown';
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class _HomeState extends State<Home> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR,)
+                CustomHomeButton(title: "SCANNER", onPressed: scanQR)
               ],
             ),
           ],
@@ -55,14 +56,28 @@ class _HomeState extends State<Home> {
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
+    // Quand on reconnait un code QR
     setState(() {
-      if (!barcodeScanRes.startsWith(Constants.QRCODE_STARTS_WITH)) {
-        const snackBar =
-            SnackBar(content: Text('QR code non géré par cette application.'));
+      // S'il commence bien par la chaine "QRGRIMM_" (pour être sûr de ne
+      // travailler uniquement avec un QR de notre application
+      if (barcodeScanRes.startsWith(Constants.QRCODE_STARTS_WITH)) {
+        // on le stocke dans la variable du state
+        _qrCode = barcodeScanRes;
+        // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
+        Navigator.pushNamed(context, ItemDetail.routeName, arguments: _qrCode);
 
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        // Sinon s'il est égal à -1 (quand l'utilisateur appuie sur "annuler"
+        // depuis l'écran de scannage
+      } else if (barcodeScanRes == "-1") {
+        // on affiche un message indiquant que l'action a été annulée
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: const Text("Lecture QR annulée.")));
+
+        // sinon
       } else {
-        _scanBarcode = barcodeScanRes;
+        // on affiche un message indiquant qu'on ne gère pas ce code QR
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("QR code scanné non géré par cette application.")));
       }
     });
   }
