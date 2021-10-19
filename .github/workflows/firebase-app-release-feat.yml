@@ -20,7 +20,7 @@ jobs:
       - name: current dir
         run: pwd
       - name: build release
-        run: cd /home/runner/work/HES_646-2_Projects_GRIMM_Scanner/HES_646-2_Projects_GRIMM_Scanner/android && ./gradlew assembleRelease
+        run: ./home/runner/work/HES_646-2_Projects_GRIMM_Scanner/HES_646-2_Projects_GRIMM_Scanner/android/gradlew assembleRelease
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
