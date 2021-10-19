@@ -17,6 +17,8 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: fake local properties
+        run: echo "test" > android/local.properties
       - name: build release
         run: cd android && bash ./gradlew assembleRelease
       - name: upload artifact to Firebase App Distribution
