@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -40,45 +41,52 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> scanQR() async {
-    print("scanQR called");
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    // Quand on reconnait un code QR
-    setState(() {
-      // S'il commence bien par la chaine "QRGRIMM_" (pour être sûr de ne
-      // travailler uniquement avec un QR de notre application
-      if (barcodeScanRes.startsWith(Constants.QRCODE_STARTS_WITH)) {
-        // on le stocke dans la variable du state
-        _qrCode = barcodeScanRes;
-        // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
-        Navigator.pushNamed(context, ItemDetail.routeName, arguments: _qrCode);
-
-        // Sinon s'il est égal à -1 (quand l'utilisateur appuie sur "annuler"
-        // depuis l'écran de scannage
-      } else if (barcodeScanRes == "-1") {
-        // on affiche un message indiquant que l'action a été annulée
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: const Text("Lecture QR annulée.")));
-
-        // sinon
-      } else {
-        // on affiche un message indiquant qu'on ne gère pas ce code QR
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text("QR code scanné non géré par cette application.")));
+    // La libraire QR n'est pas prévue pour le web, il faut informer au cas où
+    if (!kIsWeb) {
+      print("scanQR called");
+      String barcodeScanRes;
+      // Platform messages may fail, so we use a try/catch PlatformException.
+      try {
+        barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+            '#ff6666', 'Cancel', true, ScanMode.QR);
+        print(barcodeScanRes);
+      } on PlatformException {
+        barcodeScanRes = 'Failed to get platform version.';
       }
-    });
+
+      // If the widget was removed from the tree while the asynchronous platform
+      // message was in flight, we want to discard the reply rather than calling
+      // setState to update our non-existent appearance.
+      if (!mounted) return;
+
+      // Quand on reconnait un code QR
+      setState(() {
+        // S'il commence bien par la chaine "QRGRIMM_" (pour être sûr de ne
+        // travailler uniquement avec un QR de notre application
+        if (barcodeScanRes.startsWith(Constants.QRCODE_STARTS_WITH)) {
+          // on le stocke dans la variable du state
+          _qrCode = barcodeScanRes;
+          // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
+          Navigator.pushNamed(context, ItemDetail.routeName,
+              arguments: _qrCode);
+
+          // Sinon s'il est égal à -1 (quand l'utilisateur appuie sur "annuler"
+          // depuis l'écran de scannage
+        } else if (barcodeScanRes == "-1") {
+          // on affiche un message indiquant que l'action a été annulée
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: const Text("Lecture QR annulée.")));
+
+          // sinon
+        } else {
+          // on affiche un message indiquant qu'on ne gère pas ce code QR
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("QR code scanné non géré par cette application.")));
+        }
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("La lecture QR n'est possible que depuis l'application native Android / iOS.")));
+    }
   }
 }

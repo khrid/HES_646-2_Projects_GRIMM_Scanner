@@ -4,7 +4,7 @@ name: Build & upload to Firebase App Distribution
 'on':
   push:
     branches:
-      - feat*
+      #- feat*
 
 jobs:
   build:
