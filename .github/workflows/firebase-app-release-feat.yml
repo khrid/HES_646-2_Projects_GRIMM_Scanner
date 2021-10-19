@@ -20,7 +20,7 @@ jobs:
       - name: current dir
         run: pwd
       - name: build release
-        run: ./gradlew assembleRelease
+        run: ./android/gradlew assembleRelease
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
