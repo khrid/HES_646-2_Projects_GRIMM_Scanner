@@ -6,6 +6,8 @@ import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
+import 'create_account.dart';
+
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -31,13 +33,20 @@ class _HomeState extends State<Home> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR)
+                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                CustomHomeButton(title: "CREATION USER", onPressed: createUser)
               ],
             ),
           ],
         ))
         //drawer: const CustomDrawer(),
         );
+  }
+
+  Future<void> createUser() async {
+    setState(() {
+      Navigator.pushNamed(context, CreateAccountScreen.routeName);
+    });
   }
 
   Future<void> scanQR() async {
