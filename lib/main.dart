@@ -69,6 +69,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       title: 'GRIMM Scanner',
       theme: ThemeData(
         primarySwatch: Colors.grey,
+        primaryColor: Color (0xFFECF0F9),
       ),
       //navigatorObservers: <NavigatorObserver>[observer],
       home: const Home(),

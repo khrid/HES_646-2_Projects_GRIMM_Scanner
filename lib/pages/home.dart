@@ -25,10 +25,11 @@ class _HomeState extends State<Home> {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
         body: Container(
+          color:  Theme.of(context).primaryColor,
             child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -36,7 +37,7 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                CustomHomeButton(title: "CREATION USER", onPressed: createUser)
+                CustomHomeButton(title: "CREER UN PROFIL", onPressed: createUser)
               ],
             ),
           ],

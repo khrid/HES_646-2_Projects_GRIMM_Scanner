@@ -27,7 +27,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   TextEditingController lastnameController = new TextEditingController(text: "Gallay"); // controlleur du name
   TextEditingController firstnameController = new TextEditingController(text: "Robin"); // controlleur du prenom
   TextEditingController emailController = new TextEditingController(text: "user@grimm.ch");// controlleur du email
-  TextEditingController passwordController = new TextEditingController(text: "123");// controlleur du password
+  TextEditingController passwordController = new TextEditingController(text: "test123");// controlleur du password
   TextEditingController groupController = new TextEditingController(text: "group1");// controlleur du group
 
 
@@ -48,6 +48,11 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   @override
   Widget build(context) {
     return Scaffold(
+      appBar: AppBar(
+          title: const Text("Création d'un compte"),
+          backgroundColor: Theme.of(context).primaryColor,
+          elevation: 0,
+        ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Form(
         key: _key,
@@ -163,6 +168,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             TextFormField(
+              obscureText: true,
               controller: passwordController,
                validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -231,9 +237,12 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).backgroundColor,
+                primary: Theme.of(context).primaryColor,
                 textStyle: TextStyle(fontFamily: "Raleway-Regular",
-                  fontSize: 14.0)
+                  fontSize: 14.0),
+                side: const BorderSide(width: 1.0, color: Colors.black),
+                padding: EdgeInsets.all(20.0),
+
               ),
                  onPressed: () async { // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
                               if (_key.currentState!.validate()) {
