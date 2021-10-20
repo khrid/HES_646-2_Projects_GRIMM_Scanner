@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
@@ -68,12 +69,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       title: 'GRIMM Scanner',
       theme: ThemeData(
         primarySwatch: Colors.grey,
+        primaryColor: Color (0xFFECF0F9),
       ),
       //navigatorObservers: <NavigatorObserver>[observer],
       home: const Home(),
       initialRoute: '/',
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
+        CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
       },
     );
   }
