@@ -4,6 +4,9 @@
 */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/service/AuthenticationService.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -17,53 +20,30 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccountScreen> {
   bool isServiceProvider = false; // TODO : gérer le serviceProvider
   final _key = GlobalKey<FormState>();
-  //final AuthentificationService _auth = AuthentificationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
+  final AuthenticationService _auth = AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
   
   bool isChecked = false;
   bool isUploading = false;
-  TextEditingController pseudoController = TextEditingController(); // controlleur du username
-  TextEditingController emailController = TextEditingController(); // controlleur du email
-  TextEditingController passwordController = TextEditingController();// controlleur du password
-  //String userId = Uuid().v4();
+  TextEditingController lastnameController = new TextEditingController(text: "Gallay"); // controlleur du name
+  TextEditingController firstnameController = new TextEditingController(text: "Robin"); // controlleur du prenom
+  TextEditingController emailController = new TextEditingController(text: "user@grimm.ch");// controlleur du email
+  TextEditingController passwordController = new TextEditingController(text: "123");// controlleur du password
+  TextEditingController groupController = new TextEditingController(text: "group1");// controlleur du group
+
 
   @override
   void initState() {
     super.initState();
   }
 
+  var errorMessage = "";
 
-
- /* createUserInFirestore({required String pseudo, required String email, required String password}){
-
-    usersRef
-        .add({
-   //   "id" : userId,
-      "username": pseudo,
-      "email" : email,
-      "password" : password,
-      "isServiceProvider" : false,
-      "isSubscribed" : false,
+  void changeErrorMessage(String message) {
+    setState(() {
+      errorMessage = message;
     });
   }
 
-  handleSubmit() {
-    setState((){
-      isUploading = true;
-    });
-
-    createUserInFirestore(
-      pseudo: pseudoController.text,
-      email: emailController.text,
-      password: passwordController.text,
-    );
-    pseudoController.clear();
-    emailController.clear();
-    passwordController.clear();
-    setState((){
-      isUploading = false;
-      userId = Uuid().v4();
-    });
-  }*/
 
   @override
   Widget build(context) {
@@ -74,7 +54,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
         child: ListView(
           padding: EdgeInsets.all(50),
           children: <Widget>[
-            //isUploading ? linearProgress() : Text(""),
             Text(
               "Créez un nouvel utilisateur",
               style: TextStyle(
@@ -88,9 +67,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             TextFormField(
-              controller: pseudoController,
+              controller: firstnameController,
               validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'Prénom ne peut pas etre vide';
                           } else
                             return null;
@@ -120,9 +99,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             TextFormField(
-              controller: pseudoController,
+              controller: lastnameController,
               validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'Nom ne peut pas etre vide';
                           } else
                             return null;
@@ -186,7 +165,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             TextFormField(
               controller: passwordController,
                validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'Mot de passe ne peut pas etre vide';
                           } else
                             return null;
@@ -216,9 +195,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             TextFormField(
-              controller: pseudoController,
+              controller: groupController,
               validator: (value) {
-                          if (value == null) {
+                          if (value == null || value.isEmpty) {
                             return 'Groupe ne peut pas etre vide';
                           } else
                             return null;
@@ -256,23 +235,25 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 textStyle: TextStyle(fontFamily: "Raleway-Regular",
                   fontSize: 14.0)
               ),
-                 onPressed: () async { /*// ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
+                 onPressed: () async { // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
                               if (_key.currentState!.validate()) {
-                                ModelUser modelUser = ModelUser(
-                                    username: pseudoController.text,
-                                    email: emailController.text,
-                                    isServiceProvider: isServiceProvider);
+                                GrimmUser grimmUser = GrimmUser(
+                                    name: lastnameController.text,
+                                    firstname: firstnameController.text,
+                                    email: emailController.text);
                                 Object? result = await _auth.signUp(
                                     email: emailController.text,
                                     password: passwordController.text,
-                                    modelUser: modelUser);
-                                if (result is ModelUser) {
+                                    grimmUser: grimmUser);
+                                if (result is GrimmUser) {
                                   print("User CREATE" + result.toString());
-                                  Navigator.of(context).pushNamed('/eventslist_screen');;
+                                  changeErrorMessage("");
+                                  Navigator.pushNamed(
+                                      context, "/");
                                 } else {
-                                    // gérer l'erreur
+                                    changeErrorMessage(result.toString());
                                 }
-                              } */ 
+                              }  
                             },          
                             child: Text("VALIDER")),   
             SizedBox(
@@ -286,12 +267,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   }
 
 
-    Widget buildServiceProvider() => Transform.scale(
-        scale: 1,
-        child: Switch(
-          value: isServiceProvider,
-          onChanged: (value) => setState(() => this.isServiceProvider = value),
-        ),
-      );
+
 }
 
