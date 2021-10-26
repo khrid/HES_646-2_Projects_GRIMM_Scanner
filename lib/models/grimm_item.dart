@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grimm_scanner/assets/constants.dart';
 
 class GrimmItem {
   late final String id;
@@ -28,7 +29,7 @@ class GrimmItem {
 
   /// Default constructor
   GrimmItem({
-    this.id = "-1",
+    required this.id,
     required this.description,
     required this.location,
     required this.idCategory,
@@ -89,5 +90,11 @@ class GrimmItem {
   /// Set an user UID
   void setid(String id) {
     this.id = id;
+  }
+
+  /// Returns the String for QR code generation
+  String getIdForQrCode() {
+    print("GrimmItem - getIdForQrCode - " + Constants.grimmQrCodeStartsWith + this.id);
+    return Constants.grimmQrCodeStartsWith + this.id;
   }
 }

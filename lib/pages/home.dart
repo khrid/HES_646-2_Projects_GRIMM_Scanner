@@ -37,6 +37,9 @@ class _HomeState extends State<Home> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                const SizedBox(height: 10.0,),
+                CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                const SizedBox(height: 10.0,),
                 CustomHomeButton(title: "CREER UN PROFIL", onPressed: createUser)
               ],
             ),
@@ -52,8 +55,17 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<void> fakeScan() async {
+    setState(() {
+      _qrCode = Constants.grimmQrCodeStartsWith + "13tBavQPNXaLJFH4vqnc";
+      // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
+      Navigator.pushNamed(context, ItemDetail.routeName,
+          arguments: _qrCode);
+    });
+  }
+
   Future<void> scanQR() async {
-    // La libraire QR n'est pas prévue pour le web, il faut informer au cas où
+    // La librairie QR n'est pas prévue pour le web, il faut informer au cas où
     if (!kIsWeb) {
       print("scanQR called");
       String barcodeScanRes;
@@ -75,7 +87,7 @@ class _HomeState extends State<Home> {
       setState(() {
         // S'il commence bien par la chaine "QRGRIMM_" (pour être sûr de ne
         // travailler uniquement avec un QR de notre application
-        if (barcodeScanRes.startsWith(Constants.QRCODE_STARTS_WITH)) {
+        if (barcodeScanRes.startsWith(Constants.grimmQrCodeStartsWith)) {
           // on le stocke dans la variable du state
           _qrCode = barcodeScanRes;
           // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
@@ -87,7 +99,7 @@ class _HomeState extends State<Home> {
         } else if (barcodeScanRes == "-1") {
           // on affiche un message indiquant que l'action a été annulée
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: const Text("Lecture QR annulée.")));
+              const SnackBar(content: Text("Lecture QR annulée.")));
 
           // sinon
         } else {
