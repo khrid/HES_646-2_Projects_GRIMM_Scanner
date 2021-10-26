@@ -28,8 +28,6 @@ class _ItemDetailState extends State<ItemDetail> {
           context, "/", (Route<dynamic> route) => false));
     }
 
-
-
     GrimmItem grimmItem = GrimmItem(
         id: qrcode.replaceAll(Constants.grimmQrCodeStartsWith, ""),
         description: "description",
@@ -40,13 +38,13 @@ class _ItemDetailState extends State<ItemDetail> {
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
-
     return Scaffold(
         appBar: AppBar(
           title: const Text("Détail de l'objet"),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
+        backgroundColor: Theme.of(context).primaryColor,
         body: Center(
             // enlever le Center pour ne plus centrer verticalement
             child: SingleChildScrollView(
@@ -59,10 +57,6 @@ class _ItemDetailState extends State<ItemDetail> {
               children: <Widget>[
                 QRUtils.generateQrWidgetFromString(grimmItem.getIdForQrCode()),
                 const SizedBox(height: 20.0),
-                Text(grimmItem.id),
-                Padding(
-                  padding: EdgeInsets.only(top: 40),
-                ),
                 Container(
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
@@ -72,6 +66,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     builder: buildItemDetails,
                   ),
                 ),
+                const SizedBox(height: 60.0),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColor,
@@ -84,7 +79,7 @@ class _ItemDetailState extends State<ItemDetail> {
                       // button for emprunter
                     },
                     child: Text("EMPRUNTER")),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 15.0),
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).primaryColor,
@@ -129,6 +124,7 @@ Widget buildItemDetails(
     if (snapshot.data!.data() != null) {
       var grimmItem = snapshot.data;
       print(grimmItem!.data());
+
       GrimmItem item = GrimmItem(
         id: grimmItem.id,
         description: grimmItem["description"],
@@ -137,21 +133,31 @@ Widget buildItemDetails(
         remark: grimmItem["remark"],
         available: grimmItem["available"],
       );
+
+      var availability;
+      if (item.available == true) {
+        availability = "Disponible";
+      } else {
+        availability = "Emprunté";
+      }
+
       return Container(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text("Emplacement: " + item.location,
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        const SizedBox(height: 20.0),
-        Text("Catégorie: " + item.idCategory,
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        const SizedBox(height: 20.0),
-        Text("Date d'emprunt: " + item.location,
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        const SizedBox(height: 20.0),
-        Text("Status: " + item.available.toString(),
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        const SizedBox(height: 20.0),
-      ]));
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+            Text("Objet : " + item.description,
+                style: TextStyle(color: Colors.black, fontSize: 14)),
+            const SizedBox(height: 20.0),
+            Text("Emplacement : " + item.location,
+                style: TextStyle(color: Colors.black, fontSize: 14)),
+            const SizedBox(height: 20.0),
+            Text("Catégorie : " + item.idCategory,
+                style: TextStyle(color: Colors.black, fontSize: 14)),
+            const SizedBox(height: 20.0),
+            Text("Statut : " + availability,
+                style: TextStyle(color: Colors.black, fontSize: 14)),
+            const SizedBox(height: 20.0),
+          ]));
     } else {
       return Text("No item found");
     }
