@@ -120,6 +120,7 @@ Widget buildItemDetails(
         availability = "Emprunté";
       }
       var category = getCategory(item);
+      print(category);
       return Container(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,8 +131,15 @@ Widget buildItemDetails(
             Text("Emplacement : " + item.location,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
             const SizedBox(height: 20.0),
-            Text("Catégorie : " + item.idCategory,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
+            /*Text("Catégorie : " + item.idCategory,
+                style: TextStyle(color: Colors.black, fontSize: 14)),*/
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('category')
+                  .doc(item.idCategory)
+                  .snapshots(),
+              builder: buildItemCategory,
+            ),
             const SizedBox(height: 20.0),
             Text("Statut : " + availability,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
@@ -181,4 +189,19 @@ Widget buildItemDetails(
   } else {
     return Text("No item details yet :(");
   }
+}
+
+Widget buildItemCategory(BuildContext context,
+    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+  // si on a des données
+  if (snapshot.hasData) {
+    // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+    // encore plus loin pour être sûr
+    // si on a des données et que le doc existe
+    if (snapshot.data!.data() != null) {
+      var grimmCategory = snapshot.data;
+      return Text("Catégorie : " + grimmCategory!.data()!["name"]);
+    }
+  }
+  return const Text("");
 }
