@@ -84,6 +84,17 @@ Widget buildItemDetails(
     _items.doc(i.id).update(i.toJson());
   }
 
+  Future<String> getCategory(GrimmItem i) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final CollectionReference categories = firestore.collection('category');
+
+    final String uid = i.idCategory;
+
+    final result = await categories.doc(uid).get();
+
+    return result.get('name');
+  }
+
   // si on a des données
   if (snapshot.hasData) {
     // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
@@ -108,7 +119,7 @@ Widget buildItemDetails(
       } else {
         availability = "Emprunté";
       }
-
+      var category = getCategory(item);
       return Container(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,41 +136,43 @@ Widget buildItemDetails(
             Text("Statut : " + availability,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
             const SizedBox(height: 50.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
-                  side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: EdgeInsets.all(10.0),
-                ),
-                onPressed: () async {
-                  if (item.available) {
-                    item.available = false;
-                    updateItem(item);
-                  } else {
-                    //TODO: définir l'action
-                  }
-                },
-                child: Text("EMPRUNTER")),
-            const SizedBox(height: 15.0),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
-                  side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: EdgeInsets.all(10.0),
-                ),
-                onPressed: () async {
-                  if (!item.available) {
-                    item.available = true;
-                    updateItem(item);
-                  } else {
-                    //TODO: définir l'action
-                  }
-                },
-                child: Text("RETOURNER")),
+            if (item.available)
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    textStyle: TextStyle(
+                        fontFamily: "Raleway-Regular", fontSize: 14.0),
+                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    padding: EdgeInsets.all(10.0),
+                  ),
+                  onPressed: () async {
+                    if (item.available) {
+                      item.available = false;
+                      updateItem(item);
+                    } else {
+                      //TODO: définir l'action
+                    }
+                  },
+                  child: Text("EMPRUNTER")),
+            //const SizedBox(height: 15.0),
+            if (!item.available)
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    textStyle: TextStyle(
+                        fontFamily: "Raleway-Regular", fontSize: 14.0),
+                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    padding: EdgeInsets.all(10.0),
+                  ),
+                  onPressed: () async {
+                    if (!item.available) {
+                      item.available = true;
+                      updateItem(item);
+                    } else {
+                      //TODO: définir l'action
+                    }
+                  },
+                  child: Text("RETOURNER")),
             const SizedBox(height: 20.0),
           ]));
     } else {
