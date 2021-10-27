@@ -66,6 +66,7 @@ class GrimmItem {
     };
   }
 
+
   /// Retrieves the user info from Firebase document
   Future<void> populateItemInfoFromFirestore() async {
     DocumentSnapshot<Map<String, dynamic>> snap =

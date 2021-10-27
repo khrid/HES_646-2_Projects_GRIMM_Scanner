@@ -15,6 +15,8 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  late CollectionReference _items;
+
   @override
   Widget build(BuildContext context) {
     final qrcode = ModalRoute.of(context)!.settings.arguments == null
@@ -26,6 +28,13 @@ class _ItemDetailState extends State<ItemDetail> {
     if (qrcode == "NULL") {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
+    }
+
+
+    _items= FirebaseFirestore.instance.collection("items");
+
+    Future<void> updateItem(GrimmItem i) async {
+      _items.doc(i.id).update(i.toJson());
     }
 
     GrimmItem grimmItem = GrimmItem(
@@ -76,7 +85,11 @@ class _ItemDetailState extends State<ItemDetail> {
                       padding: EdgeInsets.all(10.0),
                     ),
                     onPressed: () async {
-                      // button for emprunter
+                         if (grimmItem.available) {
+                         grimmItem.available = false;
+                         updateItem(grimmItem);
+                      } else {
+                      }
                     },
                     child: Text("EMPRUNTER")),
                 const SizedBox(height: 15.0),
@@ -90,23 +103,10 @@ class _ItemDetailState extends State<ItemDetail> {
                     ),
                     onPressed: () async {
                       // button for retourner
+                      grimmItem.location = "";
                     },
                     child: Text("RETOURNER")),
                 const SizedBox(height: 20.0),
-                /* pas nécessaire car on a la flèche pour naviguer (salut sylvain)
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      textStyle: TextStyle(
-                          fontFamily: "Raleway-Regular", fontSize: 14.0),
-                      side: const BorderSide(width: 1.0, color: Colors.black),
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    onPressed: () async {
-                      // button for autre scan
-                      Navigator.pushNamed(context, "/");
-                    },
-                    child: Text("MENU")),*/
               ],
             ),
           ],
@@ -159,9 +159,11 @@ Widget buildItemDetails(
             const SizedBox(height: 20.0),
           ]));
     } else {
-      return Text("No item found");
+      return Text("Pas d'object trouvé, scannez à nouveau");
     }
   } else {
     return Text("No item details yet :(");
   }
 }
+
+
