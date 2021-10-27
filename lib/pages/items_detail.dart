@@ -15,8 +15,6 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
-  late CollectionReference _items;
-
   @override
   Widget build(BuildContext context) {
     final qrcode = ModalRoute.of(context)!.settings.arguments == null
@@ -28,13 +26,6 @@ class _ItemDetailState extends State<ItemDetail> {
     if (qrcode == "NULL") {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
-    }
-
-
-    _items= FirebaseFirestore.instance.collection("items");
-
-    Future<void> updateItem(GrimmItem i) async {
-      _items.doc(i.id).update(i.toJson());
     }
 
     GrimmItem grimmItem = GrimmItem(
@@ -76,37 +67,6 @@ class _ItemDetailState extends State<ItemDetail> {
                   ),
                 ),
                 const SizedBox(height: 60.0),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      textStyle: TextStyle(
-                          fontFamily: "Raleway-Regular", fontSize: 14.0),
-                      side: const BorderSide(width: 1.0, color: Colors.black),
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    onPressed: () async {
-                         if (grimmItem.available) {
-                         grimmItem.available = false;
-                         updateItem(grimmItem);
-                      } else {
-                      }
-                    },
-                    child: Text("EMPRUNTER")),
-                const SizedBox(height: 15.0),
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor,
-                      textStyle: TextStyle(
-                          fontFamily: "Raleway-Regular", fontSize: 14.0),
-                      side: const BorderSide(width: 1.0, color: Colors.black),
-                      padding: EdgeInsets.all(10.0),
-                    ),
-                    onPressed: () async {
-                      // button for retourner
-                      grimmItem.location = "";
-                    },
-                    child: Text("RETOURNER")),
-                const SizedBox(height: 20.0),
               ],
             ),
           ],
@@ -116,6 +76,14 @@ class _ItemDetailState extends State<ItemDetail> {
 
 Widget buildItemDetails(
     BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  late CollectionReference _items;
+
+  _items = FirebaseFirestore.instance.collection("items");
+
+  Future<void> updateItem(GrimmItem i) async {
+    _items.doc(i.id).update(i.toJson());
+  }
+
   // si on a des données
   if (snapshot.hasData) {
     // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
@@ -156,6 +124,42 @@ Widget buildItemDetails(
             const SizedBox(height: 20.0),
             Text("Statut : " + availability,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
+            const SizedBox(height: 50.0),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(10.0),
+                ),
+                onPressed: () async {
+                  if (item.available) {
+                    item.available = false;
+                    updateItem(item);
+                  } else {
+                    //TODO: définir l'action
+                  }
+                },
+                child: Text("EMPRUNTER")),
+            const SizedBox(height: 15.0),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(10.0),
+                ),
+                onPressed: () async {
+                  if (!item.available) {
+                    item.available = true;
+                    updateItem(item);
+                  } else {
+                    //TODO: définir l'action
+                  }
+                },
+                child: Text("RETOURNER")),
             const SizedBox(height: 20.0),
           ]));
     } else {
@@ -165,5 +169,3 @@ Widget buildItemDetails(
     return Text("No item details yet :(");
   }
 }
-
-
