@@ -54,6 +54,16 @@ class GrimmItem {
         "}";
   }
 
+  GrimmItem.fromJson(json) :
+      this(
+        id: json.id,
+        description: (json.data()!['description'] ?? ""),
+        location: (json.data()!['description'] ?? ""),
+        idCategory: (json.data()!['idCategory'] ?? ""),
+        remark: (json.data()!['remark'] ?? ""),
+        available: (json.data()!['available'] ?? false),
+      );
+
   /// Translate a MyUser object to JSON
   Map<String, Object?> toJson() {
     return {
@@ -66,6 +76,9 @@ class GrimmItem {
     };
   }
 
+  Future<void> saveToFirestore() async {
+    await FirebaseFirestore.instance.collection("items").doc(id).set(toJson());
+  }
 
   /// Retrieves the user info from Firebase document
   Future<void> populateItemInfoFromFirestore() async {

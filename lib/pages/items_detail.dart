@@ -76,24 +76,13 @@ class _ItemDetailState extends State<ItemDetail> {
 
 Widget buildItemDetails(
     BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-  late CollectionReference _items;
+  /*late CollectionReference _items;
 
   _items = FirebaseFirestore.instance.collection("items");
 
   Future<void> updateItem(GrimmItem i) async {
     _items.doc(i.id).update(i.toJson());
-  }
-
-  Future<String> getCategory(GrimmItem i) async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    final CollectionReference categories = firestore.collection('category');
-
-    final String uid = i.idCategory;
-
-    final result = await categories.doc(uid).get();
-
-    return result.get('name');
-  }
+  }*/
 
   // si on a des données
   if (snapshot.hasData) {
@@ -101,17 +90,7 @@ Widget buildItemDetails(
     // encore plus loin pour être sûr
     // si on a des données et que le doc existe
     if (snapshot.data!.data() != null) {
-      var grimmItem = snapshot.data;
-      print(grimmItem!.data());
-
-      GrimmItem item = GrimmItem(
-        id: grimmItem.id,
-        description: grimmItem["description"],
-        location: grimmItem["location"],
-        idCategory: grimmItem["idCategory"],
-        remark: grimmItem["remark"],
-        available: grimmItem["available"],
-      );
+      GrimmItem item = GrimmItem.fromJson(snapshot.data);
 
       var availability;
       if (item.available == true) {
@@ -119,8 +98,7 @@ Widget buildItemDetails(
       } else {
         availability = "Emprunté";
       }
-      var category = getCategory(item);
-      print(category);
+
       return Container(
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +122,7 @@ Widget buildItemDetails(
             Text("Statut : " + availability,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
             const SizedBox(height: 50.0),
-            if (item.available)
+            //if (item.available)
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
@@ -154,16 +132,17 @@ Widget buildItemDetails(
                     padding: EdgeInsets.all(10.0),
                   ),
                   onPressed: () async {
-                    if (item.available) {
-                      item.available = false;
-                      updateItem(item);
-                    } else {
-                      //TODO: définir l'action
-                    }
+                    //if (item.available) {
+                      item.available = !item.available;
+                      //updateItem(item);
+                      item.saveToFirestore();
+                    //} else {
+                    //  //TODO: définir l'action
+                    //}
                   },
-                  child: Text("EMPRUNTER")),
+                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
             //const SizedBox(height: 15.0),
-            if (!item.available)
+            /*if (!item.available)
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
@@ -175,12 +154,13 @@ Widget buildItemDetails(
                   onPressed: () async {
                     if (!item.available) {
                       item.available = true;
-                      updateItem(item);
+                      //updateItem(item);
+                      item.saveToFirestore();
                     } else {
                       //TODO: définir l'action
                     }
                   },
-                  child: Text("RETOURNER")),
+                  child: Text("RETOURNER")),*/
             const SizedBox(height: 20.0),
           ]));
     } else {
