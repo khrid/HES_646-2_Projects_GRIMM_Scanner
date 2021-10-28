@@ -74,7 +74,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: firstnameController,
               validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Prénom ne peut pas etre vide';
+                            return 'Le champ "Prénom" ne peut pas être vide';
                           } else
                             return null;
                         },
@@ -106,7 +106,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: lastnameController,
               validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Nom ne peut pas etre vide';
+                            return 'Le champ "Nom" ne peut pas être vide';
                           } else
                             return null;
                         },
@@ -137,13 +137,13 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             TextFormField(
               controller: emailController,
                validator: (value) {
-                          if (value == null) {
-                            return 'Email ne peut pas etre vide';
+                          if (value == null || value.isEmpty) {
+                            return 'Le champ "Email" ne peut pas être vide';
                           } else
                             return null;
                         },
               decoration: InputDecoration(
-                labelText: 'Adresse mail',
+                labelText: 'Email',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
@@ -171,7 +171,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: passwordController,
                validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Mot de passe ne peut pas etre vide';
+                            return 'Le champ "Mot de passe" ne peut pas être vide';
                           } else
                             return null;
                         },
@@ -248,7 +248,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
 
               ),
                  onPressed: () async { // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
-                              
                               //TODO : amélioration possible, code pas ouf mais ça fonctionne
                               var tab = [];
                               if (isAdmin) {
@@ -273,10 +272,14 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                                 if (result is GrimmUser) {
                                   print("User CREATE" + result.toString());
                                   changeErrorMessage("");
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("Compte créé avec succès")));
                                   Navigator.pushNamed(
                                       context, "/");
                                 } else {
-                                    changeErrorMessage(result.toString());
+                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("Veuillez modifier votre mail/mot de passe")));
+                                  changeErrorMessage(result.toString());
                                 }
                               }  
                             },          
