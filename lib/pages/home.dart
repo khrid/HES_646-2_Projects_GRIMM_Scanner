@@ -38,8 +38,8 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 CustomHomeButton(title: "SCANNER", onPressed: scanQR),
                 const SizedBox(height: 10.0,),
-                CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
-                const SizedBox(height: 10.0,),
+                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                const SizedBox(height: 10.0,),*/
                 CustomHomeButton(title: "CREER UN PROFIL", onPressed: createUser)
               ],
             ),
