@@ -5,7 +5,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/service/AuthenticationService.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -18,17 +17,18 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccountScreen> {
-  bool isServiceProvider = false; // TODO : gérer le serviceProvider
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
   
-  bool isChecked = false;
-  bool isUploading = false;
-  TextEditingController lastnameController = new TextEditingController(text: "Gallay"); // controlleur du name
-  TextEditingController firstnameController = new TextEditingController(text: "Robin"); // controlleur du prenom
-  TextEditingController emailController = new TextEditingController(text: "user@grimm.ch");// controlleur du email
-  TextEditingController passwordController = new TextEditingController(text: "test123");// controlleur du password
-  TextEditingController groupController = new TextEditingController(text: "group1");// controlleur du group
+  bool isAdmin = false;
+  bool isObjectManager = false;
+  bool isMember = false;
+
+  TextEditingController lastnameController = new TextEditingController(); // controlleur du name
+  TextEditingController firstnameController = new TextEditingController(); // controlleur du prenom
+  TextEditingController emailController = new TextEditingController();// controlleur du email
+  TextEditingController passwordController = new TextEditingController();// controlleur du password
+  TextEditingController groupController = new TextEditingController();// controlleur du group
 
 
   @override
@@ -43,7 +43,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
       errorMessage = message;
     });
   }
-
 
   @override
   Widget build(context) {
@@ -200,37 +199,41 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             SizedBox(
               height: 20,
             ),
-            TextFormField(
-              controller: groupController,
-              validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Groupe ne peut pas etre vide';
-                          } else
-                            return null;
-                        },
-              decoration: InputDecoration(
-                labelText: 'Groupe',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Colors.black,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
+            CheckboxListTile(
+              title: Text("Administrateur"),
+              tileColor: Theme.of(context).primaryColor,
+              checkColor: Colors.white,
+              activeColor: Colors.black,
+              value: isAdmin,
+              onChanged: (bool? value) {
+                setState(() {
+                  isAdmin = value!;
+                });
+              },
+            ),  
+            CheckboxListTile(
+              title: Text("Manager d'objets"),
+              tileColor: Theme.of(context).primaryColor,
+              checkColor: Colors.white,
+              activeColor: Colors.black,
+              value: isObjectManager,
+              onChanged: (bool? value) {
+                setState(() {
+                  isObjectManager = value!;
+                });
+              },
             ),
-            SizedBox(
-              height: 20,
+            CheckboxListTile(
+              title: Text("Membre"),
+              tileColor: Theme.of(context).primaryColor,
+              checkColor: Colors.white,
+              activeColor: Colors.black,
+              value: isMember,
+              onChanged: (bool? value) {
+                setState(() {
+                  isMember = value!;
+                });
+              },
             ),
             SizedBox(
               height: 20,
@@ -245,11 +248,24 @@ class _CreateAccountState extends State<CreateAccountScreen> {
 
               ),
                  onPressed: () async { // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
+                              
+                              //TODO : amélioration possible, code pas ouf mais ça fonctionne
+                              var tab = [];
+                              if (isAdmin) {
+                                tab.add("Administrateur");                                
+                              } 
+                              if (isMember) {
+                                tab.add("Membre");                                
+                              } 
+                              if (isObjectManager) {
+                                tab.add("ObjectManager");                                
+                              } 
                               if (_key.currentState!.validate()) {
                                 GrimmUser grimmUser = GrimmUser(
                                     name: lastnameController.text,
                                     firstname: firstnameController.text,
-                                    email: emailController.text);
+                                    email: emailController.text, 
+                                    groups: tab);
                                 Object? result = await _auth.signUp(
                                     email: emailController.text,
                                     password: passwordController.text,

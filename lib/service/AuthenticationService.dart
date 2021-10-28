@@ -11,7 +11,7 @@ class AuthenticationService {
   /// create user object base on FirebaseUser
   GrimmUser? _userFromFirebaseUser(User user) {
     if (user == null) return null;
-    GrimmUser grimmUser = GrimmUser();
+    GrimmUser grimmUser = GrimmUser(groups: []);
     grimmUser.setEmail(_auth.currentUser!.email.toString());
     grimmUser.setUid(user.uid);
     grimmUser.populateUserInfoFromFirestore();

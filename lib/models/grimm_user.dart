@@ -14,7 +14,9 @@ class GrimmUser {
   GrimmUser(
       {this.firstname = "",
       this.name = "",
-      this.email =""});
+      this.email = "",
+      required this.groups});
+
   /// Returns a readable MyUser object
   String toString() {
     return "GrimmUser{uid:" +
