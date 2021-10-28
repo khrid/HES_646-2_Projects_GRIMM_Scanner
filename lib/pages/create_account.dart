@@ -5,7 +5,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/service/AuthenticationService.dart';
+import 'package:grimm_scanner/service/authentication_service.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -18,18 +18,23 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccountScreen> {
   final _key = GlobalKey<FormState>();
-  final AuthenticationService _auth = AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
-  
+  final AuthenticationService _auth =
+      AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
+
   bool isAdmin = false;
   bool isObjectManager = false;
   bool isMember = false;
 
-  TextEditingController lastnameController = new TextEditingController(); // controlleur du name
-  TextEditingController firstnameController = new TextEditingController(); // controlleur du prenom
-  TextEditingController emailController = new TextEditingController();// controlleur du email
-  TextEditingController passwordController = new TextEditingController();// controlleur du password
-  TextEditingController groupController = new TextEditingController();// controlleur du group
-
+  TextEditingController lastnameController =
+      TextEditingController(); // controlleur du name
+  TextEditingController firstnameController =
+      TextEditingController(); // controlleur du prenom
+  TextEditingController emailController =
+      TextEditingController(); // controlleur du email
+  TextEditingController passwordController =
+      TextEditingController(); // controlleur du password
+  TextEditingController groupController =
+      TextEditingController(); // controlleur du group
 
   @override
   void initState() {
@@ -48,17 +53,17 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Création d'un compte"),
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0,
-        ),
+        title: const Text("Création d'un compte"),
+        backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
+      ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Form(
         key: _key,
         child: ListView(
           padding: EdgeInsets.all(50),
           children: <Widget>[
-            Text(
+            const Text(
               "Créez un nouvel utilisateur",
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
@@ -67,18 +72,18 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               ),
               textAlign: TextAlign.left,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
               controller: firstnameController,
               validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Le champ "Prénom" ne peut pas être vide';
-                          } else
-                            return null;
-                        },
-              decoration: InputDecoration(
+                if (value == null || value.isEmpty) {
+                  return 'Le champ "Prénom" ne peut pas être vide';
+                } else
+                  return null;
+              },
+              decoration: const InputDecoration(
                 labelText: 'Prénom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -99,18 +104,18 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
               controller: lastnameController,
               validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Le champ "Nom" ne peut pas être vide';
-                          } else
-                            return null;
-                        },
-              decoration: InputDecoration(
+                if (value == null || value.isEmpty) {
+                  return 'Le champ "Nom" ne peut pas être vide';
+                } else
+                  return null;
+              },
+              decoration: const InputDecoration(
                 labelText: 'Nom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -131,18 +136,19 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
               controller: emailController,
-               validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Le champ "Email" ne peut pas être vide';
-                          } else
-                            return null;
-                        },
-              decoration: InputDecoration(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Le champ "Email" ne peut pas être vide';
+                } else {
+                  return null;
+                }
+              },
+              decoration: const InputDecoration(
                 labelText: 'Email',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -163,19 +169,19 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
               obscureText: true,
               controller: passwordController,
-               validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Le champ "Mot de passe" ne peut pas être vide';
-                          } else
-                            return null;
-                        },
-              decoration: InputDecoration(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Le champ "Mot de passe" ne peut pas être vide';
+                } else
+                  return null;
+              },
+              decoration: const InputDecoration(
                 labelText: 'Mot de passe',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -196,11 +202,11 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CheckboxListTile(
-              title: Text("Administrateur"),
+              title: const Text("Administrateur"),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -210,9 +216,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   isAdmin = value!;
                 });
               },
-            ),  
+            ),
             CheckboxListTile(
-              title: Text("Manager d'objets"),
+              title: const Text("Responsable inventaire"),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -224,7 +230,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               },
             ),
             CheckboxListTile(
-              title: Text("Membre"),
+              title: const Text("Membre"),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -235,66 +241,68 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 });
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor,
-                textStyle: TextStyle(fontFamily: "Raleway-Regular",
-                  fontSize: 14.0),
-                side: const BorderSide(width: 1.0, color: Colors.black),
-                padding: EdgeInsets.all(20.0),
-
-              ),
-                 onPressed: () async { // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
-                              //TODO : amélioration possible, code pas ouf mais ça fonctionne
-                              var tab = [];
-                              if (isAdmin) {
-                                tab.add("Administrateur");                                
-                              } 
-                              if (isMember) {
-                                tab.add("Membre");                                
-                              } 
-                              if (isObjectManager) {
-                                tab.add("ObjectManager");                                
-                              } 
-                              if (_key.currentState!.validate()) {
-                                GrimmUser grimmUser = GrimmUser(
-                                    name: lastnameController.text,
-                                    firstname: firstnameController.text,
-                                    email: emailController.text, 
-                                    groups: tab);
-                                Object? result = await _auth.signUp(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    grimmUser: grimmUser);
-                                if (result is GrimmUser) {
-                                  print("User CREATE" + result.toString());
-                                  changeErrorMessage("");
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text("Compte créé avec succès")));
-                                  Navigator.pushNamed(
-                                      context, "/");
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text("Veuillez modifier votre mail/mot de passe")));
-                                  changeErrorMessage(result.toString());
-                                }
-                              }  
-                            },          
-                            child: Text("VALIDER")),   
-            SizedBox(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
+                  //TODO : amélioration possible, code pas ouf mais ça fonctionne
+                  var tab = [];
+                  if (isAdmin) {
+                    tab.add("Administrateur");
+                  }
+                  if (isMember) {
+                    tab.add("Membre");
+                  }
+                  if (isObjectManager) {
+                    tab.add("ObjectManager");
+                  }
+                  if (tab.isNotEmpty) {
+                    if (_key.currentState!.validate()) {
+                      GrimmUser grimmUser = GrimmUser(
+                          name: lastnameController.text,
+                          firstname: firstnameController.text,
+                          email: emailController.text,
+                          groups: tab);
+                      Object? result = await _auth.signUp(
+                          email: emailController.text,
+                          password: passwordController.text,
+                          grimmUser: grimmUser);
+                      if (result is GrimmUser) {
+                        print("User CREATE" + result.toString());
+                        changeErrorMessage("");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Compte créé avec succès")));
+                        Navigator.pushNamed(context, "/");
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                                "Veuillez modifier votre mail/mot de passe")));
+                        changeErrorMessage(result.toString());
+                      }
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Veuillez sélectionner un groupe au minimum.")));
+                  }
+                },
+                child: Text("VALID")),
+            const SizedBox(
               height: 20,
             ),
-      
           ],
         ),
       ),
     );
   }
-
-
-
 }
-
