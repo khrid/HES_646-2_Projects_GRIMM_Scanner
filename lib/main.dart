@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +67,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       title: 'GRIMM Scanner',
       theme: ThemeData(
         primarySwatch: Colors.grey,
-        primaryColor: Color (0xFFECF0F9),
+        primaryColor: const Color(0xFFECF0F9),
       ),
       //navigatorObservers: <NavigatorObserver>[observer],
       home: const Home(),

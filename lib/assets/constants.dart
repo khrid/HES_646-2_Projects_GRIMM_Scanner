@@ -1,3 +1,3 @@
 class Constants {
-  static const QRCODE_STARTS_WITH = "QRGRIMM_";
+  static const grimmQrCodeStartsWith = "QRGRIMM_";
 }
