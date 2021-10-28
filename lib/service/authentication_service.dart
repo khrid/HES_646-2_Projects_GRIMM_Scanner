@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/grimm_user.dart';
@@ -42,13 +40,14 @@ class AuthenticationService {
           "AuthenticationService - signIn - returned user uid = " + user!.uid);
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
-      print("AuthenticationService - signIn - FireBaseAuthException message = " +
+      print(
+          "AuthenticationService - signIn - FireBaseAuthException message = " +
               e.message.toString());
-    
-      return e.message;
 
+      return e.message;
     }
   }
+
   /// Sign out from the current account
   Future signOut() async {
     try {
@@ -63,7 +62,6 @@ class AuthenticationService {
       {required String email,
       required String password,
       required GrimmUser grimmUser}) async {
-   
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -71,10 +69,10 @@ class AuthenticationService {
       print(grimmUser);
       await grimmUser.saveToFirestore();
       return grimmUser;
-    } on FirebaseAuthException catch (e)  {
+    } on FirebaseAuthException catch (e) {
       print("firebaseauthexception");
-       // TODO: pour l'instant, avec Robin on a pas réussi à ajouter des messages d'erreurs selon le problème
-       // actuellement s'affiche sur l'app juste que soit le mdp soit le mail est faux    
-      }
+      // TODO: pour l'instant, avec Robin on a pas réussi à ajouter des messages d'erreurs selon le problème
+      // actuellement s'affiche sur l'app juste que soit le mdp soit le mail est faux
     }
+  }
 }
