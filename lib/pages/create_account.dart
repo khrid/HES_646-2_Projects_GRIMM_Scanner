@@ -296,7 +296,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                             "Veuillez sélectionner un groupe au minimum.")));
                   }
                 },
-                child: Text("VALID")),
+                child: Text("VALIDER")),
             const SizedBox(
               height: 20,
             ),
