@@ -140,6 +140,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -247,8 +248,8 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: const EdgeInsets.all(20.0),
                 ),
