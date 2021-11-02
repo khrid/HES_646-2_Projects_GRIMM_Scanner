@@ -54,15 +54,15 @@ class GrimmItem {
         "}";
   }
 
-  GrimmItem.fromJson(json) :
-      this(
-        id: json.id,
-        description: (json.data()!['description'] ?? ""),
-        location: (json.data()!['description'] ?? ""),
-        idCategory: (json.data()!['idCategory'] ?? ""),
-        remark: (json.data()!['remark'] ?? ""),
-        available: (json.data()!['available'] ?? false),
-      );
+  GrimmItem.fromJson(json)
+      : this(
+          id: json.id,
+          description: (json.data()!['description'] ?? ""),
+          location: (json.data()!['location'] ?? ""),
+          idCategory: (json.data()!['idCategory'] ?? ""),
+          remark: (json.data()!['remark'] ?? ""),
+          available: (json.data()!['available'] ?? false),
+        );
 
   /// Translate a MyUser object to JSON
   Map<String, Object?> toJson() {
@@ -97,7 +97,6 @@ class GrimmItem {
       available = (snap.data()!["available"] != null
           ? snap.data()!["available"]
           : false);
-      ;
     }
   }
 
@@ -108,7 +107,9 @@ class GrimmItem {
 
   /// Returns the String for QR code generation
   String getIdForQrCode() {
-    print("GrimmItem - getIdForQrCode - " + Constants.grimmQrCodeStartsWith + this.id);
+    print("GrimmItem - getIdForQrCode - " +
+        Constants.grimmQrCodeStartsWith +
+        this.id);
     return Constants.grimmQrCodeStartsWith + this.id;
   }
 }
