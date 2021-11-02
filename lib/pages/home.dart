@@ -7,10 +7,9 @@ import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
 import 'create_account.dart';
+import 'create_object.dart';
 
 class Home extends StatefulWidget {
-
-
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -29,22 +28,31 @@ class _HomeState extends State<Home> {
           elevation: 0,
         ),
         body: Container(
-          color:  Theme.of(context).primaryColor,
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                const SizedBox(height: 10.0,),
-                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+
+                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                 const SizedBox(height: 10.0,),*/
-                CustomHomeButton(title: "CREER UN PROFIL", onPressed: createUser)
+                    CustomHomeButton(
+                        title: "CREER UN PROFIL", onPressed: createUser),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    CustomHomeButton(
+                        title: "CREER UN OBJET", onPressed: createObject)
+                  ],
+                ),
               ],
-            ),
-          ],
-        ))
+            ))
         //drawer: const CustomDrawer(),
         );
   }
@@ -55,12 +63,17 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<void> createObject() async {
+    setState(() {
+      Navigator.pushNamed(context, CreateObjectScreen.routeName);
+    });
+  }
+
   Future<void> fakeScan() async {
     setState(() {
       _qrCode = Constants.grimmQrCodeStartsWith + "13tBavQPNXaLJFH4vqnc";
       // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
-      Navigator.pushNamed(context, ItemDetail.routeName,
-          arguments: _qrCode);
+      Navigator.pushNamed(context, ItemDetail.routeName, arguments: _qrCode);
     });
   }
 
@@ -110,7 +123,8 @@ class _HomeState extends State<Home> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("La lecture QR n'est possible que depuis l'application native Android / iOS.")));
+          content: Text(
+              "La lecture QR n'est possible que depuis l'application native Android / iOS.")));
     }
   }
 }

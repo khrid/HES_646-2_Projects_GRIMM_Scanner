@@ -5,6 +5,8 @@ import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
+import 'pages/create_object.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -75,6 +77,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
+        CreateObjectScreen.routeName: (context) => const CreateObjectScreen(),
       },
     );
   }
