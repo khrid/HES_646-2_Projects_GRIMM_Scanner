@@ -5,7 +5,7 @@ import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
-import 'pages/create_object.dart';
+import 'pages/create_item.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,7 +77,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
-        CreateObjectScreen.routeName: (context) => const CreateObjectScreen(),
+        CreateItemScreen.routeName: (context) => const CreateItemScreen(),
       },
     );
   }

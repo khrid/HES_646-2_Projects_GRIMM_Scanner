@@ -7,7 +7,7 @@ import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
 import 'create_account.dart';
-import 'create_object.dart';
+import 'create_item.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
                       height: 20.0,
                     ),
                     CustomHomeButton(
-                        title: "CREER UN OBJET", onPressed: createObject)
+                        title: "CREER UN OBJET", onPressed: createItem)
                   ],
                 ),
               ],
@@ -63,9 +63,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> createObject() async {
+  Future<void> createItem() async {
     setState(() {
-      Navigator.pushNamed(context, CreateObjectScreen.routeName);
+      Navigator.pushNamed(context, CreateItemScreen.routeName);
     });
   }
 

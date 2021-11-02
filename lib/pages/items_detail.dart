@@ -123,24 +123,24 @@ Widget buildItemDetails(
                 style: TextStyle(color: Colors.black, fontSize: 14)),
             const SizedBox(height: 50.0),
             //if (item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  onPressed: () async {
-                    //if (item.available) {
-                      item.available = !item.available;
-                      //updateItem(item);
-                      item.saveToFirestore();
-                    //} else {
-                    //  //TODO: définir l'action
-                    //}
-                  },
-                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(10.0),
+                ),
+                onPressed: () async {
+                  //if (item.available) {
+                  item.available = !item.available;
+                  //updateItem(item);
+                  item.saveToFirestore();
+                  //} else {
+                  //  //TODO: définir l'action
+                  //}
+                },
+                child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
             //const SizedBox(height: 15.0),
             /*if (!item.available)
               ElevatedButton(

@@ -29,7 +29,7 @@ class GrimmItem {
 
   /// Default constructor
   GrimmItem({
-    required this.id,
+    this.id = "",
     required this.description,
     required this.location,
     required this.idCategory,
@@ -67,7 +67,7 @@ class GrimmItem {
   /// Translate a MyUser object to JSON
   Map<String, Object?> toJson() {
     return {
-      //'id': id,
+      'id': id,
       'description': description,
       'location': location,
       'idCategory': idCategory,
