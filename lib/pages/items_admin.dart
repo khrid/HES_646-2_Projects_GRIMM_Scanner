@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grimm_scanner/widgets/button_home.dart';
+import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/models/grimm_item.dart';
 
-import 'create_account.dart';
+import 'items_detail.dart';
 
 class ItemsAdmin extends StatefulWidget {
   static const routeName = "/items/admin";
+
   const ItemsAdmin({Key? key}) : super(key: key);
 
   @override
@@ -13,7 +16,6 @@ class ItemsAdmin extends StatefulWidget {
 }
 
 class _ItemsAdminState extends State<ItemsAdmin> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,24 +31,66 @@ class _ItemsAdminState extends State<ItemsAdmin> {
         ),
         body: Center(
             child: SingleChildScrollView(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[],
-                    ),
-                  ],
-                )))
-      //drawer: const CustomDrawer(),
-    );
+                child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("items")
+              .orderBy("description")
+              .snapshots(),
+          builder: buildItemsList,
+        )))
+        //drawer: const CustomDrawer(),
+        );
   }
 
   Future<void> createItem() async {
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Todo ! Et désactiver avant démo si pas fait")));
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Todo ! Et désactiver avant démo si pas fait")));
     setState(() {
       //Navigator.pushNamed(context, CreateAccountScreen.routeName);
     });
+  }
+
+  Widget buildItemsList(
+      BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    if (snapshot.hasData) {
+      return Column(children: <Widget>[
+        ListView(
+          physics: const ClampingScrollPhysics(), // add t
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: snapshot.data!.docs.map((doc) {
+            GrimmItem grimmItem = GrimmItem.fromJson(doc);
+            //print(grimmItem);
+            Widget availability = (grimmItem.available)
+                ? const Icon(
+                    Icons.check,
+                    color: Colors.green,
+                  )
+                : const Icon(
+                    Icons.clear,
+                    color: Colors.red,
+                  );
+            return Card(
+              child: ListTile(
+                leading: availability,
+                minLeadingWidth: 10,
+                horizontalTitleGap: 10,
+                title: Text(grimmItem.description),
+                subtitle: Text(grimmItem.location),
+                onTap: () {
+                  Navigator.pushNamed(context, ItemDetail.routeName,
+                      arguments:
+                          Constants.grimmQrCodeStartsWith + grimmItem.id);
+                },
+              ),
+            );
+          }).toList(),
+        )
+      ]);
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
   }
 }
