@@ -1,19 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:grimm_scanner/models/grimm_item.dart';
 
-class CreateItemScreen extends StatefulWidget {
-  static const routeName = '/create_item';
+class EditItemScreen extends StatefulWidget {
+  static const routeName = '/edit_item';
 
-  const CreateItemScreen({Key? key}) : super(key: key);
+  const EditItemScreen({Key? key}) : super(key: key);
 
   @override
-  _CreateItemState createState() => _CreateItemState();
+  _EditItemState createState() => _EditItemState();
 }
 
-class _CreateItemState extends State<CreateItemScreen> {
+class _EditItemState extends State<EditItemScreen> {
   final _key = GlobalKey<FormState>();
-  TextEditingController descriptionController = TextEditingController(
+    TextEditingController descriptionController = TextEditingController(
       text: "ObjectLouise"); // controlleur de la description
   TextEditingController locationController =
       TextEditingController(text: "C6"); // controlleur du email
@@ -22,21 +20,12 @@ class _CreateItemState extends State<CreateItemScreen> {
   TextEditingController remarkController = TextEditingController(
       text: "Pas de remarque"); // controlleur de la remarque
 
+
   @override
   Widget build(BuildContext context) {
-    GrimmItem grimmItem = GrimmItem(
-        //id: "id",
-        description: "description",
-        location: "location",
-        idCategory: "idCategory",
-        available: true,
-        remark: "remark");
-
-    print("ItemDetail - GrimmItem - " + grimmItem.toString());
-    var dropdownValue;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Création"),
+        title: const Text("Edition"),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -47,7 +36,7 @@ class _CreateItemState extends State<CreateItemScreen> {
           padding: EdgeInsets.all(50),
           children: <Widget>[
             const Text(
-              "Créez un nouvel objet",
+              "Modifiez l'objet",
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
@@ -122,29 +111,7 @@ class _CreateItemState extends State<CreateItemScreen> {
             const SizedBox(
               height: 20,
             ),
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.military_tech_sharp),
-              iconSize: 24,
-              //elevation: 16,
-              style: const TextStyle(color: Colors.black),
-              underline: Container(
-                height: 1,
-                color: Colors.black,
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
-              },
-              items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),),
-            /*TextFormField(
+           TextFormField(
               controller: categorieController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -173,7 +140,7 @@ class _CreateItemState extends State<CreateItemScreen> {
               ),
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
-            ),*/
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -220,19 +187,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
                 onPressed: () async {
                   {
-                    if (_key.currentState!.validate()) {
-                      GrimmItem item = GrimmItem(
-                          description: descriptionController.text,
-                          location: locationController.text,
-                          remark: remarkController.text,
-                          idCategory: categorieController.text,
-                          available: true);
-                      await item.saveToFirestore();
-                      print("Item CREATE" + item.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Objet créé avec succès")));
-                      Navigator.pushNamed(context, "/");
-                    }
+                    
                   }
                 },
                 child: Text("VALIDER")),
@@ -243,5 +198,4 @@ class _CreateItemState extends State<CreateItemScreen> {
         ),
       ),
     );
-  }
-}
+}}

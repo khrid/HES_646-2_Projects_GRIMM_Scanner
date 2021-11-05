@@ -26,8 +26,11 @@ class _ItemsAdminState extends State<ItemsAdmin> {
         ),
         backgroundColor: Theme.of(context).primaryColor,
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
           onPressed: createItem,
-          child: const Icon(Icons.add),
+          child: Icon(
+              Icons.add,           
+              color: Theme.of(context).primaryColor,),
         ),
         body: Center(
             child: SingleChildScrollView(

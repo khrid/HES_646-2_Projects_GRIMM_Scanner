@@ -5,6 +5,8 @@ import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 
+import 'edit_item.dart';
+
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
 
@@ -45,6 +47,10 @@ class _ItemDetailState extends State<ItemDetail> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
+         /*floatingActionButton: FloatingActionButton(
+          onPressed: editItem,
+          child: const Icon(Icons.edit),
+        ),*/
         body: Center(
             // enlever le Center pour ne plus centrer verticalement
             child: SingleChildScrollView(
@@ -69,8 +75,41 @@ class _ItemDetailState extends State<ItemDetail> {
                 const SizedBox(height: 60.0),
               ],
             ),
+            
           ],
-        )))));
+        )))),floatingActionButton: Column(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      FloatingActionButton(
+        backgroundColor: Colors.black,
+        child: Icon(
+          Icons.edit,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () {
+          editItem();
+        },
+        heroTag: null,
+      ),
+      SizedBox(
+        height: 10,
+      ),
+      FloatingActionButton(    
+        backgroundColor: Colors.black,       
+        child: Icon(
+          Icons.delete,
+          color: Theme.of(context).primaryColor,
+        ),
+        onPressed: () => editItem(),
+        heroTag: null,
+      )
+    ]
+  ));
+  }
+    Future<void> editItem() async {
+    setState(() {
+      Navigator.pushNamed(context, EditItemScreen.routeName);
+    });
   }
 }
 
@@ -185,3 +224,4 @@ Widget buildItemCategory(BuildContext context,
   }
   return const Text("");
 }
+
