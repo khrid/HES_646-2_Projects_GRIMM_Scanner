@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
+import 'accounts_admin.dart';
 import 'create_account.dart';
 import 'create_item.dart';
+import 'items_admin.dart';
+import 'items_admin.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -27,9 +31,10 @@ class _HomeState extends State<Home> {
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
-        body: Container(
-            color: Theme.of(context).primaryColor,
-            child: Row(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Center(
+            child: SingleChildScrollView(
+                child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Column(
@@ -42,24 +47,42 @@ class _HomeState extends State<Home> {
 
                     /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                 const SizedBox(height: 10.0,),*/
+
                     CustomHomeButton(
-                        title: "CREER UN PROFIL", onPressed: createUser),
+                        title: "CREER UN OBJET", onPressed: createItem),
+ const SizedBox(
+                      height: 10.0,
+                    ),
+                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                     const SizedBox(
-                      height: 20.0,
+                      height: 10.0,
+                    ),*/
+                    CustomHomeButton(
+                        title: "Gérer les utilisateurs",
+                        onPressed: navigateToUsersAdmin),
+                    const SizedBox(
+                      height: 10.0,
                     ),
                     CustomHomeButton(
-                        title: "CREER UN OBJET", onPressed: createItem)
+                        title: "Gérer l'inventaire",
+                        onPressed: navigateToItemsAdmin)
                   ],
                 ),
               ],
-            ))
+            )))
         //drawer: const CustomDrawer(),
         );
   }
 
-  Future<void> createUser() async {
+  Future<void> navigateToUsersAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, CreateAccountScreen.routeName);
+      Navigator.pushNamed(context, AccountsAdmin.routeName);
+    });
+  }
+
+  Future<void> navigateToItemsAdmin() async {
+    setState(() {
+      Navigator.pushNamed(context, ItemsAdmin.routeName);
     });
   }
 
@@ -71,7 +94,7 @@ class _HomeState extends State<Home> {
 
   Future<void> fakeScan() async {
     setState(() {
-      _qrCode = Constants.grimmQrCodeStartsWith + "13tBavQPNXaLJFH4vqnc";
+      _qrCode = Constants.grimmQrCodeStartsWith + "1VEx5uRRtuUVk8Bf7597";
       // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
       Navigator.pushNamed(context, ItemDetail.routeName, arguments: _qrCode);
     });

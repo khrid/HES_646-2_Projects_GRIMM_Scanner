@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
 import 'pages/create_item.dart';
@@ -76,6 +78,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       initialRoute: '/',
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
+        ItemsAdmin.routeName: (context) => const ItemsAdmin(),
+        AccountsAdmin.routeName: (context) => const AccountsAdmin(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         CreateItemScreen.routeName: (context) => const CreateItemScreen(),
       },
