@@ -42,7 +42,7 @@ class _HomeState extends State<Home> {
                   children: <Widget>[
                     CustomHomeButton(title: "SCANNER", onPressed: scanQR),
                     const SizedBox(
-                      height: 20.0,
+                      height: 10.0,
                     ),
 
                     /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
