@@ -39,6 +39,7 @@ class GrimmItem {
   });
 
   /// Returns a readable GrimmItem object
+  @override
   String toString() {
     return "GrimmItem{id:" +
         id +
@@ -103,8 +104,14 @@ class GrimmItem {
   String getIdForQrCode() {
     print("GrimmItem - getIdForQrCode - " +
         Constants.grimmQrCodeStartsWith +
-        this.id);
-    return Constants.grimmQrCodeStartsWith + this.id;
+        id);
+    return Constants.grimmQrCodeStartsWith + id;
+  }
+
+  String getDescriptionForPdfFilename() {
+    String tmp = description.toLowerCase().replaceAll(" ", "_").replaceAll("[:\\\\/*?|<>]", "_");
+    print(tmp);
+    return tmp;
   }
 
   /// Update the availability of the object

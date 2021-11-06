@@ -8,6 +8,11 @@ import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
 
+// printing libs
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
 
@@ -19,11 +24,12 @@ class ItemDetail extends StatefulWidget {
 
 class _ItemDetailState extends State<ItemDetail> {
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
+  late String qrcode;
   late GrimmItem grimmItem;
 
   @override
   Widget build(BuildContext context) {
-    final qrcode = ModalRoute.of(context)!.settings.arguments == null
+    qrcode = ModalRoute.of(context)!.settings.arguments == null
         ? "NULL"
         : ModalRoute.of(context)!.settings.arguments as String;
 
@@ -49,6 +55,19 @@ class _ItemDetailState extends State<ItemDetail> {
           title: const Text("Détail de l'objet"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: handleAction,
+              itemBuilder: (BuildContext context) {
+                return Constants.actions.map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
         ),
         backgroundColor: Theme.of(context).primaryColor,
         // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
@@ -127,10 +146,10 @@ class _ItemDetailState extends State<ItemDetail> {
       // encore plus loin pour être sûr
       // si on a des données et que le doc existe
       if (snapshot.data!.data() != null) {
-        GrimmItem item = GrimmItem.fromJson(snapshot.data);
+        grimmItem = GrimmItem.fromJson(snapshot.data);
 
         var availability;
-        if (item.available == true) {
+        if (grimmItem.available == true) {
           availability = "Disponible";
         } else {
           availability = "Emprunté";
@@ -140,10 +159,10 @@ class _ItemDetailState extends State<ItemDetail> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-              Text("Objet : " + item.description,
+              Text("Objet : " + grimmItem.description,
                   style: TextStyle(color: Colors.black, fontSize: 14)),
               const SizedBox(height: 20.0),
-              Text("Emplacement : " + item.location,
+              Text("Emplacement : " + grimmItem.location,
                   style: TextStyle(color: Colors.black, fontSize: 14)),
               const SizedBox(height: 20.0),
               /*Text("Catégorie : " + item.idCategory,
@@ -151,7 +170,7 @@ class _ItemDetailState extends State<ItemDetail> {
               StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('category')
-                    .doc(item.idCategory)
+                    .doc(grimmItem.idCategory)
                     .snapshots(),
                 builder: buildItemCategory,
               ),
@@ -169,6 +188,35 @@ class _ItemDetailState extends State<ItemDetail> {
                     padding: EdgeInsets.all(10.0),
                   ),
                   onPressed: () async {
+                    //if (item.available) {
+                    grimmItem.available = !grimmItem.available;
+                    //updateItem(item);
+                    grimmItem.saveToFirestore();
+                    //} else {
+                    //  //TODO: définir l'action
+                    //}
+                  },
+                  child: Text(grimmItem.available ? "EMPRUNTER" : "RETOURNER")),
+              //const SizedBox(height: 15.0),
+              /*if (!item.available)
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).primaryColor,
+                    textStyle: TextStyle(
+                        fontFamily: "Raleway-Regular", fontSize: 14.0),
+                    side: const BorderSide(width: 1.0, color: Colors.black),
+                    padding: EdgeInsets.all(10.0),
+                  ),
+                  onPressed: () async {
+                    if (!item.available) {
+                      item.available = true;
+                      //updateItem(item);
+                      item.saveToFirestore();
+                    } else {
+                      //TODO: définir l'action
+                    }
+                  },
+                  child: Text("RETOURNER")),*/
                     item.updateAvailability();
                   },
                   child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
@@ -193,6 +241,47 @@ class _ItemDetailState extends State<ItemDetail> {
         var grimmCategory = snapshot.data;
         return Text("Catégorie : " + grimmCategory!.data()!["name"]);
       }
+    }
+    return const Text("");
+  }
+
+  Future<void> handleAction(String value) async {
+    if (value == Constants.actionPrintQr) {
+      print("ItemDetail - handleAction - print QR");
+      final doc = pw.Document();
+      doc.addPage(pw.MultiPage(
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) => <pw.Widget>[
+                pw.Center(
+                  child: pw.Paragraph(
+                      text: grimmItem.description, style: const pw.TextStyle(fontSize: 20,),),
+                ),
+                pw.Center(
+                  child: pw.BarcodeWidget(
+                      data: qrcode,
+                      width: 150,
+                      height: 150,
+                      barcode: pw.Barcode.qrCode()),
+                ),
+                pw.Padding(padding: const pw.EdgeInsets.all(10)),
+              ]));
+      //build: (pw.Context context) => <pw.Widget>[
+      //    pw.Center(child: pw.Paragraph(text: grimmItem.description, style: pw.TextStyle(fontSize: 18))),
+      //  ]));
+      /*pw.Center(
+                child: pw.BarcodeWidget(
+                    data: qrcode,
+                    width: 300,
+                    height: 300,
+                    barcode: pw.Barcode.qrCode()),
+              )
+            ];
+          ));*/
+
+      await Printing.layoutPdf(
+          onLayout: (PdfPageFormat format) async => doc.save(), name: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+"");
+      //await Printing.sharePdf(bytes: await doc.save(), filename: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+".pdf");
+
     }
     return const Text("");
   }
