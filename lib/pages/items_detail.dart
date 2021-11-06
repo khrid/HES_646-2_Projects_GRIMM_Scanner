@@ -55,7 +55,7 @@ class _ItemDetailState extends State<ItemDetail> {
           title: const Text("Détail de l'objet"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
-          actions: <Widget>[
+          /*actions: <Widget>[
             PopupMenuButton<String>(
               onSelected: handleAction,
               itemBuilder: (BuildContext context) {
@@ -67,7 +67,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 }).toList();
               },
             ),
-          ],
+          ],*/
         ),
         backgroundColor: Theme.of(context).primaryColor,
         // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
@@ -86,7 +86,7 @@ class _ItemDetailState extends State<ItemDetail> {
               icon: const Icon(Icons.access_time, color: Colors.white,),
             ),
             ActionButton(
-              onPressed: () => _showAction(context, 1),
+              onPressed: () => handleAction(Constants.actionPrintQr),
               icon: const Icon(Icons.print, color: Colors.white,),
             ),
             /*ActionButton(
@@ -127,8 +127,6 @@ class _ItemDetailState extends State<ItemDetail> {
     print("ItemDetail - showHistory - " + grimmItem.toString());
     Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
   }
-
-  void handleAction(String value) {}
 
   Widget buildItemDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -188,38 +186,9 @@ class _ItemDetailState extends State<ItemDetail> {
                     padding: EdgeInsets.all(10.0),
                   ),
                   onPressed: () async {
-                    //if (item.available) {
-                    grimmItem.available = !grimmItem.available;
-                    //updateItem(item);
-                    grimmItem.saveToFirestore();
-                    //} else {
-                    //  //TODO: définir l'action
-                    //}
+                    grimmItem.updateAvailability();
                   },
                   child: Text(grimmItem.available ? "EMPRUNTER" : "RETOURNER")),
-              //const SizedBox(height: 15.0),
-              /*if (!item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  onPressed: () async {
-                    if (!item.available) {
-                      item.available = true;
-                      //updateItem(item);
-                      item.saveToFirestore();
-                    } else {
-                      //TODO: définir l'action
-                    }
-                  },
-                  child: Text("RETOURNER")),*/
-                    item.updateAvailability();
-                  },
-                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
               const SizedBox(height: 20.0),
             ]));
       } else {
@@ -265,25 +234,12 @@ class _ItemDetailState extends State<ItemDetail> {
                 ),
                 pw.Padding(padding: const pw.EdgeInsets.all(10)),
               ]));
-      //build: (pw.Context context) => <pw.Widget>[
-      //    pw.Center(child: pw.Paragraph(text: grimmItem.description, style: pw.TextStyle(fontSize: 18))),
-      //  ]));
-      /*pw.Center(
-                child: pw.BarcodeWidget(
-                    data: qrcode,
-                    width: 300,
-                    height: 300,
-                    barcode: pw.Barcode.qrCode()),
-              )
-            ];
-          ));*/
 
       await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => doc.save(), name: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+"");
       //await Printing.sharePdf(bytes: await doc.save(), filename: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+".pdf");
 
     }
-    return const Text("");
   }
 
   void _showAction(BuildContext context, int index) {
