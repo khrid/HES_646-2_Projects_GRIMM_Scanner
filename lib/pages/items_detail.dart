@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
+import 'package:grimm_scanner/widgets/action_button.dart';
+import 'package:grimm_scanner/widgets/expandable_fab.dart';
 
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
@@ -15,6 +18,9 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
+  late GrimmItem grimmItem;
+
   @override
   Widget build(BuildContext context) {
     final qrcode = ModalRoute.of(context)!.settings.arguments == null
@@ -28,7 +34,7 @@ class _ItemDetailState extends State<ItemDetail> {
           context, "/", (Route<dynamic> route) => false));
     }
 
-    GrimmItem grimmItem = GrimmItem(
+    grimmItem = GrimmItem(
         id: qrcode.replaceAll(Constants.grimmQrCodeStartsWith, ""),
         description: "description",
         location: "location",
@@ -45,6 +51,31 @@ class _ItemDetailState extends State<ItemDetail> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
+        // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
+        floatingActionButton: /*FloatingActionButton(
+          child: const Icon(
+            Icons.access_time,
+            color: Colors.white,
+          ),
+          onPressed: showHistory,
+        )*/
+            ExpandableFab(
+          distance: 112.0,
+          children: [
+            ActionButton(
+              onPressed: showHistory,
+              icon: const Icon(Icons.access_time, color: Colors.white,),
+            ),
+            ActionButton(
+              onPressed: () => _showAction(context, 1),
+              icon: const Icon(Icons.print, color: Colors.white,),
+            ),
+            /*ActionButton(
+              onPressed: () => _showAction(context, 2),
+              icon: const Icon(Icons.videocam),
+            ),*/
+          ],
+        ),
         body: Center(
             // enlever le Center pour ne plus centrer verticalement
             child: SingleChildScrollView(
@@ -72,11 +103,17 @@ class _ItemDetailState extends State<ItemDetail> {
           ],
         )))));
   }
-}
 
-Widget buildItemDetails(
-    BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-  /*late CollectionReference _items;
+  void showHistory() {
+    print("ItemDetail - showHistory - " + grimmItem.toString());
+    Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
+  }
+
+  void handleAction(String value) {}
+
+  Widget buildItemDetails(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    /*late CollectionReference _items;
 
   _items = FirebaseFirestore.instance.collection("items");
 
@@ -84,45 +121,45 @@ Widget buildItemDetails(
     _items.doc(i.id).update(i.toJson());
   }*/
 
-  // si on a des données
-  if (snapshot.hasData) {
-    // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
-    // encore plus loin pour être sûr
-    // si on a des données et que le doc existe
-    if (snapshot.data!.data() != null) {
-      GrimmItem item = GrimmItem.fromJson(snapshot.data);
+    // si on a des données
+    if (snapshot.hasData) {
+      // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+      // encore plus loin pour être sûr
+      // si on a des données et que le doc existe
+      if (snapshot.data!.data() != null) {
+        GrimmItem item = GrimmItem.fromJson(snapshot.data);
 
-      var availability;
-      if (item.available == true) {
-        availability = "Disponible";
-      } else {
-        availability = "Emprunté";
-      }
+        var availability;
+        if (item.available == true) {
+          availability = "Disponible";
+        } else {
+          availability = "Emprunté";
+        }
 
-      return Container(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-            Text("Objet : " + item.description,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
-            const SizedBox(height: 20.0),
-            Text("Emplacement : " + item.location,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
-            const SizedBox(height: 20.0),
-            /*Text("Catégorie : " + item.idCategory,
+        return Container(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+              Text("Objet : " + item.description,
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
+              const SizedBox(height: 20.0),
+              Text("Emplacement : " + item.location,
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
+              const SizedBox(height: 20.0),
+              /*Text("Catégorie : " + item.idCategory,
                 style: TextStyle(color: Colors.black, fontSize: 14)),*/
-            StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('category')
-                  .doc(item.idCategory)
-                  .snapshots(),
-              builder: buildItemCategory,
-            ),
-            const SizedBox(height: 20.0),
-            Text("Statut : " + availability,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
-            const SizedBox(height: 50.0),
-            //if (item.available)
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('category')
+                    .doc(item.idCategory)
+                    .snapshots(),
+                builder: buildItemCategory,
+              ),
+              const SizedBox(height: 20.0),
+              Text("Statut : " + availability,
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
+              const SizedBox(height: 50.0),
+              //if (item.available)
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor,
@@ -132,30 +169,48 @@ Widget buildItemDetails(
                     padding: EdgeInsets.all(10.0),
                   ),
                   onPressed: () async {
-                      item.updateAvailability();
+                    item.updateAvailability();
                   },
                   child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
-            const SizedBox(height: 20.0),
-          ]));
+              const SizedBox(height: 20.0),
+            ]));
+      } else {
+        return Text("Pas d'object trouvé, scannez à nouveau");
+      }
     } else {
-      return Text("Pas d'object trouvé, scannez à nouveau");
+      return Text("No item details yet :(");
     }
-  } else {
-    return Text("No item details yet :(");
   }
-}
 
-Widget buildItemCategory(BuildContext context,
-    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-  // si on a des données
-  if (snapshot.hasData) {
-    // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
-    // encore plus loin pour être sûr
-    // si on a des données et que le doc existe
-    if (snapshot.data!.data() != null) {
-      var grimmCategory = snapshot.data;
-      return Text("Catégorie : " + grimmCategory!.data()!["name"]);
+  Widget buildItemCategory(BuildContext context,
+      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+    // si on a des données
+    if (snapshot.hasData) {
+      // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+      // encore plus loin pour être sûr
+      // si on a des données et que le doc existe
+      if (snapshot.data!.data() != null) {
+        var grimmCategory = snapshot.data;
+        return Text("Catégorie : " + grimmCategory!.data()!["name"]);
+      }
     }
+    return const Text("");
   }
-  return const Text("");
+
+  void _showAction(BuildContext context, int index) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(_actionTitles[index]),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

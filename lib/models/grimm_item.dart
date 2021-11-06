@@ -121,7 +121,6 @@ class GrimmItem {
     // 3 > record dispo, date de retour non vide
 
     // on va chercher si un mouvement existe pour cet objet
-    print(id);
     QuerySnapshot existingHistory = await FirebaseFirestore.instance
         .collection("history")
         .where("itemRef", isEqualTo: id)

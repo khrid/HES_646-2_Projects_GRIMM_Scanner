@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'grimm_item.dart';
+
 class GrimmHistory {
   late final String id;
 
-  String itemRef;
+  String itemRef = "";
 
   Timestamp? dateBorrow;
 
   Timestamp? dateReturn;
 
-  String userBorrow;
+  String userBorrow = "";
 
-  String userReturn;
+  String userReturn = "";
 
   GrimmHistory(
       {this.id = "",
@@ -32,6 +34,15 @@ class GrimmHistory {
     userBorrow: (json.data()!['userBorrow'] ?? "null"),
     userReturn: (json.data()!['userReturn'] ?? "null"),
   );
+
+  GrimmHistory.fromJson2(json) {
+    id = json.id;
+    itemRef = (json.data()!["itemRef"] ?? "");
+    dateBorrow = (json.data()!["dateBorrow"]);
+    dateReturn = (json.data()!["dateReturn"]);
+    userBorrow = (json.data()!["userBorrow"] ?? "null");
+    userReturn = (json.data()!["userReturn"] ?? "null");
+  }
 
   @override
   String toString() {
@@ -63,11 +74,15 @@ class GrimmHistory {
   }
 
   Future<void> save() async {
-    await FirebaseFirestore.instance.collection("history").add(toJson());
+    DocumentReference ref = await FirebaseFirestore.instance.collection("history").add(toJson());
   }
 
   Future<void> update() async {
     await FirebaseFirestore.instance.collection("history").doc(id).set(toJson());
+  }
+
+  Future<GrimmItem?> getGrimmItemFromItemRef() async {
+    return null;
   }
 
 }

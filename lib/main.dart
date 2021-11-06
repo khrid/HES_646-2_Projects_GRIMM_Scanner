@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
@@ -76,6 +77,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       initialRoute: '/',
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
+        ItemHistory.routeName: (context) => const ItemHistory(),
         ItemsAdmin.routeName: (context) => const ItemsAdmin(),
         AccountsAdmin.routeName: (context) => const AccountsAdmin(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
