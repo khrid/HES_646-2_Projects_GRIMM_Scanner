@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
+import 'package:grimm_scanner/widgets/action_button.dart';
+import 'package:grimm_scanner/widgets/expandable_fab.dart';
 
 // printing libs
 import 'package:pdf/pdf.dart';
@@ -20,6 +23,7 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
   late String qrcode;
   late GrimmItem grimmItem;
 
@@ -66,6 +70,31 @@ class _ItemDetailState extends State<ItemDetail> {
           ],
         ),
         backgroundColor: Theme.of(context).primaryColor,
+        // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
+        floatingActionButton: /*FloatingActionButton(
+          child: const Icon(
+            Icons.access_time,
+            color: Colors.white,
+          ),
+          onPressed: showHistory,
+        )*/
+            ExpandableFab(
+          distance: 112.0,
+          children: [
+            ActionButton(
+              onPressed: showHistory,
+              icon: const Icon(Icons.access_time, color: Colors.white,),
+            ),
+            ActionButton(
+              onPressed: () => _showAction(context, 1),
+              icon: const Icon(Icons.print, color: Colors.white,),
+            ),
+            /*ActionButton(
+              onPressed: () => _showAction(context, 2),
+              icon: const Icon(Icons.videocam),
+            ),*/
+          ],
+        ),
         body: Center(
             // enlever le Center pour ne plus centrer verticalement
             child: SingleChildScrollView(
@@ -93,6 +122,13 @@ class _ItemDetailState extends State<ItemDetail> {
           ],
         )))));
   }
+
+  void showHistory() {
+    print("ItemDetail - showHistory - " + grimmItem.toString());
+    Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
+  }
+
+  void handleAction(String value) {}
 
   Widget buildItemDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -181,6 +217,9 @@ class _ItemDetailState extends State<ItemDetail> {
                     }
                   },
                   child: Text("RETOURNER")),*/
+                    item.updateAvailability();
+                  },
+                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
               const SizedBox(height: 20.0),
             ]));
       } else {
@@ -242,6 +281,25 @@ class _ItemDetailState extends State<ItemDetail> {
       await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => doc.save(), name: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+"");
       //await Printing.sharePdf(bytes: await doc.save(), filename: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+".pdf");
+
     }
+    return const Text("");
+  }
+
+  void _showAction(BuildContext context, int index) {
+    showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          content: Text(_actionTitles[index]),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CLOSE'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/models/grimm_history.dart';
 
 class GrimmItem {
   late final String id;
@@ -87,8 +88,7 @@ class GrimmItem {
         await FirebaseFirestore.instance.collection("items").doc(id).get();
     if (snap.exists) {
       description = (snap.data()!["description"] ?? "");
-      location =
-          (snap.data()!["location"] ?? "");
+      location = (snap.data()!["location"] ?? "");
       idCategory = (snap.data()!["idCategory"] ?? "");
       remark = (snap.data()!["remark"] ?? "");
       available = (snap.data()!["available"] ?? false);
@@ -112,5 +112,46 @@ class GrimmItem {
     String tmp = description.toLowerCase().replaceAll(" ", "_").replaceAll("[:\\\\/*?|<>]", "_");
     print(tmp);
     return tmp;
+  }
+
+  /// Update the availability of the object
+  void updateAvailability() {
+    available = !available;
+    saveToFirestore();
+    saveMovement();
+  }
+
+  Future<void> saveMovement() async {
+    // trois cas possibles
+    // 1 > pas de record dispo
+    // 2 > record dispo, date de retour vide
+    // 3 > record dispo, date de retour non vide
+
+    // on va chercher si un mouvement existe pour cet objet
+    QuerySnapshot existingHistory = await FirebaseFirestore.instance
+        .collection("history")
+        .where("itemRef", isEqualTo: id)
+        .where("dateReturn", isNull: true)
+        .get();
+
+    if (existingHistory.docs.isNotEmpty) {
+      if(existingHistory.docs.length > 1) {
+        // qqch de pas normal si on a plus d'un enregistrement sans date de retour
+      } else {
+        existingHistory.docs.forEach((element) {
+          GrimmHistory grimmHistory = GrimmHistory.fromJson(element);
+          grimmHistory.dateReturn = Timestamp.now();
+          grimmHistory.userReturn = "QlkuFCmJjIUd1akCuWOGxfVXNCG2";
+          grimmHistory.update();
+        });
+      }
+    } else {
+      GrimmHistory(
+              itemRef: id,
+              dateBorrow: Timestamp.now(),
+              userBorrow: "QlkuFCmJjIUd1akCuWOGxfVXNCG2")
+          .save();
+    }
+    /**/
   }
 }
