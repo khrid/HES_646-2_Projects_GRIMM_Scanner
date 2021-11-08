@@ -17,10 +17,12 @@ class _CreateItemState extends State<CreateItemScreen> {
       text: "ObjectLouise"); // controlleur de la description
   TextEditingController locationController =
       TextEditingController(text: "C6"); // controlleur du email
-  TextEditingController categorieController = TextEditingController(
-      text: "CkptVTldFGQLlF0QLRvv"); // controlleur de la catégorie
+  TextEditingController categorieController =
+      TextEditingController(); // controlleur de la catégorie
   TextEditingController remarkController = TextEditingController(
       text: "Pas de remarque"); // controlleur de la remarque
+
+  String dropdownValue = "pansement";
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,6 @@ class _CreateItemState extends State<CreateItemScreen> {
         remark: "remark");
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
-    var dropdownValue;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Création"),
@@ -122,28 +123,50 @@ class _CreateItemState extends State<CreateItemScreen> {
             const SizedBox(
               height: 20,
             ),
-            DropdownButton<String>(
-              value: dropdownValue,
-              icon: const Icon(Icons.military_tech_sharp),
-              iconSize: 24,
-              //elevation: 16,
-              style: const TextStyle(color: Colors.black),
-              underline: Container(
-                height: 1,
-                color: Colors.black,
-              ),
-              onChanged: (String? newValue) {
-                setState(() {
-                  dropdownValue = newValue!;
-                });
+            StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('category').snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+                  // encore plus loin pour être sûr
+                  // si on a des données et que le doc existe
+                  if (snapshot.data != null) {
+                    List<String> categories = [];
+
+                    snapshot.data!.docs.forEach((result) {
+                      categories.add(result['name']);
+                    });
+                    return DropdownButton<String>(
+                      value: dropdownValue,
+                      hint: Text("Category"),
+                      icon: const Icon(Icons.military_tech_sharp),
+                      iconSize: 24,
+                      //elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.black,
+                      ),
+                      items: categories
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          this.dropdownValue = value!;
+                        });
+                      },
+                    );
+                  }
+                }
+                return const Text("");
               },
-              items: <String>['One', 'Two', 'Free', 'Four']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),),
+            ),
             /*TextFormField(
               controller: categorieController,
               validator: (value) {
@@ -220,12 +243,13 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
                 onPressed: () async {
                   {
+                    print(dropdownValue);
                     if (_key.currentState!.validate()) {
                       GrimmItem item = GrimmItem(
                           description: descriptionController.text,
                           location: locationController.text,
                           remark: remarkController.text,
-                          idCategory: categorieController.text,
+                          idCategory: dropdownValue,
                           available: true);
                       await item.saveToFirestore();
                       print("Item CREATE" + item.toString());
