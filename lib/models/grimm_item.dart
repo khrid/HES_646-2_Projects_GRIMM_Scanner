@@ -57,10 +57,10 @@ class GrimmItem {
   GrimmItem.fromJson(json)
       : this(
           id: json.id,
-          description: (json.data()!['description'] ?? ""),
-          location: (json.data()!['location'] ?? ""),
+          description: (json.data()!['description'] ?? "-"),
+          location: (json.data()!['location'] ?? "-"),
           idCategory: (json.data()!['idCategory'] ?? "").toString().trim(),
-          remark: (json.data()!['remark'] ?? ""),
+          remark: (json.data()!['remark'] ?? "-"),
           available: (json.data()!['available'] ?? false),
         );
 
@@ -89,18 +89,12 @@ class GrimmItem {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await FirebaseFirestore.instance.collection("items").doc(id).get();
     if (snap.exists) {
-      description = (snap.data()!["description"] != null
-          ? snap.data()!["description"]
-          : "");
+      description = (snap.data()!["description"] ?? "");
       location =
-          (snap.data()!["location"] != null ? snap.data()!["location"] : "");
-      idCategory = (snap.data()!["idCategory"] != null
-          ? snap.data()!["idCategory"]
-          : "");
-      remark = (snap.data()!["remark"] != null ? snap.data()!["remark"] : "");
-      available = (snap.data()!["available"] != null
-          ? snap.data()!["available"]
-          : false);
+          (snap.data()!["location"] ?? "-");
+      idCategory = (snap.data()!["idCategory"] ?? "");
+      remark = (snap.data()!["remark"] ?? "-");
+      available = (snap.data()!["available"] ?? false);
     }
   }
 

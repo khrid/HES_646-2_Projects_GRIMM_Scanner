@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 
+import 'edit_item.dart';
+
 class CreateItemScreen extends StatefulWidget {
   static const routeName = '/create_item';
 
@@ -124,8 +126,10 @@ class _CreateItemState extends State<CreateItemScreen> {
               height: 20,
             ),
             StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('category').snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('category')
+                  .orderBy("name")
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -138,17 +142,16 @@ class _CreateItemState extends State<CreateItemScreen> {
                     snapshot.data!.docs.forEach((result) {
                       categories.add(result['name']);
                     });
-                    return DropdownButton<String>(
+                    return DropdownButtonFormField<String>(
                       value: dropdownValue,
                       hint: Text("Category"),
-                      icon: const Icon(Icons.military_tech_sharp),
+                      decoration: const InputDecoration(
+                        labelText: 'Catégorie',
+                        labelStyle: TextStyle(color: Colors.black),
+                      ),
                       iconSize: 24,
                       //elevation: 16,
                       style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 1,
-                        color: Colors.black,
-                      ),
                       items: categories
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -249,7 +252,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                           description: descriptionController.text,
                           location: locationController.text,
                           remark: remarkController.text,
-                          idCategory: dropdownValue,
+                          idCategory: await getIdForCategoryName(dropdownValue),
                           available: true);
                       await item.saveToFirestore();
                       print("Item CREATE" + item.toString());

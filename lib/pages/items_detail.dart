@@ -43,6 +43,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
+    double cWidth = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
         appBar: AppBar(
           title: const Text("Détail de l'objet"),
@@ -67,6 +68,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 QRUtils.generateQrWidgetFromString(grimmItem.getIdForQrCode()),
                 const SizedBox(height: 20.0),
                 Container(
+                  width: cWidth,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('items')
@@ -111,7 +113,8 @@ class _ItemDetailState extends State<ItemDetail> {
   Future<void> editItem() async {
     setState(() {
       grimmItem.populateItemInfoFromFirestore();
-      Navigator.pushNamed(context, EditItemScreen.routeName, arguments: grimmItem);
+      Navigator.pushNamed(context, EditItemScreen.routeName,
+          arguments: grimmItem);
     });
   }
 }
@@ -134,25 +137,39 @@ Widget buildItemDetails(
     if (snapshot.data!.data() != null) {
       GrimmItem item = GrimmItem.fromJson(snapshot.data);
 
-      var availability;
+      String availability;
       if (item.available == true) {
         availability = "Disponible";
       } else {
         availability = "Emprunté";
       }
 
-      return Container(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-            Text("Objet : " + item.description,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("" + item.description,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
             const SizedBox(height: 20.0),
-            Text("Emplacement : " + item.location,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Emplacement : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + item.location,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
             const SizedBox(height: 20.0),
             /*Text("Catégorie : " + item.idCategory,
-                style: TextStyle(color: Colors.black, fontSize: 14)),*/
+            style: TextStyle(color: Colors.black, fontSize: 14)),*/
             StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('category')
@@ -161,11 +178,34 @@ Widget buildItemDetails(
               builder: buildItemCategory,
             ),
             const SizedBox(height: 20.0),
-            Text("Statut : " + availability,
-                style: TextStyle(color: Colors.black, fontSize: 14)),
-                const SizedBox(height: 20.0),
-                Text("Remarque : " + item.remark,
-                    style: TextStyle(color: Colors.black, fontSize: 14)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Statut : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + availability,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Remarque : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Flexible(
+                  child: Text("" + item.remark,
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 14)),
+                )
+              ],
+            ),
             const SizedBox(height: 50.0),
             //if (item.available)
             ElevatedButton(
@@ -188,26 +228,26 @@ Widget buildItemDetails(
                 child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
             //const SizedBox(height: 15.0),
             /*if (!item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  onPressed: () async {
-                    if (!item.available) {
-                      item.available = true;
-                      //updateItem(item);
-                      item.saveToFirestore();
-                    } else {
-                      //TODO: définir l'action
-                    }
-                  },
-                  child: Text("RETOURNER")),*/
+          ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Theme.of(context).primaryColor,
+                textStyle: TextStyle(
+                    fontFamily: "Raleway-Regular", fontSize: 14.0),
+                side: const BorderSide(width: 1.0, color: Colors.black),
+                padding: EdgeInsets.all(10.0),
+              ),
+              onPressed: () async {
+                if (!item.available) {
+                  item.available = true;
+                  //updateItem(item);
+                  item.saveToFirestore();
+                } else {
+                  //TODO: définir l'action
+                }
+              },
+              child: Text("RETOURNER")),*/
             const SizedBox(height: 20.0),
-          ]));
+          ]);
     } else {
       return Text("Pas d'object trouvé, scannez à nouveau");
     }
@@ -225,7 +265,18 @@ Widget buildItemCategory(BuildContext context,
     // si on a des données et que le doc existe
     if (snapshot.data!.data() != null) {
       var grimmCategory = snapshot.data;
-      return Text("Catégorie : " + grimmCategory!.data()!["name"]);
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Catégorie : ",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+          Text("" + grimmCategory!.data()!["name"],
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
+        ],
+      );
     }
   }
   return const Text("");
