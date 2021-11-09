@@ -49,7 +49,7 @@ class GrimmItem {
         idCategory +
         ",remark:" +
         remark +
-        ", available" +
+        ", available:" +
         available.toString() +
         "}";
   }
@@ -59,7 +59,7 @@ class GrimmItem {
           id: json.id,
           description: (json.data()!['description'] ?? ""),
           location: (json.data()!['location'] ?? ""),
-          idCategory: (json.data()!['idCategory'] ?? ""),
+          idCategory: (json.data()!['idCategory'] ?? "").toString().trim(),
           remark: (json.data()!['remark'] ?? ""),
           available: (json.data()!['available'] ?? false),
         );

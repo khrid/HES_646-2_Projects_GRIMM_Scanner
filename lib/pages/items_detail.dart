@@ -17,6 +17,8 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  late GrimmItem grimmItem;
+
   @override
   Widget build(BuildContext context) {
     final qrcode = ModalRoute.of(context)!.settings.arguments == null
@@ -30,13 +32,14 @@ class _ItemDetailState extends State<ItemDetail> {
           context, "/", (Route<dynamic> route) => false));
     }
 
-    GrimmItem grimmItem = GrimmItem(
+    grimmItem = GrimmItem(
         id: qrcode.replaceAll(Constants.grimmQrCodeStartsWith, ""),
         description: "description",
         location: "location",
         idCategory: "idCategory",
         available: true,
         remark: "remark");
+    grimmItem.populateItemInfoFromFirestore();
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
@@ -47,7 +50,7 @@ class _ItemDetailState extends State<ItemDetail> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-         /*floatingActionButton: FloatingActionButton(
+        /*floatingActionButton: FloatingActionButton(
           onPressed: editItem,
           child: const Icon(Icons.edit),
         ),*/
@@ -75,40 +78,40 @@ class _ItemDetailState extends State<ItemDetail> {
                 const SizedBox(height: 60.0),
               ],
             ),
-            
           ],
-        )))),floatingActionButton: Column(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      FloatingActionButton(
-        backgroundColor: Colors.black,
-        child: Icon(
-          Icons.edit,
-          color: Theme.of(context).primaryColor,
-        ),
-        onPressed: () {
-          editItem();
-        },
-        heroTag: null,
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      FloatingActionButton(    
-        backgroundColor: Colors.black,       
-        child: Icon(
-          Icons.delete,
-          color: Theme.of(context).primaryColor,
-        ),
-        onPressed: () => editItem(),
-        heroTag: null,
-      )
-    ]
-  ));
+        )))),
+        floatingActionButton:
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {
+              editItem();
+            },
+            heroTag: null,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () => editItem(),
+            heroTag: null,
+          )
+        ]));
   }
-    Future<void> editItem() async {
+
+  Future<void> editItem() async {
     setState(() {
-      Navigator.pushNamed(context, EditItemScreen.routeName);
+      grimmItem.populateItemInfoFromFirestore();
+      Navigator.pushNamed(context, EditItemScreen.routeName, arguments: grimmItem);
     });
   }
 }
@@ -160,6 +163,9 @@ Widget buildItemDetails(
             const SizedBox(height: 20.0),
             Text("Statut : " + availability,
                 style: TextStyle(color: Colors.black, fontSize: 14)),
+                const SizedBox(height: 20.0),
+                Text("Remarque : " + item.remark,
+                    style: TextStyle(color: Colors.black, fontSize: 14)),
             const SizedBox(height: 50.0),
             //if (item.available)
             ElevatedButton(
@@ -224,4 +230,3 @@ Widget buildItemCategory(BuildContext context,
   }
   return const Text("");
 }
-

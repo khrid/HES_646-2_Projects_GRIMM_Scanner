@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/models/grimm_item.dart';
 
 class EditItemScreen extends StatefulWidget {
   static const routeName = '/edit_item';
@@ -11,7 +13,7 @@ class EditItemScreen extends StatefulWidget {
 
 class _EditItemState extends State<EditItemScreen> {
   final _key = GlobalKey<FormState>();
-    TextEditingController descriptionController = TextEditingController(
+  TextEditingController descriptionController = TextEditingController(
       text: "ObjectLouise"); // controlleur de la description
   TextEditingController locationController =
       TextEditingController(text: "C6"); // controlleur du email
@@ -19,10 +21,29 @@ class _EditItemState extends State<EditItemScreen> {
       text: "CkptVTldFGQLlF0QLRvv"); // controlleur de la catégorie
   TextEditingController remarkController = TextEditingController(
       text: "Pas de remarque"); // controlleur de la remarque
-
+  String dropdownValue = "pansement";
+  String dropdownValueId = "";
+  int firstLoad = 1;
+  List test = [];
+  late GrimmItem grimmItem;
 
   @override
   Widget build(BuildContext context) {
+    grimmItem = (ModalRoute.of(context)!.settings.arguments == null
+        ? null
+        : ModalRoute.of(context)!.settings.arguments as GrimmItem)!;
+
+    if (grimmItem is! GrimmItem) {
+      Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false));
+    }
+    print("EditItemScreen - " + grimmItem.toString());
+
+    descriptionController.text = grimmItem.description;
+    locationController.text = grimmItem.location;
+    categorieController.text = grimmItem.idCategory;
+    remarkController.text = grimmItem.remark;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Edition"),
@@ -111,6 +132,54 @@ class _EditItemState extends State<EditItemScreen> {
             const SizedBox(
               height: 20,
             ),
+            StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection('category').orderBy("name").snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasData) {
+                  // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+                  // encore plus loin pour être sûr
+                  // si on a des données et que le doc existe
+                  if (snapshot.data != null) {
+                    List<String> categories = [];
+
+                    for (var result in snapshot.data!.docs) {
+                      categories.add(result['name']);
+                      if (result.id == grimmItem.idCategory && firstLoad == 1) {
+                        dropdownValue = result["name"];
+                      }
+                    }
+
+                    firstLoad = 0;
+                    return DropdownButtonFormField<String>(
+                      value: dropdownValue,
+                      hint: const Text("Category"),
+                      iconSize: 24,
+                      //elevation: 16,
+                      decoration: InputDecoration(
+                        labelText: 'Catégorie',
+                      ),
+                      style: const TextStyle(color: Colors.black),
+                      items: categories
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
+                      },
+                    );
+                  }
+                }
+                return const Text("");
+              },
+            ),
+            /*
            TextFormField(
               controller: categorieController,
               validator: (value) {
@@ -143,7 +212,7 @@ class _EditItemState extends State<EditItemScreen> {
             ),
             const SizedBox(
               height: 20,
-            ),
+            ),*/
             TextFormField(
               controller: remarkController,
               validator: (value) {
@@ -187,7 +256,14 @@ class _EditItemState extends State<EditItemScreen> {
                 ),
                 onPressed: () async {
                   {
-                    
+                    grimmItem.description = descriptionController.text;
+                    grimmItem.location = locationController.text;
+                    grimmItem.remark = remarkController.text;
+                    grimmItem.idCategory =
+                        await getIdForCategoryName(dropdownValue);
+                    print("End " + grimmItem.toString());
+                    grimmItem.updateFirestore();
+                    Navigator.of(context).pop();
                   }
                 },
                 child: Text("VALIDER")),
@@ -198,4 +274,13 @@ class _EditItemState extends State<EditItemScreen> {
         ),
       ),
     );
-}}
+  }
+}
+
+getIdForCategoryName(String dropdownValue) async {
+  QuerySnapshot<Map<String, dynamic>> snap = await FirebaseFirestore.instance
+      .collection("category")
+      .where("name", isEqualTo: dropdownValue)
+      .get();
+  return snap.docs.first.id;
+}
