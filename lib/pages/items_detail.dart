@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 
 import 'edit_item.dart';
@@ -18,6 +19,9 @@ class ItemDetail extends StatefulWidget {
 
 class _ItemDetailState extends State<ItemDetail> {
   late GrimmItem grimmItem;
+
+  late CollectionReference _items =
+      FirebaseFirestore.instance.collection("items");
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,7 @@ class _ItemDetailState extends State<ItemDetail> {
               Icons.delete,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () => editItem(),
+            onPressed: () => showAlertDialog(context),
             heroTag: null,
           )
         ]));
@@ -116,6 +120,45 @@ class _ItemDetailState extends State<ItemDetail> {
       Navigator.pushNamed(context, EditItemScreen.routeName,
           arguments: grimmItem);
     });
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Annuler"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continuer"),
+      onPressed: () {
+        _items.doc(grimmItem.id).delete();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text('Objet supprimé'),
+            duration: Duration(seconds: 2)));
+        Navigator.pushNamedAndRemoveUntil(
+            context, ItemsAdmin.routeName, (route) => false);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Suppression de l'objet"),
+      content: Text("Etes vous vraiment sûr de vouloir supprimer cet objet?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 

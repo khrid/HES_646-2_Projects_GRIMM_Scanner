@@ -24,7 +24,7 @@ class _CreateItemState extends State<CreateItemScreen> {
   TextEditingController remarkController = TextEditingController(
       text: "Pas de remarque"); // controlleur de la remarque
 
-  String dropdownValue = "pansement";
+  String dropdownValue = "Non défini";
 
   @override
   Widget build(BuildContext context) {
