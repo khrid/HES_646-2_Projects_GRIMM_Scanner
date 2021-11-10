@@ -17,6 +17,8 @@ class _EditItemState extends State<EditItemScreen> {
       text: "ObjectLouise"); // controlleur de la description
   TextEditingController locationController =
       TextEditingController(text: "C6"); // controlleur du email
+  TextEditingController colorController =
+      TextEditingController(text: "red"); // controlleur de la color
   TextEditingController categorieController = TextEditingController(
       text: "CkptVTldFGQLlF0QLRvv"); // controlleur de la catégorie
   TextEditingController remarkController = TextEditingController(
@@ -41,6 +43,7 @@ class _EditItemState extends State<EditItemScreen> {
 
     descriptionController.text = grimmItem.description;
     locationController.text = grimmItem.location;
+    colorController.text = grimmItem.color;
     categorieController.text = grimmItem.idCategory;
     remarkController.text = grimmItem.remark;
 
@@ -132,9 +135,43 @@ class _EditItemState extends State<EditItemScreen> {
             const SizedBox(
               height: 20,
             ),
+            TextFormField(
+              controller: colorController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Le champ 'Couleur' ne peut pas être vide";
+                } else
+                  return null;
+              },
+              decoration: const InputDecoration(
+                labelText: "Couleur",
+                labelStyle: TextStyle(
+                  fontFamily: "Raleway-Regular",
+                  fontSize: 14.0,
+                  color: Colors.black,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              textInputAction: TextInputAction.next,
+              cursorColor: Theme.of(context).backgroundColor,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('category').orderBy("name").snapshots(),
+              stream: FirebaseFirestore.instance
+                  .collection('category')
+                  .orderBy("name")
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasData) {
@@ -258,6 +295,7 @@ class _EditItemState extends State<EditItemScreen> {
                   {
                     grimmItem.description = descriptionController.text;
                     grimmItem.location = locationController.text;
+                    grimmItem.color = colorController.text;
                     grimmItem.remark = remarkController.text;
                     grimmItem.idCategory =
                         await getIdForCategoryName(dropdownValue);

@@ -15,14 +15,16 @@ class CreateItemScreen extends StatefulWidget {
 
 class _CreateItemState extends State<CreateItemScreen> {
   final _key = GlobalKey<FormState>();
-  TextEditingController descriptionController = TextEditingController(
-      text: "ObjectLouise"); // controlleur de la description
+  TextEditingController descriptionController =
+      TextEditingController(); // controlleur de la description
   TextEditingController locationController =
-      TextEditingController(text: "C6"); // controlleur du email
+      TextEditingController(); // controlleur du email
+  TextEditingController colorController =
+      TextEditingController(); //Controller de la color
   TextEditingController categorieController =
       TextEditingController(); // controlleur de la catégorie
-  TextEditingController remarkController = TextEditingController(
-      text: "Pas de remarque"); // controlleur de la remarque
+  TextEditingController remarkController =
+      TextEditingController(); // controlleur de la remarque
 
   String dropdownValue = "Non défini";
 
@@ -32,6 +34,7 @@ class _CreateItemState extends State<CreateItemScreen> {
         //id: "id",
         description: "description",
         location: "location",
+        color: "color",
         idCategory: "idCategory",
         available: true,
         remark: "remark");
@@ -103,6 +106,38 @@ class _CreateItemState extends State<CreateItemScreen> {
               },
               decoration: const InputDecoration(
                 labelText: 'Emplacement',
+                labelStyle: TextStyle(
+                  fontFamily: "Raleway-Regular",
+                  fontSize: 14.0,
+                  color: Colors.black,
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              textInputAction: TextInputAction.next,
+              cursorColor: Theme.of(context).backgroundColor,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              controller: colorController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Le champ 'Couleur' ne peut pas être vide";
+                } else
+                  return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'Couleur',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
@@ -251,6 +286,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                       GrimmItem item = GrimmItem(
                           description: descriptionController.text,
                           location: locationController.text,
+                          color: colorController.text,
                           remark: remarkController.text,
                           idCategory: await getIdForCategoryName(dropdownValue),
                           available: true);

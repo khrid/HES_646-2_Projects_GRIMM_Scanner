@@ -10,6 +10,9 @@ class GrimmItem {
   /// Item location
   String location;
 
+  /// Iteam color
+  String color;
+
   /// Item category
   String idCategory;
 
@@ -32,6 +35,7 @@ class GrimmItem {
     this.id = "",
     required this.description,
     required this.location,
+    required this.color,
     required this.idCategory,
     required this.available,
     required this.remark,
@@ -45,6 +49,8 @@ class GrimmItem {
         description +
         ",location:" +
         location +
+        ", color:" +
+        color +
         ",category:" +
         idCategory +
         ",remark:" +
@@ -59,6 +65,7 @@ class GrimmItem {
           id: json.id,
           description: (json.data()!['description'] ?? "-"),
           location: (json.data()!['location'] ?? "-"),
+          color: (json.data()!['color'] ?? "-"),
           idCategory: (json.data()!['idCategory'] ?? "").toString().trim(),
           remark: (json.data()!['remark'] ?? "-"),
           available: (json.data()!['available'] ?? false),
@@ -70,6 +77,7 @@ class GrimmItem {
       //'id': id,
       'description': description,
       'location': location,
+      'color': color,
       'idCategory': idCategory,
       'remark': remark,
       'available': available
@@ -80,7 +88,7 @@ class GrimmItem {
     await FirebaseFirestore.instance.collection("items").doc(id).set(toJson());
   }
 
-    Future<void> saveToFirestore() async {
+  Future<void> saveToFirestore() async {
     await FirebaseFirestore.instance.collection("items").add(toJson());
   }
 
@@ -90,8 +98,8 @@ class GrimmItem {
         await FirebaseFirestore.instance.collection("items").doc(id).get();
     if (snap.exists) {
       description = (snap.data()!["description"] ?? "");
-      location =
-          (snap.data()!["location"] ?? "-");
+      location = (snap.data()!["location"] ?? "-");
+      color = (snap.data()!["color"] ?? "-");
       idCategory = (snap.data()!["idCategory"] ?? "");
       remark = (snap.data()!["remark"] ?? "-");
       available = (snap.data()!["available"] ?? false);

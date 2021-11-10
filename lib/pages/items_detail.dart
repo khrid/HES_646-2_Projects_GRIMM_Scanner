@@ -40,6 +40,7 @@ class _ItemDetailState extends State<ItemDetail> {
         id: qrcode.replaceAll(Constants.grimmQrCodeStartsWith, ""),
         description: "description",
         location: "location",
+        color: "color",
         idCategory: "idCategory",
         available: true,
         remark: "remark");
@@ -211,6 +212,19 @@ Widget buildItemDetails(
               ],
             ),
             const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Couleur : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + item.color,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 20.0),
             /*Text("Catégorie : " + item.idCategory,
             style: TextStyle(color: Colors.black, fontSize: 14)),*/
             StreamBuilder(
@@ -263,7 +277,7 @@ Widget buildItemDetails(
                   //if (item.available) {
                   item.available = !item.available;
                   //updateItem(item);
-                  item.saveToFirestore();
+                  item.updateFirestore();
                   //} else {
                   //  //TODO: définir l'action
                   //}
