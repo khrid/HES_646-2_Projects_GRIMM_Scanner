@@ -146,7 +146,7 @@ class _ItemDetailState extends State<ItemDetail> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Suppression de l'objet"),
-      content: Text("Etes vous vraiment sûr de vouloir supprimer cet objet?"),
+      content: Text("Êtes-vous vraiment sûr de vouloir supprimer cet objet ?"),
       actions: [
         cancelButton,
         continueButton,
