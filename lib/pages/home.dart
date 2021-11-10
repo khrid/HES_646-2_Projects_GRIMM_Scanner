@@ -9,6 +9,7 @@ import 'package:grimm_scanner/widgets/button_home.dart';
 
 import 'accounts_admin.dart';
 import 'create_account.dart';
+import 'create_item.dart';
 import 'items_admin.dart';
 import 'items_admin.dart';
 
@@ -43,6 +44,9 @@ class _HomeState extends State<Home> {
                     const SizedBox(
                       height: 10.0,
                     ),
+
+                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                const SizedBox(height: 10.0,),*/
                     /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                     const SizedBox(
                       height: 10.0,
@@ -75,6 +79,12 @@ class _HomeState extends State<Home> {
       Navigator.pushNamed(context, ItemsAdmin.routeName);
     });
   }
+
+  /*Future<void> createItem() async {
+    setState(() {
+      Navigator.pushNamed(context, CreateItemScreen.routeName);
+    });
+  }*/
 
   Future<void> fakeScan() async {
     setState(() {
