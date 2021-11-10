@@ -130,7 +130,7 @@ class GrimmItem {
   /// Update the availability of the object
   void updateAvailability() {
     available = !available;
-    saveToFirestore();
+    updateFirestore();
     saveMovement();
   }
 
