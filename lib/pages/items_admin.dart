@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 
+import 'create_item.dart';
 import 'items_detail.dart';
 
 class ItemsAdmin extends StatefulWidget {
@@ -26,8 +27,11 @@ class _ItemsAdminState extends State<ItemsAdmin> {
         ),
         backgroundColor: Theme.of(context).primaryColor,
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
           onPressed: createItem,
-          child: const Icon(Icons.add),
+          child: Icon(
+              Icons.add,           
+              color: Theme.of(context).primaryColor,),
         ),
         body: Center(
             child: SingleChildScrollView(
@@ -43,10 +47,8 @@ class _ItemsAdminState extends State<ItemsAdmin> {
   }
 
   Future<void> createItem() async {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Todo ! Et désactiver avant démo si pas fait")));
     setState(() {
-      //Navigator.pushNamed(context, CreateAccountScreen.routeName);
+      Navigator.pushNamed(context, CreateItemScreen.routeName);
     });
   }
 

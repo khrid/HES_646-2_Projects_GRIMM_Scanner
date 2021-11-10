@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/pages/items_history.dart';
+import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
@@ -12,6 +13,8 @@ import 'package:grimm_scanner/widgets/expandable_fab.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import 'edit_item.dart';
 
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
@@ -26,6 +29,9 @@ class _ItemDetailState extends State<ItemDetail> {
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
   late String qrcode;
   late GrimmItem grimmItem;
+
+  late CollectionReference _items =
+      FirebaseFirestore.instance.collection("items");
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +50,15 @@ class _ItemDetailState extends State<ItemDetail> {
         id: qrcode.replaceAll(Constants.grimmQrCodeStartsWith, ""),
         description: "description",
         location: "location",
+        color: "color",
         idCategory: "idCategory",
         available: true,
         remark: "remark");
+    grimmItem.populateItemInfoFromFirestore();
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
+    double cWidth = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
         appBar: AppBar(
           title: const Text("Détail de l'objet"),
@@ -108,6 +117,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 QRUtils.generateQrWidgetFromString(grimmItem.getIdForQrCode()),
                 const SizedBox(height: 20.0),
                 Container(
+                  width: cWidth,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('items')
@@ -120,7 +130,80 @@ class _ItemDetailState extends State<ItemDetail> {
               ],
             ),
           ],
-        )))));
+        )))),
+        floatingActionButton:
+            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {
+              editItem();
+            },
+            heroTag: null,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.black,
+            child: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryColor,
+            ),
+            onPressed: () => showAlertDialog(context),
+            heroTag: null,
+          )
+        ]));
+  }
+
+  Future<void> editItem() async {
+    setState(() {
+      grimmItem.populateItemInfoFromFirestore();
+      Navigator.pushNamed(context, EditItemScreen.routeName,
+          arguments: grimmItem);
+    });
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text("Annuler"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text("Continuer"),
+      onPressed: () {
+        _items.doc(grimmItem.id).delete();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: const Text('Objet supprimé'),
+            duration: Duration(seconds: 2)));
+        Navigator.pushNamedAndRemoveUntil(
+            context, ItemsAdmin.routeName, (route) => false);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Suppression de l'objet"),
+      content: Text("Êtes-vous vraiment sûr de vouloir supprimer cet objet ?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   void showHistory() {
@@ -137,79 +220,138 @@ class _ItemDetailState extends State<ItemDetail> {
   Future<void> updateItem(GrimmItem i) async {
     _items.doc(i.id).update(i.toJson());
   }*/
+  // si on a des données
+  if (snapshot.hasData) {
+    // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+    // encore plus loin pour être sûr
+    // si on a des données et que le doc existe
+    if (snapshot.data!.data() != null) {
+      GrimmItem item = GrimmItem.fromJson(snapshot.data);
 
-    // si on a des données
-    if (snapshot.hasData) {
-      // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
-      // encore plus loin pour être sûr
-      // si on a des données et que le doc existe
-      if (snapshot.data!.data() != null) {
-        grimmItem = GrimmItem.fromJson(snapshot.data);
+      String availability;
+      if (item.available == true) {
+        availability = "Disponible";
+      } else {
+        availability = "Emprunté";
+      }
 
-        var availability;
-        if (grimmItem.available == true) {
-          availability = "Disponible";
-        } else {
-          availability = "Emprunté";
-        }
-
-        return Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-              Text("Objet : " + grimmItem.description,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
-              const SizedBox(height: 20.0),
-              Text("Emplacement : " + grimmItem.location,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
-              const SizedBox(height: 20.0),
-              /*Text("Catégorie : " + item.idCategory,
-                style: TextStyle(color: Colors.black, fontSize: 14)),*/
-              StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('category')
-                    .doc(grimmItem.idCategory)
-                    .snapshots(),
-                builder: buildItemCategory,
-              ),
-              const SizedBox(height: 20.0),
-              Text("Statut : " + availability,
-                  style: TextStyle(color: Colors.black, fontSize: 14)),
-              const SizedBox(height: 50.0),
-              //if (item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("" + item.description,
+                overflow: TextOverflow.fade,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Emplacement : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + item.location,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Couleur : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + item.color,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            /*Text("Catégorie : " + item.idCategory,
+            style: TextStyle(color: Colors.black, fontSize: 14)),*/
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('category')
+                  .doc(item.idCategory)
+                  .snapshots(),
+              builder: buildItemCategory,
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Statut : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Text("" + availability,
+                    style: const TextStyle(color: Colors.black, fontSize: 14)),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Remarque : ",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold)),
+                Flexible(
+                  child: Text("" + item.remark,
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 14)),
+                )
+              ],
+            ),
+            const SizedBox(height: 50.0),
+            //if (item.available)
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(10.0),
+                ),
                   onPressed: () async {
                     grimmItem.updateAvailability();
                   },
-                  child: Text(grimmItem.available ? "EMPRUNTER" : "RETOURNER")),
-              const SizedBox(height: 20.0),
-            ]));
-      } else {
-        return Text("Pas d'object trouvé, scannez à nouveau");
-      }
+                child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
+            const SizedBox(height: 20.0),
+          ]);
     } else {
-      return Text("No item details yet :(");
+        return Text("Pas d'object trouvé, scannez à nouveau");
     }
   }
 
-  Widget buildItemCategory(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-    // si on a des données
-    if (snapshot.hasData) {
-      // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
-      // encore plus loin pour être sûr
-      // si on a des données et que le doc existe
-      if (snapshot.data!.data() != null) {
-        var grimmCategory = snapshot.data;
-        return Text("Catégorie : " + grimmCategory!.data()!["name"]);
-      }
+Widget buildItemCategory(BuildContext context,
+    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+  // si on a des données
+  if (snapshot.hasData) {
+    // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
+    // encore plus loin pour être sûr
+    // si on a des données et que le doc existe
+    if (snapshot.data!.data() != null) {
+      var grimmCategory = snapshot.data;
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("Catégorie : ",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold)),
+          Text("" + grimmCategory!.data()!["name"],
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
+        ],
+      );
     }
     return const Text("");
   }

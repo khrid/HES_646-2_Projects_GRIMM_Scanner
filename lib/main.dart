@@ -8,6 +8,9 @@ import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 
+import 'pages/create_item.dart';
+import 'pages/edit_item.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -81,6 +84,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         ItemsAdmin.routeName: (context) => const ItemsAdmin(),
         AccountsAdmin.routeName: (context) => const AccountsAdmin(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
+        CreateItemScreen.routeName: (context) => const CreateItemScreen(),
+        EditItemScreen.routeName: (context) => const EditItemScreen(),
       },
     );
   }
