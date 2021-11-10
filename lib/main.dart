@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
+import 'package:grimm_scanner/pages/accounts_user_detail.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/update_account.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,6 +80,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         ItemDetail.routeName: (context) => const ItemDetail(),
         ItemsAdmin.routeName: (context) => const ItemsAdmin(),
         AccountsAdmin.routeName: (context) => const AccountsAdmin(),
+        UserDetail.routeName: (context) => const UserDetail(),
+        UserUpdate.routeName: (context) => const UserUpdate(),
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
       },
     );
