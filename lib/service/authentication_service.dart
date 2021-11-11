@@ -13,7 +13,7 @@ class AuthenticationService {
     if (user == null) return null;
     GrimmUser grimmUser = GrimmUser(groups: []);
     grimmUser.setEmail(_auth.currentUser!.email.toString());
-    grimmUser.setUid(user.uid);
+    //grimmUser.setUid(user.uid);
     grimmUser.populateUserInfoFromFirestore();
     return grimmUser;
   }
@@ -65,7 +65,7 @@ class AuthenticationService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      grimmUser.setUid(result.user!.uid);
+      //grimmUser.setUid(result.user!.uid);
       print(grimmUser);
       await grimmUser.saveToFirestore();
       return grimmUser;

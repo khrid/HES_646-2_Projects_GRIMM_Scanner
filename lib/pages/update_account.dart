@@ -1,70 +1,78 @@
-/*
-* Classe pour l'écran de création d'un nouveau compte 
-* Lié directement avec la firebase Authentification
-*/
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/service/authentication_service.dart';
 
-class CreateAccountScreen extends StatefulWidget {
-  static const routeName = '/create_account';
+class UserUpdate extends StatefulWidget {
+  static const routeName = "/users/detail/update";
 
-  const CreateAccountScreen({Key? key}) : super(key: key);
+  const UserUpdate({Key? key}) : super(key: key);
 
   @override
-  _CreateAccountState createState() => _CreateAccountState();
+  _UserUpdateState createState() => _UserUpdateState();
 }
 
-class _CreateAccountState extends State<CreateAccountScreen> {
-  final _key = GlobalKey<FormState>();
-  final AuthenticationService _auth =
-      AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
+class _UserUpdateState extends State<UserUpdate> {
+  final _formKey = GlobalKey<FormState>();
+
+  GrimmUser? _user;
+  late CollectionReference _users;
+  TextEditingController userNameController = new TextEditingController();
+  TextEditingController userSurnameController = new TextEditingController();
+  TextEditingController userEmailController = new TextEditingController();
+  TextEditingController userPasswordController =
+      new TextEditingController(); //TO DO Micaela
+  TextEditingController userGroupController = new TextEditingController();
+  var eventTypeSelectedValue;
+  int firstLoad = 1;
 
   bool isAdmin = false;
   bool isObjectManager = false;
   bool isMember = false;
-
-  TextEditingController lastnameController =
-      TextEditingController(); // controlleur du name
-  TextEditingController firstnameController =
-      TextEditingController(); // controlleur du prenom
-  TextEditingController emailController =
-      TextEditingController(); // controlleur du email
-  TextEditingController passwordController =
-      TextEditingController(); // controlleur du password
-  TextEditingController groupController =
-      TextEditingController(); // controlleur du group
 
   @override
   void initState() {
     super.initState();
   }
 
-  var errorMessage = "";
-
-  void changeErrorMessage(String message) {
-    setState(() {
-      errorMessage = message;
-    });
-  }
-
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
+    var tab = [];
+    if (firstLoad == 1) {
+      _user = ModalRoute.of(context)!.settings.arguments as GrimmUser;
+      if (_user!.groups.contains("Administrator")) isAdmin = true;
+      if (_user!.groups.contains("Member")) isMember = true;
+      if (_user!.groups.contains("ObjectManager")) isObjectManager = true;
+      userNameController.text = _user!.name;
+      userSurnameController.text = _user!.firstname;
+      userEmailController.text = _user!.email;
+      firstLoad = 0;
+    }
+
+    print(_user);
+
+    _users = FirebaseFirestore.instance.collection("users");
+
+    // TO DO Micaela
+    Future<void> updateUser(GrimmUser u) async {
+      //_users.doc(u.uid).update(u.toJson());
+      u.updateFirestore();
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Création d'un compte"),
+        title: const Text("Éditez utilisateur"),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Form(
-        key: _key,
+        key: _formKey,
         child: ListView(
           padding: EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Créez un nouvel utilisateur",
+            Text(
+              "Modifiez les informations de l'utilisateur",
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
@@ -72,18 +80,18 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               ),
               textAlign: TextAlign.left,
             ),
-            const SizedBox(
+            SizedBox(
               height: 20,
             ),
             TextFormField(
-              controller: firstnameController,
+              controller: userSurnameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Prénom" ne peut pas être vide';
                 } else
                   return null;
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Prénom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -104,18 +112,18 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            const SizedBox(
+            SizedBox(
               height: 20,
             ),
             TextFormField(
-              controller: lastnameController,
+              controller: userNameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Nom" ne peut pas être vide';
                 } else
                   return null;
               },
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: 'Nom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -136,21 +144,13 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            const SizedBox(
+            SizedBox(
               height: 20,
             ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              controller: emailController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Le champ "Email" ne peut pas être vide';
-                } else {
-                  return null;
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Email',
+            TextField(
+              controller: userEmailController,
+              decoration: InputDecoration(
+                labelText: 'Email (non-modifiable actuellement)',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
@@ -167,43 +167,10 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   ),
                 ),
               ),
-              textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
+              enabled: false,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              obscureText: true,
-              controller: passwordController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Le champ "Mot de passe" ne peut pas être vide';
-                } else
-                  return null;
-              },
-              decoration: const InputDecoration(
-                labelText: 'Mot de passe',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Colors.black,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Colors.black,
-            ),
-            const SizedBox(
+            SizedBox(
               height: 20,
             ),
             CheckboxListTile(
@@ -248,15 +215,12 @@ class _CreateAccountState extends State<CreateAccountScreen> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: const TextStyle(
-                      fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: const EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
-                  // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
-                  //TODO : amélioration possible, code pas ouf mais ça fonctionne
-                  var tab = [];
                   if (isAdmin) {
                     tab.add("Administrator");
                   }
@@ -266,30 +230,25 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   if (isObjectManager) {
                     tab.add("ObjectManager");
                   }
+                  /*GrimmUser changedUser = GrimmUser(
+                      name: userNameController.text,
+                      firstname: userSurnameController.text,
+                      email: _user!.email,
+                      //TO DO checkbox Micaela
+                      enable: _user!.enable,
+                      groups: tab);
+                  changedUser.setUid(_user!.uid);*/
+                  _user!.name = userNameController.text;
+                  _user!.firstname = userSurnameController.text;
+                  _user!.groups = tab;
+
                   if (tab.isNotEmpty) {
-                    if (_key.currentState!.validate()) {
-                      GrimmUser grimmUser = GrimmUser(
-                          name: lastnameController.text,
-                          firstname: firstnameController.text,
-                          email: emailController.text,
-                          groups: tab);
-                      Object? result = await _auth.signUp(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          grimmUser: grimmUser);
-                      if (result is GrimmUser) {
-                        print("User CREATE" + result.toString());
-                        changeErrorMessage("");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Compte créé avec succès")));
-                        Navigator.pushNamed(context, "/");
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                "Veuillez modifier votre mail/mot de passe")));
-                        changeErrorMessage(result.toString());
-                      }
+                    if (_formKey.currentState!.validate()) {
+                      updateUser(_user!);
+                      print("Changements effectués");
+                      //Navigator.pushNamed(context, UserDetail.routeName,
+                      //    arguments: _user!.uid);
+                      Navigator.pop(context);
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -297,8 +256,44 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                             "Veuillez sélectionner un groupe au minimum.")));
                   }
                 },
-                child: Text("VALIDER")),
-            const SizedBox(
+                child: Text("Valider les modifications")),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (isAdmin) {
+                      tab.add("Administrator");
+                    }
+                    if (isMember) {
+                      tab.add("Member");
+                    }
+                    if (isObjectManager) {
+                      tab.add("ObjectManager");
+                    }
+                    if (tab.isNotEmpty) {
+                      _user!.updateStatus();
+                      Navigator.pop(context);
+                      print("Désactivation effectuée");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              "Veuillez sélectionner un groupe au minimum.")));
+                    }
+                  }
+                },
+                child: Text(_user!.enable
+                    ? "Désactiver le compte"
+                    : "Activer le compte")),
+            SizedBox(
               height: 20,
             ),
           ],
