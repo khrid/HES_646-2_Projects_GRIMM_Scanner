@@ -31,28 +31,26 @@ class _UserDetailState extends State<UserDetail> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body: Container(
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Container(
+        padding: EdgeInsets.all(50),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 20.0),
-                Container(
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(userUID)
-                        .snapshots(),
-                    builder: buildUserDetails,
-                  ),
-                ),
-                const SizedBox(height: 60.0),
-              ],
+            const SizedBox(height: 20.0),
+            Container(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(userUID)
+                    .snapshots(),
+                builder: buildUserDetails,
+              ),
             ),
+            const SizedBox(height: 60.0),
           ],
-        )));
+        ),
+      ),
+    );
   }
 
   Widget buildUserDetails(
@@ -62,9 +60,22 @@ class _UserDetailState extends State<UserDetail> {
       if (snapshot.data!.data() != null) {
         GrimmUser user = GrimmUser.fromJson(snapshot.data);
         print(user);
+
+        for (var i = 0; i < user.groups.length; i++) {
+          if (user.groups[i] == "Administrator")
+          {
+            isAdmin = true;
+          } else if(user.groups[i] == "ObjectManager")
+          {
+            isObjectManager = true;
+          } else if(user.groups[i] == "Member")
+          {
+            isMember = true;
+          }
+        }
         return Container(
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
               Text(
                 "Informations de l'utilisateur",
@@ -90,7 +101,7 @@ class _UserDetailState extends State<UserDetail> {
               //Text("Compte actif : " + user.enable.toString(),
               //    style: TextStyle(color: Colors.black, fontSize: 14)),
               //const SizedBox(height: 20.0),
-              /*CheckboxListTile(
+              CheckboxListTile(
                 title: const Text("Administrateur"),
                 tileColor: Theme.of(context).primaryColor,
                 checkColor: Colors.white,
@@ -113,7 +124,7 @@ class _UserDetailState extends State<UserDetail> {
                 activeColor: Colors.black,
                 value: isMember,
                 onChanged: null,
-              ),*/
+              ),
               const SizedBox(
                 height: 20,
               ),
