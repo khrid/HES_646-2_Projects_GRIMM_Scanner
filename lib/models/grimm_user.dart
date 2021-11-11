@@ -12,6 +12,9 @@ class GrimmUser {
   /// User email
   String email;
 
+    ///User enable
+  bool enable;
+
   /// Event that the user is attending to
   late List groups = [];
 
@@ -21,6 +24,7 @@ class GrimmUser {
         this.firstname = "",
       this.name = "",
       this.email = "",
+      this.enable = true,
       required this.groups});
 
   /// Returns a readable MyUser object
@@ -33,10 +37,23 @@ class GrimmUser {
         name +
         ",email:" +
         email +
+        ",enable:" +
+        enable.toString() +
         ",groups:" +
         groups.toString() +
         "}";
   }
+
+   /// Translate a User object to JSON
+  GrimmUser.fromJson(json)
+  : this(
+    //uid: json.id,
+    firstname: (json.data()!['firstname'] ?? ""),
+    name: (json.data()!['name'] ?? ""),
+    email: (json.data()!['email'] ?? ""),
+    enable: (json.data()!['enable'] ?? false),
+    groups: (json.data()!['groups'] ?? []),
+  );
 
   /// Translate a MyUser object to JSON
   Map<String, Object?> toJson() {
@@ -45,6 +62,7 @@ class GrimmUser {
       'firstname': firstname,
       'name': name,
       'email': email,
+      'enable': enable,
       'groups': groups,
     };
   }
@@ -59,6 +77,9 @@ if (snap.exists) {
       firstname =
           (snap.data()!["firstname"] != null ? snap.data()!["firstname"] : "");
       email = (snap.data()!["email"] != null ? snap.data()!["email"] : "");
+        enable = (snap.data()!["enable"] != null
+          ? snap.data()!["enable"]
+          : false);
       groups = (snap.data()!['groups'] != null
           ? List.from(snap.data()!['groups'].toSet())
           : []);
@@ -91,14 +112,13 @@ if (snap.exists) {
   void setEmail(String email) {
     this.email = email;
   }
+/// Set an user state as enable
+  void enableUser() {
+    this.enable = true;
+  }
 
-
-  GrimmUser.fromJson(json)
-      : this(
-    //uid: json.id,
-    name: (json.data()!['name'] ?? ""),
-    firstname: (json.data()!['firstname'] ?? ""),
-    email: (json.data()!['email'] ?? ""),
-    groups: (json.data()!['groups'] ?? []),
-  );
+  /// Set an user state as disabled
+  void disableUser() {
+    this.enable = false;
+  }
 }
