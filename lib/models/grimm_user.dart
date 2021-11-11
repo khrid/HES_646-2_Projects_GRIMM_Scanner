@@ -17,7 +17,7 @@ class GrimmUser {
 
   /// Default constructor
   GrimmUser(
-      {this.uid = "-1",
+      {
         this.firstname = "",
       this.name = "",
       this.email = "",
@@ -53,10 +53,12 @@ class GrimmUser {
   Future<void> populateUserInfoFromFirestore() async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await FirebaseFirestore.instance.collection("users").doc(uid).get();
-    if (snap.exists) {
-      name = (snap.data()!["name"] ?? "");
-      firstname = (snap.data()!["firstname"] ?? "");
-      email = (snap.data()!["email"] ?? "");
+if (snap.exists) {
+      name =
+          (snap.data()!["name"] != null ? snap.data()!["name"] : "");
+      firstname =
+          (snap.data()!["firstname"] != null ? snap.data()!["firstname"] : "");
+      email = (snap.data()!["email"] != null ? snap.data()!["email"] : "");
       groups = (snap.data()!['groups'] != null
           ? List.from(snap.data()!['groups'].toSet())
           : []);
@@ -93,7 +95,7 @@ class GrimmUser {
 
   GrimmUser.fromJson(json)
       : this(
-    uid: json.id,
+    //uid: json.id,
     name: (json.data()!['name'] ?? ""),
     firstname: (json.data()!['firstname'] ?? ""),
     email: (json.data()!['email'] ?? ""),
