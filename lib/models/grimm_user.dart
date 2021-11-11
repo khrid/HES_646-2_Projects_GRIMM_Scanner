@@ -132,4 +132,9 @@ if (snap.exists) {
   void disableUser() {
     this.enable = false;
   }
+
+  void updateStatus() {
+    enable = !enable;
+    updateFirestore();
+  }
 }

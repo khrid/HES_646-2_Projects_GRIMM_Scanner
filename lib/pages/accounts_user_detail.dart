@@ -56,9 +56,16 @@ class _UserDetailState extends State<UserDetail> {
   Widget buildUserDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     print(snapshot.data);
+          
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         GrimmUser user = GrimmUser.fromJson(snapshot.data);
+        String status;
+        if (user.enable == true) {
+          status = "Actif";
+        } else {
+          status = "Inactif";
+        }
         print(user);
 
         for (var i = 0; i < user.groups.length; i++) {
@@ -78,7 +85,7 @@ class _UserDetailState extends State<UserDetail> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
               Text(
-                "Informations de l'utilisateur",
+                "Informations",
                 style: TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 30.0,
@@ -96,6 +103,9 @@ class _UserDetailState extends State<UserDetail> {
                   style: TextStyle(color: Colors.black, fontSize: 14)),
               const SizedBox(height: 20.0),
               Text("Email : " + user.email,
+                  style: TextStyle(color: Colors.black, fontSize: 14)),
+              const SizedBox(height: 20.0),
+              Text("Statut : " + status,
                   style: TextStyle(color: Colors.black, fontSize: 14)),
               const SizedBox(height: 20.0),
               //Text("Compte actif : " + user.enable.toString(),
@@ -128,20 +138,23 @@ class _UserDetailState extends State<UserDetail> {
               const SizedBox(
                 height: 20,
               ),
-              MaterialButton(
-                color: Colors.pinkAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: TextStyle(fontFamily: "Raleway-Regular",
+                      fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(20.0),
+
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, UserUpdate.routeName,
+                onPressed: () async {
+                   Navigator.pushNamed(context, UserUpdate.routeName,
                       arguments: user);
                 },
-                child: Text(
-                  "Edit user",
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+                child: Text("Modifier le profil")),
+            SizedBox(
+              height: 20,
+            ),
               /*MaterialButton(
                   color: Colors.red,
                   shape: RoundedRectangleBorder(

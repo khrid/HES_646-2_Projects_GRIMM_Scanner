@@ -225,7 +225,7 @@ class _UserUpdateState extends State<UserUpdate> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text("Valider changements")),
+                child: Text("Valider les modifications")),
             SizedBox(
               height: 20,
             ),
@@ -240,13 +240,12 @@ class _UserUpdateState extends State<UserUpdate> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _user!.disableUser();
-                    updateUser(_user as GrimmUser);
-                    Navigator.pushNamed(context, AccountsAdmin.routeName);
+                    _user!.updateStatus();
+                   Navigator.pop(context);
                     print("Désactivation effectuée");
                   }
                 },
-                child: Text("Désactiver utilisateur")),
+                child: Text(_user!.enable ? "Désactiver le compte" : "Activer le compte")),
             SizedBox(
               height: 20,
             ),
