@@ -50,7 +50,8 @@ class _UserUpdateState extends State<UserUpdate> {
 
     // TO DO Micaela
     Future<void> updateUser(GrimmUser u) async {
-      _users.doc(u.uid).update(u.toJson());
+      //_users.doc(u.uid).update(u.toJson());
+      u.updateFirestore();
     }
 
     return Scaffold(
@@ -205,19 +206,23 @@ class _UserUpdateState extends State<UserUpdate> {
                 ),
                 onPressed: () async {
                   var tab = [];
-                  GrimmUser changedUser = GrimmUser(
+                  /*GrimmUser changedUser = GrimmUser(
                       name: userNameController.text,
                       firstname: userSurnameController.text,
                       email: _user!.email,
                       //TO DO checkbox Micaela
                       enable: _user!.enable,
                       groups: tab);
-                  //changedUser.setUid(_user!.uid);
+                  changedUser.setUid(_user!.uid);*/
+                  _user!.name = userNameController.text;
+                  _user!.firstname = userSurnameController.text;
+                  _user!.groups = tab;
                   if (_formKey.currentState!.validate()) {
-                    updateUser(changedUser);
+                    updateUser(_user!);
                     print("Changements effectués");
-                    Navigator.pushNamed(context, UserDetail.routeName,
-                        arguments: _user!.uid);
+                    //Navigator.pushNamed(context, UserDetail.routeName,
+                    //    arguments: _user!.uid);
+                    Navigator.pop(context);
                   }
                 },
                 child: Text("Valider changements")),

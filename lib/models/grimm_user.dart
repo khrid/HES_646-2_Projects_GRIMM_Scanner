@@ -21,6 +21,7 @@ class GrimmUser {
   /// Default constructor
   GrimmUser(
       {
+        this.uid = "",
         this.firstname = "",
       this.name = "",
       this.email = "",
@@ -47,7 +48,7 @@ class GrimmUser {
    /// Translate a User object to JSON
   GrimmUser.fromJson(json)
   : this(
-    //uid: json.id,
+    uid: json.id,
     firstname: (json.data()!['firstname'] ?? ""),
     name: (json.data()!['name'] ?? ""),
     email: (json.data()!['email'] ?? ""),
@@ -87,8 +88,18 @@ if (snap.exists) {
   }
 
   /// Save the user info to Firebase
-  Future<void> saveToFirestore() async {
+  /*Future<void> saveToFirestore() async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
+  }*/
+
+
+  Future<void> updateFirestore() async {
+    print(this);
+    await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
+  }
+
+  Future<void> saveToFirestore() async {
+    await FirebaseFirestore.instance.collection("users").add(toJson());
   }
 
   /// Remove the group from the user groups list and sync it with Firebase

@@ -67,7 +67,7 @@ class _AccountsAdminState extends State<AccountsAdmin> {
           shrinkWrap: true,
           children: snapshot.data!.docs.map((doc) {
             GrimmUser grimmUser = GrimmUser.fromJson(doc);
-            grimmUser.setUid(doc.id);
+            //grimmUser.setUid(doc.id);
             //print();
             return Card(
               child: ListTile(
