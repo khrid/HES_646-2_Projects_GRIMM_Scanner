@@ -14,9 +14,6 @@ class UserDetail extends StatefulWidget {
 }
 
 class _UserDetailState extends State<UserDetail> {
-  bool isAdmin = false;
-  bool isObjectManager = false;
-  bool isMember = false;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +53,9 @@ class _UserDetailState extends State<UserDetail> {
   Widget buildUserDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     print(snapshot.data);
+    bool isAdmin = false;
+    bool isObjectManager = false;
+    bool isMember = false;
           
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
@@ -68,7 +68,7 @@ class _UserDetailState extends State<UserDetail> {
         }
         print(user);
 
-        for (var i = 0; i < user.groups.length; i++) {
+        /*for (var i = 0; i < user.groups.length; i++) {
           if (user.groups[i] == "Administrator")
           {
             isAdmin = true;
@@ -79,7 +79,12 @@ class _UserDetailState extends State<UserDetail> {
           {
             isMember = true;
           }
-        }
+        }*/
+
+        if (user!.groups.contains("Administrator")) isAdmin = true;
+        if (user!.groups.contains("Member")) isMember = true;
+        if (user!.groups.contains("ObjectManager")) isObjectManager = true;
+
         return Container(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -117,8 +122,9 @@ class _UserDetailState extends State<UserDetail> {
                 checkColor: Colors.white,
                 activeColor: Colors.black,
                 value: isAdmin,
-                onChanged: null,
+                onChanged: null
               ),
+
               CheckboxListTile(
                 title: const Text("Responsable inventaire"),
                 tileColor: Theme.of(context).primaryColor,

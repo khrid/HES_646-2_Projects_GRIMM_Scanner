@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 
-import 'accounts_admin.dart';
-import 'accounts_user_detail.dart';
-
 class UserUpdate extends StatefulWidget {
   static const routeName = "/users/detail/update";
 
   const UserUpdate({Key? key}) : super(key: key);
+
   @override
   _UserUpdateState createState() => _UserUpdateState();
 }
@@ -22,9 +20,11 @@ class _UserUpdateState extends State<UserUpdate> {
   TextEditingController userNameController = new TextEditingController();
   TextEditingController userSurnameController = new TextEditingController();
   TextEditingController userEmailController = new TextEditingController();
-  TextEditingController userPasswordController = new TextEditingController(); //TO DO Micaela
+  TextEditingController userPasswordController =
+      new TextEditingController(); //TO DO Micaela
   TextEditingController userGroupController = new TextEditingController();
   var eventTypeSelectedValue;
+  int firstLoad = 1;
 
   bool isAdmin = false;
   bool isObjectManager = false;
@@ -37,15 +37,20 @@ class _UserUpdateState extends State<UserUpdate> {
 
   @override
   Widget build(BuildContext context) {
+    var tab = [];
+    if (firstLoad == 1) {
+      _user = ModalRoute.of(context)!.settings.arguments as GrimmUser;
+      if (_user!.groups.contains("Administrator")) isAdmin = true;
+      if (_user!.groups.contains("Member")) isMember = true;
+      if (_user!.groups.contains("ObjectManager")) isObjectManager = true;
+      userNameController.text = _user!.name;
+      userSurnameController.text = _user!.firstname;
+      userEmailController.text = _user!.email;
+      firstLoad = 0;
+    }
 
-    _user = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as GrimmUser;
+    print(_user);
 
-    userNameController.text = _user!.name;
-    userSurnameController.text = _user!.firstname;
-    userEmailController.text = _user!.email;
     _users = FirebaseFirestore.instance.collection("users");
 
     // TO DO Micaela
@@ -174,7 +179,11 @@ class _UserUpdateState extends State<UserUpdate> {
               checkColor: Colors.white,
               activeColor: Colors.black,
               value: isAdmin,
-              onChanged: null,
+              onChanged: (bool? value) {
+                setState(() {
+                  isAdmin = value!;
+                });
+              },
             ),
             CheckboxListTile(
               title: const Text("Responsable inventaire"),
@@ -182,7 +191,11 @@ class _UserUpdateState extends State<UserUpdate> {
               checkColor: Colors.white,
               activeColor: Colors.black,
               value: isObjectManager,
-              onChanged: null,
+              onChanged: (bool? value) {
+                setState(() {
+                  isObjectManager = value!;
+                });
+              },
             ),
             CheckboxListTile(
               title: const Text("Membre"),
@@ -190,7 +203,11 @@ class _UserUpdateState extends State<UserUpdate> {
               checkColor: Colors.white,
               activeColor: Colors.black,
               value: isMember,
-              onChanged: null,
+              onChanged: (bool? value) {
+                setState(() {
+                  isMember = value!;
+                });
+              },
             ),
             const SizedBox(
               height: 20,
@@ -198,14 +215,21 @@ class _UserUpdateState extends State<UserUpdate> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: TextStyle(fontFamily: "Raleway-Regular",
-                      fontSize: 14.0),
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: EdgeInsets.all(20.0),
-
                 ),
                 onPressed: () async {
-                  var tab = [];
+                  if (isAdmin) {
+                    tab.add("Administrator");
+                  }
+                  if (isMember) {
+                    tab.add("Member");
+                  }
+                  if (isObjectManager) {
+                    tab.add("ObjectManager");
+                  }
                   /*GrimmUser changedUser = GrimmUser(
                       name: userNameController.text,
                       firstname: userSurnameController.text,
@@ -217,12 +241,19 @@ class _UserUpdateState extends State<UserUpdate> {
                   _user!.name = userNameController.text;
                   _user!.firstname = userSurnameController.text;
                   _user!.groups = tab;
-                  if (_formKey.currentState!.validate()) {
-                    updateUser(_user!);
-                    print("Changements effectués");
-                    //Navigator.pushNamed(context, UserDetail.routeName,
-                    //    arguments: _user!.uid);
-                    Navigator.pop(context);
+
+                  if (tab.isNotEmpty) {
+                    if (_formKey.currentState!.validate()) {
+                      updateUser(_user!);
+                      print("Changements effectués");
+                      //Navigator.pushNamed(context, UserDetail.routeName,
+                      //    arguments: _user!.uid);
+                      Navigator.pop(context);
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                            "Veuillez sélectionner un groupe au minimum.")));
                   }
                 },
                 child: Text("Valider les modifications")),
@@ -232,20 +263,36 @@ class _UserUpdateState extends State<UserUpdate> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle: TextStyle(fontFamily: "Raleway-Regular",
-                      fontSize: 14.0),
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: EdgeInsets.all(20.0),
-
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    _user!.updateStatus();
-                   Navigator.pop(context);
-                    print("Désactivation effectuée");
+                    if (isAdmin) {
+                      tab.add("Administrator");
+                    }
+                    if (isMember) {
+                      tab.add("Member");
+                    }
+                    if (isObjectManager) {
+                      tab.add("ObjectManager");
+                    }
+                    if (tab.isNotEmpty) {
+                      _user!.updateStatus();
+                      Navigator.pop(context);
+                      print("Désactivation effectuée");
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text(
+                              "Veuillez sélectionner un groupe au minimum.")));
+                    }
                   }
                 },
-                child: Text(_user!.enable ? "Désactiver le compte" : "Activer le compte")),
+                child: Text(_user!.enable
+                    ? "Désactiver le compte"
+                    : "Activer le compte")),
             SizedBox(
               height: 20,
             ),

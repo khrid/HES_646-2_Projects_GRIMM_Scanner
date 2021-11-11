@@ -258,10 +258,10 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   //TODO : amélioration possible, code pas ouf mais ça fonctionne
                   var tab = [];
                   if (isAdmin) {
-                    tab.add("Administrateur");
+                    tab.add("Administrator");
                   }
                   if (isMember) {
-                    tab.add("Membre");
+                    tab.add("Member");
                   }
                   if (isObjectManager) {
                     tab.add("ObjectManager");
