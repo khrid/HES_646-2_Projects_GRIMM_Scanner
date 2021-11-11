@@ -201,8 +201,9 @@ class _ItemDetailState extends State<ItemDetail> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('Objet supprimé'),
             duration: Duration(seconds: 2)));
-        Navigator.pushNamedAndRemoveUntil(
-            context, ItemsAdmin.routeName, (route) => false);
+        var nav = Navigator.of(context);
+        nav.pop();
+        nav.pop();
       },
     );
 
