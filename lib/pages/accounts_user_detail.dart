@@ -15,6 +15,8 @@ class UserDetail extends StatefulWidget {
 
 class _UserDetailState extends State<UserDetail> {
 
+  late GrimmUser user;
+
   @override
   Widget build(BuildContext context) {
     var userUID;
@@ -28,7 +30,15 @@ class _UserDetailState extends State<UserDetail> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-      body: Container(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: editUser,
+          child: Icon(
+              Icons.edit,           
+              color: Theme.of(context).primaryColor,),
+        ),
+      body: 
+      Container(
         padding: EdgeInsets.all(50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -48,6 +58,7 @@ class _UserDetailState extends State<UserDetail> {
         ),
       ),
     );
+    
   }
 
   Widget buildUserDetails(
@@ -59,7 +70,7 @@ class _UserDetailState extends State<UserDetail> {
           
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
-        GrimmUser user = GrimmUser.fromJson(snapshot.data);
+        user = GrimmUser.fromJson(snapshot.data);
         String status;
         if (user.enable == true) {
           status = "Actif";
@@ -80,6 +91,8 @@ class _UserDetailState extends State<UserDetail> {
             isMember = true;
           }
         }*/
+
+      
 
         if (user!.groups.contains("Administrator")) isAdmin = true;
         if (user!.groups.contains("Member")) isMember = true;
@@ -143,24 +156,7 @@ class _UserDetailState extends State<UserDetail> {
               ),
               const SizedBox(
                 height: 20,
-              ),
-               ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle: TextStyle(fontFamily: "Raleway-Regular",
-                      fontSize: 14.0),
-                  side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: EdgeInsets.all(20.0),
-
-                ),
-                onPressed: () async {
-                   Navigator.pushNamed(context, UserUpdate.routeName,
-                      arguments: user);
-                },
-                child: Text("Modifier le profil")),
-            SizedBox(
-              height: 20,
-            ),
+              ),     
               /*MaterialButton(
                   color: Colors.red,
                   shape: RoundedRectangleBorder(
@@ -181,4 +177,13 @@ class _UserDetailState extends State<UserDetail> {
     return Text(
         "Pas d'utilisateur trouvé, erreur. Veuillez contacter les développeurs");
   }
+
+  Future<void> editUser() async {
+    setState(() {
+        Navigator.pushNamed(context, UserUpdate.routeName,
+        arguments: user);
+    });
+  }
+
+
 }

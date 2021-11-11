@@ -61,7 +61,7 @@ class _UserUpdateState extends State<UserUpdate> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Éditer utilisateur"),
+        title: const Text("Éditez utilisateur"),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -72,7 +72,7 @@ class _UserUpdateState extends State<UserUpdate> {
           padding: EdgeInsets.all(50),
           children: <Widget>[
             Text(
-              "Mofidier les informations de l'utilisateur",
+              "Modifiez les informations de l'utilisateur",
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
