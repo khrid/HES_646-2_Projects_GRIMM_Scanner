@@ -12,6 +12,7 @@ import 'package:grimm_scanner/pages/update_account.dart';
 
 import 'pages/create_item.dart';
 import 'pages/edit_item.dart';
+import 'pages/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -78,9 +79,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         primaryColor: const Color(0xFFECF0F9),
       ),
       //navigatorObservers: <NavigatorObserver>[observer],
-      home: const Home(),
+      home: Login(),
       initialRoute: '/',
       routes: {
+        Home.routeName: (context) => const Home(),
         ItemDetail.routeName: (context) => const ItemDetail(),
         ItemHistory.routeName: (context) => const ItemHistory(),
         ItemsAdmin.routeName: (context) => const ItemsAdmin(),

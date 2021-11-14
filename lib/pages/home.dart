@@ -14,6 +14,7 @@ import 'items_admin.dart';
 import 'items_admin.dart';
 
 class Home extends StatefulWidget {
+    static const routeName = '/home';
   const Home({Key? key}) : super(key: key);
 
   @override
