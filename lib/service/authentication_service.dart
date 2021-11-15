@@ -13,7 +13,7 @@ class AuthenticationService {
     if (user == null) return null;
     GrimmUser grimmUser = GrimmUser(groups: []);
     grimmUser.setEmail(_auth.currentUser!.email.toString());
-    //grimmUser.setUid(user.uid);
+    grimmUser.setUid(user.uid);
     grimmUser.populateUserInfoFromFirestore();
     return grimmUser;
   }

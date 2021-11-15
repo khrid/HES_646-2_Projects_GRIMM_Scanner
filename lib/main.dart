@@ -9,10 +9,14 @@ import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
+import 'dart:async';
 
+import 'models/grimm_user.dart';
 import 'pages/create_item.dart';
 import 'pages/edit_item.dart';
 import 'pages/login.dart';
+import 'service/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,12 +75,15 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // Ensure that plugin services are initialized so that `availableCameras()`
     // can be called before `runApp()`
     // TODO: implement build
-    return MaterialApp(
+    return StreamProvider<GrimmUser?>.value(
+      value: AuthenticationService().user,
+      initialData: null,
+      child: MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'GRIMM Scanner',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        primaryColor: const Color(0xFFECF0F9),
+        title: 'GRIMM Scanner',
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          primaryColor: const Color(0xFFECF0F9),
       ),
       //navigatorObservers: <NavigatorObserver>[observer],
       home: Login(),
@@ -92,7 +99,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
         CreateItemScreen.routeName: (context) => const CreateItemScreen(),
         EditItemScreen.routeName: (context) => const EditItemScreen(),
-      },
-    );
+            }));
   }
 }

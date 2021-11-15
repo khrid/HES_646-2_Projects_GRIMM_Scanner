@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GrimmUser {
-  late final String uid;
+  late String uid;
 
   /// User firstname
   String firstname;
@@ -101,6 +101,8 @@ if (snap.exists) {
   Future<void> saveToFirestore() async {
     await FirebaseFirestore.instance.collection("users").add(toJson());
   }
+
+    
 
   /// Remove the group from the user groups list and sync it with Firebase
   removeGroup(String groupId) async {

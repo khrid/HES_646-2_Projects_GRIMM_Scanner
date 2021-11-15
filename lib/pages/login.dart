@@ -143,14 +143,10 @@ class _LoginState extends State<Login> {
                     padding: EdgeInsets.all(10.0),
                   ),
                             onPressed: () async {
-                              print('Before');
-                              print(_formKey.currentState);
                               if (_formKey.currentState!.validate()) {
-                                    print("ici");
                                     Object? result = await _auth.signIn(
                                     email: emailController.text,
                                     password: passwordController.text);
-                                    
                                 if (result is GrimmUser) {
                                   print(result.toString());
                                   print("Authentification OK = " + result.uid + " " + result.name);
