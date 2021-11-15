@@ -25,6 +25,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
+  //late final GrimmUser user;
 
 
   @override

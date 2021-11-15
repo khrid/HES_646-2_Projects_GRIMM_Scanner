@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../models/grimm_user.dart';
 
 /// Manage the authentication with Firebase
@@ -26,6 +25,7 @@ class AuthenticationService {
   /// sync the user status with firebase
   Stream<GrimmUser?> get user {
     return _auth.authStateChanges().map((User? user) {
+      //print(user);
       return _userFromFirebaseUser(user!);
     });
   }
