@@ -76,29 +76,31 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // can be called before `runApp()`
     // TODO: implement build
     return StreamProvider<GrimmUser?>.value(
-      value: AuthenticationService().user,
-      initialData: null,
-      child: MaterialApp(
-      debugShowCheckedModeBanner: false,
-        title: 'GRIMM Scanner',
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-          primaryColor: const Color(0xFFECF0F9),
-      ),
-      //navigatorObservers: <NavigatorObserver>[observer],
-      home: Login(),
-      initialRoute: '/',
-      routes: {
-        Home.routeName: (context) => const Home(),
-        ItemDetail.routeName: (context) => const ItemDetail(),
-        ItemHistory.routeName: (context) => const ItemHistory(),
-        ItemsAdmin.routeName: (context) => const ItemsAdmin(),
-        AccountsAdmin.routeName: (context) => const AccountsAdmin(),
-        UserDetail.routeName: (context) => const UserDetail(),
-        UserUpdate.routeName: (context) => const UserUpdate(),
-        CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
-        CreateItemScreen.routeName: (context) => const CreateItemScreen(),
-        EditItemScreen.routeName: (context) => const EditItemScreen(),
+        initialData: null,
+        value: AuthenticationService().user,
+        lazy: false,
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GRIMM Scanner',
+            theme: ThemeData(
+              primarySwatch: Colors.grey,
+              primaryColor: const Color(0xFFECF0F9),
+            ),
+            //navigatorObservers: <NavigatorObserver>[observer],
+            home: Login(),
+            initialRoute: '/',
+            routes: {
+              Home.routeName: (context) => const Home(),
+              ItemDetail.routeName: (context) => const ItemDetail(),
+              ItemHistory.routeName: (context) => const ItemHistory(),
+              ItemsAdmin.routeName: (context) => const ItemsAdmin(),
+              AccountsAdmin.routeName: (context) => const AccountsAdmin(),
+              UserDetail.routeName: (context) => const UserDetail(),
+              UserUpdate.routeName: (context) => const UserUpdate(),
+              CreateAccountScreen.routeName: (context) =>
+                  const CreateAccountScreen(),
+              CreateItemScreen.routeName: (context) => const CreateItemScreen(),
+              EditItemScreen.routeName: (context) => const EditItemScreen(),
             }));
   }
 }

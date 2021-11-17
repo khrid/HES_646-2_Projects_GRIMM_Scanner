@@ -16,7 +16,7 @@ import 'items_admin.dart';
 import 'items_admin.dart';
 
 class Home extends StatefulWidget {
-    static const routeName = '/home';
+  static const routeName = '/home';
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -27,10 +27,10 @@ class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
   //late final GrimmUser user;
 
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
+    print("testHomepage");
     print(user);
     return Scaffold(
         appBar: AppBar(
@@ -42,34 +42,34 @@ class _HomeState extends State<Home> {
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                 const SizedBox(height: 10.0,),*/
-                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                     const SizedBox(
                       height: 10.0,
                     ),*/
-                    CustomHomeButton(
-                        title: "Gérer les utilisateurs",
-                        onPressed: navigateToUsersAdmin),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    CustomHomeButton(
-                        title: "Gérer l'inventaire",
-                        onPressed: navigateToItemsAdmin)
-                  ],
+                CustomHomeButton(
+                    title: "Gérer les utilisateurs",
+                    onPressed: navigateToUsersAdmin),
+                const SizedBox(
+                  height: 10.0,
                 ),
+                CustomHomeButton(
+                    title: "Gérer l'inventaire",
+                    onPressed: navigateToItemsAdmin)
               ],
-            )))
+            ),
+          ],
+        )))
         //drawer: const CustomDrawer(),
         );
   }
