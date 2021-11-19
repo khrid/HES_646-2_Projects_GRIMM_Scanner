@@ -134,6 +134,7 @@ class GrimmItem {
     saveMovement();
   }
 
+  // TODO fix pour faire fonctionner en offline
   Future<void> saveMovement() async {
     // trois cas possibles
     // 1 > pas de record dispo

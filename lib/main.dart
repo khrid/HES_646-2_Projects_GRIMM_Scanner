@@ -5,11 +5,10 @@ import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/accounts_user_detail.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
-import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
-import 'package:connectivity/connectivity.dart';
 
 import 'pages/create_item.dart';
 import 'pages/edit_item.dart';
@@ -96,6 +95,4 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       },
     );
   }
-
-
 }
