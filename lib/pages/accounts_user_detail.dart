@@ -94,9 +94,9 @@ class _UserDetailState extends State<UserDetail> {
 
       
 
-        if (user!.groups.contains("Administrator")) isAdmin = true;
-        if (user!.groups.contains("Member")) isMember = true;
-        if (user!.groups.contains("ObjectManager")) isObjectManager = true;
+        if (user.groups.contains("Administrator")) isAdmin = true;
+        if (user.groups.contains("Member")) isMember = true;
+        if (user.groups.contains("ObjectManager")) isObjectManager = true;
 
         return Container(
             child: Column(
