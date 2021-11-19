@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'accounts_admin.dart';
 import 'items_admin.dart';
@@ -25,9 +28,41 @@ class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
 
   String _connectionStatus = 'Unknown';
+  bool connectionLost = false;
   late ConnectivityResult previousState;
+  late final bool _firstLaunch;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  Future<bool> isFirstTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("first_time", true); // activer pour reset le first_time
+    bool isFirstTime = prefs.getBool('first_time') ?? false;
+    if (isFirstTime) {
+      print('premier lancement, on switch la variable');
+      setState(() {
+        _firstLaunch = true;
+      });
+      prefs.setBool('first_time', false);
+      // si on a internet lors du premier lancement
+      bool hasInternet = await InternetConnectionChecker().hasConnection;
+      if(!await InternetConnectionChecker().hasConnection) {
+        print('First launch but no Internet, sync needed later');
+        prefs.setBool("sync_needed", true);
+      }
+      forceLocalSync();
+      return false;
+    }
+    return false;
+  }
+
+  void forceLocalSync() {
+    print('Force sync Firebase');
+    FirebaseFirestore.instance.collection("items").snapshots();
+    FirebaseFirestore.instance.collection("category").snapshots();
+    FirebaseFirestore.instance.collection("history").snapshots();
+    FirebaseFirestore.instance.collection("users").snapshots();
+  }
 
   @override
   void initState() {
@@ -35,6 +70,7 @@ class _HomeState extends State<Home> {
 
     super.initState();
     initConnectivity();
+    isFirstTime();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
@@ -86,13 +122,6 @@ class _HomeState extends State<Home> {
                 const SizedBox(
                   height: 10.0,
                 ),
-
-                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
-                const SizedBox(height: 10.0,),*/
-                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
-                    const SizedBox(
-                      height: 10.0,
-                    ),*/
                 CustomHomeButton(
                     title: "Gérer les utilisateurs",
                     onPressed: navigateToUsersAdmin),
@@ -121,12 +150,6 @@ class _HomeState extends State<Home> {
       Navigator.pushNamed(context, ItemsAdmin.routeName);
     });
   }
-
-  /*Future<void> createItem() async {
-    setState(() {
-      Navigator.pushNamed(context, CreateItemScreen.routeName);
-    });
-  }*/
 
   Future<void> fakeScan() async {
     setState(() {
@@ -189,11 +212,21 @@ class _HomeState extends State<Home> {
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     // si on a du réseau (mais pas forcément internet...)
+    print("connection lost : " + connectionLost.toString());
+    print("connectivity result : " + result.toString());
     if (result != ConnectivityResult.none) {
       // check si on a internet
       bool hasInternet = await InternetConnectionChecker().hasConnection;
+      print("has internet : " + hasInternet.toString());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      if (hasInternet) {
+      if (hasInternet && connectionLost) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        bool syncNeeded = prefs.getBool("sync_needed") ?? false;
+        if(syncNeeded) {
+          forceLocalSync();
+          prefs.setBool("sync_needed", false);
+        }
+        connectionLost = false;
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Connexion rétablie!",
@@ -202,17 +235,9 @@ class _HomeState extends State<Home> {
           duration: Duration(seconds: 5),
           backgroundColor: Color(0xFF1CB731),
         ));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Pas de connexion internet.",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          duration: Duration(days: 365),
-          backgroundColor: Color(0xFFB71C1C),
-        ));
       }
     } else {
+      connectionLost = true;
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Pas de connexion disponible.",
@@ -221,17 +246,6 @@ class _HomeState extends State<Home> {
         duration: Duration(days: 365),
         backgroundColor: Color(0xFFB71C1C),
       ));
-    }
-
-    switch (result) {
-      case ConnectivityResult.wifi:
-      case ConnectivityResult.mobile:
-      case ConnectivityResult.none:
-        setState(() => _connectionStatus = result.toString());
-        break;
-      default:
-        setState(() => _connectionStatus = 'Failed to get connectivity.');
-        break;
     }
   }
 }

@@ -102,7 +102,7 @@ class _UserDetailState extends State<UserDetail> {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-              Text(
+              const Text(
                 "Informations",
                 style: TextStyle(
                   fontFamily: "Raleway-Regular",
