@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,11 +9,9 @@ import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 import 'accounts_admin.dart';
-import 'create_account.dart';
-import 'create_item.dart';
-import 'items_admin.dart';
 import 'items_admin.dart';
 
 class Home extends StatefulWidget {
@@ -22,6 +23,47 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
+
+  String _connectionStatus = 'Unknown';
+  late ConnectivityResult previousState;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  @override
+  void dispose() {
+    _connectivitySubscription.cancel();
+    super.dispose();
+  }
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initConnectivity() async {
+    ConnectivityResult result = ConnectivityResult.none;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,35 +77,35 @@ class _HomeState extends State<Home> {
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
+                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                const SizedBox(
+                  height: 10.0,
+                ),
 
-                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                 const SizedBox(height: 10.0,),*/
-                    /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                     const SizedBox(
                       height: 10.0,
                     ),*/
-                    CustomHomeButton(
-                        title: "Gérer les utilisateurs",
-                        onPressed: navigateToUsersAdmin),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    CustomHomeButton(
-                        title: "Gérer l'inventaire",
-                        onPressed: navigateToItemsAdmin)
-                  ],
+                CustomHomeButton(
+                    title: "Gérer les utilisateurs",
+                    onPressed: navigateToUsersAdmin),
+                const SizedBox(
+                  height: 10.0,
                 ),
+                CustomHomeButton(
+                    title: "Gérer l'inventaire",
+                    onPressed: navigateToItemsAdmin)
               ],
-            )))
+            ),
+          ],
+        )))
         //drawer: const CustomDrawer(),
         );
   }
@@ -142,6 +184,54 @@ class _HomeState extends State<Home> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               "La lecture QR n'est possible que depuis l'application native Android / iOS.")));
+    }
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    // si on a du réseau (mais pas forcément internet...)
+    if (result != ConnectivityResult.none) {
+      // check si on a internet
+      bool hasInternet = await InternetConnectionChecker().hasConnection;
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      if (hasInternet) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Connexion rétablie!",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(seconds: 5),
+          backgroundColor: Color(0xFF1CB731),
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Pas de connexion internet.",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(days: 365),
+          backgroundColor: Color(0xFFB71C1C),
+        ));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Pas de connexion disponible.",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        duration: Duration(days: 365),
+        backgroundColor: Color(0xFFB71C1C),
+      ));
+    }
+
+    switch (result) {
+      case ConnectivityResult.wifi:
+      case ConnectivityResult.mobile:
+      case ConnectivityResult.none:
+        setState(() => _connectionStatus = result.toString());
+        break;
+      default:
+        setState(() => _connectionStatus = 'Failed to get connectivity.');
+        break;
     }
   }
 }

@@ -9,6 +9,7 @@ import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
+import 'package:connectivity/connectivity.dart';
 
 import 'pages/create_item.dart';
 import 'pages/edit_item.dart';
@@ -27,6 +28,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
+  var subscription;
+  var connectionStatus;
 
   /*static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
@@ -93,4 +96,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       },
     );
   }
+
+
 }
