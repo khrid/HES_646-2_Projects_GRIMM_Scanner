@@ -15,6 +15,10 @@ class CategoriesAdmin extends StatefulWidget {
 }
 
 class _CategoriesAdminState extends State<CategoriesAdmin> {
+  final _key = GlobalKey<FormState>();
+
+  TextEditingController categoryNameController = TextEditingController(
+      text: "Catégorie"); // controlleur de la description
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +64,18 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
     );
     Widget continueButton = TextButton(
       child: Text("Confirmer"),
-      onPressed: () {
-        //_categories.doc(category.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text('Objet supprimé'),
-            duration: Duration(seconds: 2)));
-        var nav = Navigator.of(context);
-        nav.pop();
-        nav.pop();
-      },
+      onPressed: () async {
+        if (_key.currentState!.validate()) {
+          GrimmCategory category = GrimmCategory(
+              name: categoryNameController.text);
+          await category.saveToFirestore();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: const Text('Catégorie ajoutée'),
+              duration: Duration(seconds: 2)));
+          var nav = Navigator.of(context);
+          nav.pop();
+        }
+      }
     );
 
     // set up the AlertDialog
@@ -105,8 +112,6 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
           shrinkWrap: true,
           children: snapshot.data!.docs.map((doc) {
             GrimmCategory grimmCategory = GrimmCategory.fromJson(doc);
-            //grimmUser.setUid(doc.id);
-            //print();
             return Card(
               child: ListTile(
                   minLeadingWidth: 10,
