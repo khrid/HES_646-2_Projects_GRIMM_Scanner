@@ -12,6 +12,7 @@ import 'create_account.dart';
 import 'create_item.dart';
 import 'items_admin.dart';
 import 'items_admin.dart';
+import 'items_manage_menu.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -59,7 +60,7 @@ class _HomeState extends State<Home> {
                     ),
                     CustomHomeButton(
                         title: "Gérer l'inventaire",
-                        onPressed: navigateToItemsAdmin)
+                        onPressed: navigateToItemsCatAdmin)
                   ],
                 ),
               ],
@@ -74,9 +75,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> navigateToItemsAdmin() async {
+  Future<void> navigateToItemsCatAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsAdmin.routeName);
+      Navigator.pushNamed(context, ItemsManageMenu.routeName);
     });
   }
 

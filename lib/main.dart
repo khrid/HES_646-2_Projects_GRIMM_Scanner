@@ -3,11 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/accounts_user_detail.dart';
+import 'package:grimm_scanner/pages/categories_admin.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
 
 import 'pages/create_item.dart';
@@ -83,7 +85,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       routes: {
         ItemDetail.routeName: (context) => const ItemDetail(),
         ItemHistory.routeName: (context) => const ItemHistory(),
+        ItemsManageMenu.routeName: (context) => const ItemsManageMenu(),
         ItemsAdmin.routeName: (context) => const ItemsAdmin(),
+        CategoriesAdmin.routeName : (context) => const CategoriesAdmin(),
         AccountsAdmin.routeName: (context) => const AccountsAdmin(),
         UserDetail.routeName: (context) => const UserDetail(),
         UserUpdate.routeName: (context) => const UserUpdate(),
