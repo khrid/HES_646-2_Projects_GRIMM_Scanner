@@ -49,8 +49,9 @@ class _HomeState extends State<Home> {
       if(!await InternetConnectionChecker().hasConnection) {
         print('First launch but no Internet, sync needed later');
         prefs.setBool("sync_needed", true);
+      } else {
+        forceLocalSync();
       }
-      forceLocalSync();
       return false;
     }
     return false;
@@ -58,21 +59,30 @@ class _HomeState extends State<Home> {
 
   void forceLocalSync() {
     print('Force sync Firebase');
-    FirebaseFirestore.instance.collection("items").snapshots();
-    FirebaseFirestore.instance.collection("category").snapshots();
-    FirebaseFirestore.instance.collection("history").snapshots();
-    FirebaseFirestore.instance.collection("users").snapshots();
+    FirebaseFirestore.instance.collection("items").snapshots().toList();
+    FirebaseFirestore.instance.collection("items").get();
+    FirebaseFirestore.instance.collection("category").snapshots().toList();
+    FirebaseFirestore.instance.collection("category").get();
+    FirebaseFirestore.instance.collection("history").snapshots().toList();
+    FirebaseFirestore.instance.collection("history").get();
+    FirebaseFirestore.instance.collection("users").snapshots().toList();
+    FirebaseFirestore.instance.collection("users").get();
   }
 
   @override
   void initState() {
     // TODO: implement initState
-
     super.initState();
+    isPersistenceEnabled();
     initConnectivity();
     isFirstTime();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+  }
+
+  void isPersistenceEnabled() async {
+    FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
+    print("isPersistenceEnabled : " + FirebaseFirestore.instance.settings.persistenceEnabled.toString());
   }
 
   @override
