@@ -40,7 +40,7 @@ class GrimmCategory {
   /// Retrieves the Category info from Firebase document
   Future<void> populateUserInfoFromFirestore() async {
     DocumentSnapshot<Map<String, dynamic>> snap =
-    await FirebaseFirestore.instance.collection("cats").doc(id).get();
+    await FirebaseFirestore.instance.collection("category").doc(id).get();
     if (snap.exists) {
       name =
       (snap.data()!["name"] != null ? snap.data()!["name"] : "");
@@ -50,11 +50,11 @@ class GrimmCategory {
 
   Future<void> updateFirestore() async {
     print(this);
-    await FirebaseFirestore.instance.collection("cats").doc(id).set(toJson());
+    await FirebaseFirestore.instance.collection("category").doc(id).set(toJson());
   }
 
   Future<void> saveToFirestore() async {
-    await FirebaseFirestore.instance.collection("cats").add(toJson());
+    await FirebaseFirestore.instance.collection("category").add(toJson());
   }
 
   Future<void> updateItemsDeletedCategory() async {

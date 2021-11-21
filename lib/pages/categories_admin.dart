@@ -43,7 +43,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
         body: SingleChildScrollView(
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection("cats")
+                  .collection("category")
                   .orderBy("name")
                   .snapshots(),
               builder: buildCategoriesList,

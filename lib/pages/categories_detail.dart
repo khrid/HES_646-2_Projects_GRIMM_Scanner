@@ -22,7 +22,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
   late GrimmCategory category;
 
   late final CollectionReference _categories =
-  FirebaseFirestore.instance.collection("cats");
+  FirebaseFirestore.instance.collection("category");
 
   late final CollectionReference _items =
   FirebaseFirestore.instance.collection("items");
@@ -77,7 +77,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
             Container(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('cats')
+                    .collection('category')
                     .doc(categoryID)
                     .snapshots(),
                 builder: buildUserDetails,
