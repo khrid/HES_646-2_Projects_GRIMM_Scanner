@@ -6,7 +6,6 @@ class GrimmCategory {
   /// User name
   String name;
 
-
   /// Default constructor
   GrimmCategory({
     this.id = "",
@@ -57,4 +56,13 @@ class GrimmCategory {
     await FirebaseFirestore.instance.collection("cats").add(toJson());
   }
 
+  /*Future<void> updateItemsDeletedCategory(GrimmCategory category) async {
+    DocumentSnapshot <Map<String, dynamic>> snap = FirebaseFirestore.instance.collection("category").where('name', isEqualTo: 'Non défini').get() as DocumentSnapshot<Map<String, dynamic>>;
+    DocumentSnapshot<Map<String, dynamic>> snap =
+    (await FirebaseFirestore.instance.collection("items").where('idCategory', isEqualTo: category.id)) as DocumentSnapshot<Map<String, dynamic>>;
+    if (snap.exists) {
+      snap.data()!.update('idCategory', (value) => null)
+      (snap.data()!["name"] != null ? snap.data()!["name"] : "");
+    }
+  }*/
 }

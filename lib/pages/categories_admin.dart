@@ -17,8 +17,7 @@ class CategoriesAdmin extends StatefulWidget {
 class _CategoriesAdminState extends State<CategoriesAdmin> {
   final _key = GlobalKey<FormState>();
 
-  TextEditingController categoryNameController = TextEditingController(
-      text: "Catégorie"); // controlleur de la description
+  TextEditingController categoryNameController = TextEditingController(); // controlleur de la description
 
   @override
   Widget build(BuildContext context) {
@@ -64,24 +63,34 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
     );
     Widget continueButton = TextButton(
       child: Text("Confirmer"),
-      onPressed: () async {
-        if (_key.currentState!.validate()) {
-          GrimmCategory category = GrimmCategory(
-              name: categoryNameController.text);
-          await category.saveToFirestore();
+      onPressed: () {
+        //if (_key.currentState!.validate()) {
+          GrimmCategory category = GrimmCategory(name: categoryNameController.text);
+          category.saveToFirestore();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: const Text('Catégorie ajoutée'),
               duration: Duration(seconds: 2)));
           var nav = Navigator.of(context);
           nav.pop();
+          setState(() {
+
+          });
         }
-      }
+      //}
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text('Nouvelle catégorie :'),
-      content: TextField(
+      content: TextFormField(
+          controller: categoryNameController,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Le champ "Prénom" ne peut pas être vide';
+            } else
+              return null;
+          },
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
               hintText: 'Entrez la nouvelle catégorie'
           )

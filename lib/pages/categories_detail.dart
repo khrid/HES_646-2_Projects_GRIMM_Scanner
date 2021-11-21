@@ -140,7 +140,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
     Widget continueButton = TextButton(
       child: Text("Continuer"),
       onPressed: () {
-        //for(){};
+        //category.updateItemsDeletedCategory();
         _categories.doc(category.id).delete();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text('Catégorie supprimée'),
