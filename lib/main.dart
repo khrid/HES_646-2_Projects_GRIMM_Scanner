@@ -8,6 +8,7 @@ import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/login_group.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
 import 'dart:async';
 
@@ -90,6 +91,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             home: Login(),
             initialRoute: '/',
             routes: {
+              LoginGroup.routeName: (context) => const LoginGroup(),
               Home.routeName: (context) => const Home(),
               ItemDetail.routeName: (context) => const ItemDetail(),
               ItemHistory.routeName: (context) => const ItemHistory(),

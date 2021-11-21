@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
 class Login extends StatefulWidget {
@@ -12,23 +11,25 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final AuthenticationService _auth = AuthenticationService();
-  TextEditingController emailController = new TextEditingController(text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail 
-  TextEditingController passwordController = new TextEditingController(text: "123456");
+  TextEditingController emailController = new TextEditingController(
+      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
+  TextEditingController passwordController =
+      new TextEditingController(text: "123456");
 
   MenuScreen(BuildContext context) {
     setState(() {
-      Navigator.pushNamed(context, Home.routeName);
+      Navigator.pushNamed(context, LoginGroup.routeName);
     });
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          elevation: 0,
-        ),
         backgroundColor: Theme.of(context).primaryColor,
+        elevation: 0,
+      ),
+      backgroundColor: Theme.of(context).primaryColor,
       body: Form(
         key: _formKey,
         child: ListView(
@@ -67,100 +68,102 @@ class _LoginState extends State<Login> {
                 color: Colors.black,
               ),
             ),
-
             TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                labelText: 'Adresse mail',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Theme.of(context).backgroundColor,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: 'Adresse mail',
+                  labelStyle: TextStyle(
+                    fontFamily: "Raleway-Regular",
+                    fontSize: 14.0,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
-              validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Entrez votre adresse mail correct';
-                              }
-                              return null;
-                            }),
+                textInputAction: TextInputAction.next,
+                cursorColor: Theme.of(context).backgroundColor,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Entrez votre adresse mail correct';
+                  }
+                  return null;
+                }),
             SizedBox(
               height: 20,
             ),
-    
             TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Mot de passe',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Theme.of(context).backgroundColor,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
+                controller: passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Mot de passe',
+                  labelStyle: TextStyle(
+                    fontFamily: "Raleway-Regular",
+                    fontSize: 14.0,
+                    color: Theme.of(context).backgroundColor,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
-              validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Entrez votre mot de passe correct';
-                              }
-                              return null;
-                            }),
-           
-           
+                textInputAction: TextInputAction.next,
+                cursorColor: Theme.of(context).backgroundColor,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Entrez votre mot de passe correct';
+                  }
+                  return null;
+                }),
             SizedBox(
               height: 50,
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                    Object? result = await _auth.signIn(
-                                    email: emailController.text,
-                                    password: passwordController.text);
-                                if (result is GrimmUser) {
-                                  print(result.toString());
-                                  print("Authentification OK = " + result.uid + " " + result.name);
-                                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                    content: Text("Connexion réussie")));
-                                  MenuScreen(context);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                    content: Text("Erreur dans votre mot de passe/mail")));
-                                  print(result.toString());
-                                }
-                              }
-                            },
-                            child: Text('Se connecter')),
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle:
+                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: EdgeInsets.all(10.0),
+                ),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    Object? result = await _auth.signIn(
+                        email: emailController.text,
+                        password: passwordController.text);
+                    if (result is GrimmUser) {
+                      print(result.toString());
+                      print("Authentification OK = " +
+                          result.uid +
+                          " " +
+                          result.name);
+                      await Future.delayed(
+                          const Duration(milliseconds: 100), () {});
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Connexion réussie")));
+                      MenuScreen(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content:
+                              Text("Erreur dans votre mot de passe/mail")));
+                      print(result.toString());
+                    }
+                  }
+                },
+                child: Text('Se connecter')),
             SizedBox(
               height: 10,
             ),
