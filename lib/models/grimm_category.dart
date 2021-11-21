@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:grimm_scanner/models/grimm_item.dart';
 
 class GrimmCategory {
   late final String id;
@@ -56,13 +57,18 @@ class GrimmCategory {
     await FirebaseFirestore.instance.collection("cats").add(toJson());
   }
 
-  /*Future<void> updateItemsDeletedCategory(GrimmCategory category) async {
-    DocumentSnapshot <Map<String, dynamic>> snap = FirebaseFirestore.instance.collection("category").where('name', isEqualTo: 'Non défini').get() as DocumentSnapshot<Map<String, dynamic>>;
-    DocumentSnapshot<Map<String, dynamic>> snap =
-    (await FirebaseFirestore.instance.collection("items").where('idCategory', isEqualTo: category.id)) as DocumentSnapshot<Map<String, dynamic>>;
-    if (snap.exists) {
-      snap.data()!.update('idCategory', (value) => null)
-      (snap.data()!["name"] != null ? snap.data()!["name"] : "");
+  Future<void> updateItemsDeletedCategory() async {
+    QuerySnapshot snap =
+    await FirebaseFirestore.instance.collection("items").where('idCategory', isEqualTo: id).get();
+    if (snap.docs.isNotEmpty) {
+      if(snap.docs.length > 1) {
+      } else {
+        snap.docs.forEach((element) {
+          GrimmItem grimmItem = GrimmItem.fromJson(element);
+          grimmItem.idCategory = 'Qh3F15Werg9qeNToe7fT';
+          grimmItem.updateFirestore();
+        });
+      }
     }
-  }*/
+  }
 }
