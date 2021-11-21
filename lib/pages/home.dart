@@ -8,10 +8,6 @@ import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
 import 'accounts_admin.dart';
-import 'create_account.dart';
-import 'create_item.dart';
-import 'items_admin.dart';
-import 'items_admin.dart';
 import 'items_manage_menu.dart';
 
 class Home extends StatefulWidget {

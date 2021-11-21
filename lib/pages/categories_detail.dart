@@ -6,8 +6,6 @@ import 'package:grimm_scanner/pages/edit_category.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
 
-import 'edit_item.dart';
-
 class CategoryDetail extends StatefulWidget {
   static const routeName = "/items/categories/detail";
 
