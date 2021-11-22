@@ -3,12 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/accounts_user_detail.dart';
+import 'package:grimm_scanner/pages/categories_admin.dart';
+import 'package:grimm_scanner/pages/categories_detail.dart';
 import 'package:grimm_scanner/pages/create_account.dart';
+import 'package:grimm_scanner/pages/edit_category.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/pages/login_group.dart';
+import 'package:grimm_scanner/pages/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/update_account.dart';
 import 'dart:async';
 
@@ -76,6 +80,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // Ensure that plugin services are initialized so that `availableCameras()`
     // can be called before `runApp()`
     // TODO: implement build
+
     return StreamProvider<GrimmUser?>.value(
         initialData: null,
         value: AuthenticationService().user,

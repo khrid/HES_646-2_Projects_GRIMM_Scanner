@@ -10,10 +10,7 @@ import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:provider/provider.dart';
 
 import 'accounts_admin.dart';
-import 'create_account.dart';
-import 'create_item.dart';
-import 'items_admin.dart';
-import 'items_admin.dart';
+import 'items_manage_menu.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';
@@ -57,11 +54,16 @@ class _HomeState extends State<Home> {
                     const SizedBox(
                       height: 10.0,
                     ),*/
-                CustomHomeButton(
-                    title: "Gérer les utilisateurs",
-                    onPressed: navigateToUsersAdmin),
-                const SizedBox(
-                  height: 10.0,
+                    CustomHomeButton(
+                        title: "Gérer les utilisateurs",
+                        onPressed: navigateToUsersAdmin),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    CustomHomeButton(
+                        title: "Gérer l'inventaire",
+                        onPressed: navigateToItemsCatAdmin)
+                  ],
                 ),
                 CustomHomeButton(
                     title: "Gérer l'inventaire",
@@ -80,9 +82,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> navigateToItemsAdmin() async {
+  Future<void> navigateToItemsCatAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsAdmin.routeName);
+      Navigator.pushNamed(context, ItemsManageMenu.routeName);
     });
   }
 
