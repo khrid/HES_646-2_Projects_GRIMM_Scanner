@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   late SharedPreferences prefs;
   String _connectionStatus = 'Unknown';
   bool connectionLost = false;
-  bool _connectionLost = true;
+  bool _connectionLost = false;
   late ConnectivityResult previousState;
   late final bool _firstLaunch;
   final Connectivity _connectivity = Connectivity();
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setPersistenceEnabled();
+    //setPersistenceEnabled();
     initConnectivity();
     isFirstTime();
     _connectivitySubscription =
