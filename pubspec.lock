@@ -360,7 +360,12 @@ packages:
     source: hosted
     version: "2.0.1"
   path_provider_windows:
-    version: "3.6.2"
+    dependency: transitive
+    description:
+      name: path_provider_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.4"
   pedantic:
     dependency: transitive
     description:
