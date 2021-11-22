@@ -48,12 +48,6 @@ class _HomeState extends State<Home> {
                   const SizedBox(
                     height: 10.0,
                   ),
-                  /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
-                const SizedBox(height: 10.0,),*/
-                  /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
-                    const SizedBox(
-                      height: 10.0,
-                    ),*/
                   CustomHomeButton(
                       title: "Gérer les utilisateurs",
                       onPressed: navigateToUsersAdmin),
@@ -83,12 +77,6 @@ class _HomeState extends State<Home> {
       Navigator.pushNamed(context, ItemsManageMenu.routeName);
     });
   }
-
-  /*Future<void> createItem() async {
-    setState(() {
-      Navigator.pushNamed(context, CreateItemScreen.routeName);
-    });
-  }*/
 
   Future<void> fakeScan() async {
     setState(() {

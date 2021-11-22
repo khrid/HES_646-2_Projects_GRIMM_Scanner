@@ -77,19 +77,6 @@ class _UserDetailState extends State<UserDetail> {
         }
         print(user);
 
-        /*for (var i = 0; i < user.groups.length; i++) {
-          if (user.groups[i] == "Administrator")
-          {
-            isAdmin = true;
-          } else if(user.groups[i] == "ObjectManager")
-          {
-            isObjectManager = true;
-          } else if(user.groups[i] == "Member")
-          {
-            isMember = true;
-          }
-        }*/
-
         if (user.groups.contains("Administrator")) isAdmin = true;
         if (user.groups.contains("Member")) isMember = true;
         if (user.groups.contains("ObjectManager")) isObjectManager = true;
@@ -121,9 +108,6 @@ class _UserDetailState extends State<UserDetail> {
           Text("Statut : " + status,
               style: TextStyle(color: Colors.black, fontSize: 14)),
           const SizedBox(height: 20.0),
-          //Text("Compte actif : " + user.enable.toString(),
-          //    style: TextStyle(color: Colors.black, fontSize: 14)),
-          //const SizedBox(height: 20.0),
           CheckboxListTile(
               title: const Text("Administrateur"),
               tileColor: Theme.of(context).primaryColor,
@@ -131,7 +115,6 @@ class _UserDetailState extends State<UserDetail> {
               activeColor: Colors.black,
               value: isAdmin,
               onChanged: null),
-
           CheckboxListTile(
             title: const Text("Responsable inventaire"),
             tileColor: Theme.of(context).primaryColor,
@@ -151,17 +134,6 @@ class _UserDetailState extends State<UserDetail> {
           const SizedBox(
             height: 20,
           ),
-          /*MaterialButton(
-                  color: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                  onPressed: () {},
-                  child: Text(
-                    "Delete user",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )*/
         ]));
       } else {
         return Text(
