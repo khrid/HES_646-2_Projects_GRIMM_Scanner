@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -27,15 +26,17 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
 
+  late SharedPreferences prefs;
   String _connectionStatus = 'Unknown';
   bool connectionLost = false;
+  bool _connectionLost = true;
   late ConnectivityResult previousState;
   late final bool _firstLaunch;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
   Future<bool> isFirstTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs = await SharedPreferences.getInstance();
     prefs.setBool("first_time", true); // activer pour reset le first_time
     bool isFirstTime = prefs.getBool('first_time') ?? false;
     if (isFirstTime) {
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
       prefs.setBool('first_time', false);
       // si on a internet lors du premier lancement
       bool hasInternet = await InternetConnectionChecker().hasConnection;
-      if(!await InternetConnectionChecker().hasConnection) {
+      if (!await InternetConnectionChecker().hasConnection) {
         print('First launch but no Internet, sync needed later');
         prefs.setBool("sync_needed", true);
       } else {
@@ -73,16 +74,18 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    isPersistenceEnabled();
+    setPersistenceEnabled();
     initConnectivity();
     isFirstTime();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
-  void isPersistenceEnabled() async {
-    FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
-    print("isPersistenceEnabled : " + FirebaseFirestore.instance.settings.persistenceEnabled.toString());
+  void setPersistenceEnabled() async {
+    FirebaseFirestore.instance.settings =
+        const Settings(persistenceEnabled: true);
+    print("isPersistenceEnabled : " +
+        FirebaseFirestore.instance.settings.persistenceEnabled.toString());
   }
 
   @override
@@ -134,13 +137,13 @@ class _HomeState extends State<Home> {
                 ),
                 CustomHomeButton(
                     title: "Gérer les utilisateurs",
-                    onPressed: navigateToUsersAdmin),
+                    onPressed: !_connectionLost ? navigateToUsersAdmin : null),
                 const SizedBox(
                   height: 10.0,
                 ),
                 CustomHomeButton(
                     title: "Gérer l'inventaire",
-                    onPressed: navigateToItemsAdmin)
+                    onPressed: !_connectionLost ? navigateToItemsAdmin : null)
               ],
             ),
           ],
@@ -224,19 +227,20 @@ class _HomeState extends State<Home> {
     // si on a du réseau (mais pas forcément internet...)
     print("connection lost : " + connectionLost.toString());
     print("connectivity result : " + result.toString());
+    bool syncNeeded = prefs.getBool("sync_needed") ?? false;
     if (result != ConnectivityResult.none) {
       // check si on a internet
       bool hasInternet = await InternetConnectionChecker().hasConnection;
       print("has internet : " + hasInternet.toString());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      if (hasInternet && connectionLost) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        bool syncNeeded = prefs.getBool("sync_needed") ?? false;
-        if(syncNeeded) {
+      if (hasInternet && _connectionLost) {
+        if (syncNeeded) {
           forceLocalSync();
           prefs.setBool("sync_needed", false);
         }
-        connectionLost = false;
+        setState(() {
+          _connectionLost = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Connexion rétablie!",
@@ -247,15 +251,28 @@ class _HomeState extends State<Home> {
         ));
       }
     } else {
-      connectionLost = true;
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-          "Pas de connexion disponible.",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        duration: Duration(days: 365),
-        backgroundColor: Color(0xFFB71C1C),
-      ));
+      setState(() {
+        _connectionLost = true;
+      });
+      /*if (syncNeeded) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Connexion internet nécessaire lors du premier lancement.",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(days: 365),
+          backgroundColor: Color(0xFFB71C1C),
+        ));
+      } else {*/
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          duration: Duration(days: 365),
+          backgroundColor: Color(0xFFB71C1C),
+        ));
+      //}
     }
   }
 }
