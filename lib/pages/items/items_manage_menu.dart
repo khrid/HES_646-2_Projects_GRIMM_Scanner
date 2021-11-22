@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
-
-import 'categories_admin.dart';
+import 'package:grimm_scanner/pages/categories/categories_admin.dart';
 import 'items_admin.dart';
 
 class ItemsManageMenu extends StatefulWidget {

@@ -4,13 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/accounts_admin.dart';
-import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/account/accounts_admin.dart';
+import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:provider/provider.dart';
 
-import 'accounts_admin.dart';
-import 'items_manage_menu.dart';
+import 'account/accounts_admin.dart';
+import 'items/items_manage_menu.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';

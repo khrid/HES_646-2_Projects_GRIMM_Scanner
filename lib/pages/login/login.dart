@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/login_group.dart';
+import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
 class Login extends StatefulWidget {

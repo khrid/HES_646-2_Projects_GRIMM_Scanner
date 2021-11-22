@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/items_admin.dart';
-import 'package:grimm_scanner/pages/items_history.dart';
+import 'package:grimm_scanner/pages/items/edit_item.dart';
+import 'package:grimm_scanner/pages/items/items_admin.dart';
+import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
@@ -15,7 +16,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
-import 'edit_item.dart';
 
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
