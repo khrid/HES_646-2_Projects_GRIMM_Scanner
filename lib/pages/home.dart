@@ -38,40 +38,36 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).primaryColor,
         body: Center(
             child: SingleChildScrollView(
-                child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                 const SizedBox(height: 10.0,),*/
-                /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
+                  /*CustomHomeButton(title: "FAKE SCAN", onPressed: fakeScan),
                     const SizedBox(
                       height: 10.0,
                     ),*/
-                    CustomHomeButton(
-                        title: "Gérer les utilisateurs",
-                        onPressed: navigateToUsersAdmin),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    CustomHomeButton(
-                        title: "Gérer l'inventaire",
-                        onPressed: navigateToItemsCatAdmin)
-                  ],
-                ),
-                CustomHomeButton(
-                    title: "Gérer l'inventaire",
-                    onPressed: navigateToItemsAdmin)
-              ],
-            ),
-          ],
-        )))
+                  CustomHomeButton(
+                      title: "Gérer les utilisateurs",
+                      onPressed: navigateToUsersAdmin),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  CustomHomeButton(
+                      title: "Gérer l'inventaire",
+                      onPressed: navigateToItemsCatAdmin)
+                ],
+              )
+            ],
+          ),
+        ))
         //drawer: const CustomDrawer(),
         );
   }
