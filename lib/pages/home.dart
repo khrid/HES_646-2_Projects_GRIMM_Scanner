@@ -8,7 +8,10 @@ import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 
 import 'accounts_admin.dart';
-import 'items_manage_menu.dart';
+import 'create_account.dart';
+import 'create_item.dart';
+import 'items_admin.dart';
+import 'items_admin.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -56,7 +59,7 @@ class _HomeState extends State<Home> {
                     ),
                     CustomHomeButton(
                         title: "Gérer l'inventaire",
-                        onPressed: navigateToItemsCatAdmin)
+                        onPressed: navigateToItemsAdmin)
                   ],
                 ),
               ],
@@ -71,9 +74,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> navigateToItemsCatAdmin() async {
+  Future<void> navigateToItemsAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsManageMenu.routeName);
+      Navigator.pushNamed(context, ItemsAdmin.routeName);
     });
   }
 
