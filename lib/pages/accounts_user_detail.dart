@@ -76,7 +76,6 @@ class _UserDetailState extends State<UserDetail> {
           status = "Inactif";
         }
         print(user);
-
         if (user.groups.contains("Administrator")) isAdmin = true;
         if (user.groups.contains("Member")) isMember = true;
         if (user.groups.contains("ObjectManager")) isObjectManager = true;
