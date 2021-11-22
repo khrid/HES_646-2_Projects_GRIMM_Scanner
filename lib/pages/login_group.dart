@@ -21,7 +21,7 @@ class _LoginGroupState extends State<LoginGroup> {
     print(user);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Group Choice"),
+          title: const Text("Choix du rôle"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
@@ -36,7 +36,7 @@ class _LoginGroupState extends State<LoginGroup> {
               children: <Widget>[
                 if (user!.groups.contains("Administrator"))
                   CustomHomeButton(
-                      title: "Administrator", onPressed: navigateToHomePage),
+                      title: "Administrateur", onPressed: navigateToHomePage),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -48,7 +48,7 @@ class _LoginGroupState extends State<LoginGroup> {
                 ),
                 if (user!.groups.contains("Member"))
                   CustomHomeButton(
-                      title: "Member", onPressed: navigateToHomePage)
+                      title: "Membre", onPressed: navigateToHomePage)
               ],
             ),
           ],
