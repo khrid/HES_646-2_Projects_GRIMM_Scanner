@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
@@ -15,8 +16,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'accounts_admin.dart';
 import 'items_admin.dart';
+import 'package:provider/provider.dart';
+
+import 'accounts_admin.dart';
+import 'items_manage_menu.dart';
 
 class Home extends StatefulWidget {
+  static const routeName = '/home';
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +31,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
+  //late final GrimmUser user;
 
   late SharedPreferences prefs;
   String _connectionStatus = 'Unknown';
@@ -116,6 +123,9 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<GrimmUser?>(context);
+    print("testHomepage");
+    print(user);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
@@ -143,7 +153,7 @@ class _HomeState extends State<Home> {
                 ),
                 CustomHomeButton(
                     title: "Gérer l'inventaire",
-                    onPressed: !_connectionLost ? navigateToItemsAdmin : null)
+                    onPressed: !_connectionLost ? navigateToItemsCatAdmin : null)
               ],
             ),
           ],
@@ -158,9 +168,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> navigateToItemsAdmin() async {
+  Future<void> navigateToItemsCatAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsAdmin.routeName);
+      Navigator.pushNamed(context, ItemsManageMenu.routeName);
     });
   }
 

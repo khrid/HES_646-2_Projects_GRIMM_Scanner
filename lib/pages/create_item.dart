@@ -205,36 +205,6 @@ class _CreateItemState extends State<CreateItemScreen> {
                 return const Text("");
               },
             ),
-            /*TextFormField(
-              controller: categorieController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Le champ "Catégorie" ne peut pas être vide';
-                } else {
-                  return null;
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Catégorie',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Colors.black,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Colors.black,
-            ),*/
             const SizedBox(
               height: 20,
             ),

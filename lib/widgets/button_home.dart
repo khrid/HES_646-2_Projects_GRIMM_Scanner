@@ -19,7 +19,7 @@ class CustomHomeButton extends StatelessWidget {
         fixedSize: const Size(250, 100),
         textStyle: const TextStyle(
           color: Colors.black,
-          fontSize: 28.0,
+          fontSize: 25.0,
         ),
         padding: EdgeInsets.all(20.0),
       ),
