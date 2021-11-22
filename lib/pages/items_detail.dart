@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/pages/items_admin.dart';
 import 'package:grimm_scanner/pages/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
@@ -11,6 +13,7 @@ import 'package:grimm_scanner/widgets/expandable_fab.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:provider/provider.dart';
 
 import 'edit_item.dart';
 
@@ -78,7 +81,8 @@ class _ItemDetailState extends State<ItemDetail> {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
-      floatingActionButton: /*FloatingActionButton(
+      floatingActionButton:
+          /*FloatingActionButton(
           child: const Icon(
             Icons.access_time,
             color: Colors.white,
@@ -232,6 +236,8 @@ class _ItemDetailState extends State<ItemDetail> {
 
   Widget buildItemDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //on prend le user connecté pour enregistré le mouvement
+    final user = Provider.of<GrimmUser?>(context);
     /*late CollectionReference _items;
 
   _items = FirebaseFirestore.instance.collection("items");
@@ -343,7 +349,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     padding: EdgeInsets.all(10.0),
                   ),
                   onPressed: () async {
-                    grimmItem.updateAvailability();
+                    grimmItem.updateAvailability(user!.uid);
                   },
                   child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
               const SizedBox(height: 20.0),
@@ -406,25 +412,29 @@ class _ItemDetailState extends State<ItemDetail> {
       doc.addPage(pw.MultiPage(
           pageFormat: PdfPageFormat.a4,
           build: (pw.Context context) => <pw.Widget>[
-            pw.Center(
-              child: pw.Paragraph(
-                text: grimmItem.description, style: const pw.TextStyle(fontSize: 20,),),
-            ),
-            pw.Center(
-              child: pw.BarcodeWidget(
-                  data: qrcode,
-                  width: 150,
-                  height: 150,
-                  barcode: pw.Barcode.qrCode()),
-            ),
-            pw.Padding(padding: const pw.EdgeInsets.all(10)),
-          ]));
+                pw.Center(
+                  child: pw.Paragraph(
+                    text: grimmItem.description,
+                    style: const pw.TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                pw.Center(
+                  child: pw.BarcodeWidget(
+                      data: qrcode,
+                      width: 150,
+                      height: 150,
+                      barcode: pw.Barcode.qrCode()),
+                ),
+                pw.Padding(padding: const pw.EdgeInsets.all(10)),
+              ]));
 
       await Printing.layoutPdf(
-          onLayout: (PdfPageFormat format) async => doc.save(), name: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+"");
+          onLayout: (PdfPageFormat format) async => doc.save(),
+          name: "qrgrimm_" + grimmItem.getDescriptionForPdfFilename() + "");
       //await Printing.sharePdf(bytes: await doc.save(), filename: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+".pdf");
 
     }
   }
-
 }
