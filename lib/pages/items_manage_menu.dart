@@ -21,38 +21,34 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Menu"),
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
+          title: const Text("Gestion de l'inventaire"),
+          backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        CustomHomeButton(
-                            title: "Gérer les articles",
-                            onPressed: navigateToItemsAdmin),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        CustomHomeButton(
-                            title: "Gérer les catégories",
-                            onPressed: navigateToCategoriesAdmin)
-                      ],
-                    ),
-                  ],
-                )))
-      //drawer: const CustomDrawer(),
-    );
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CustomHomeButton(
+                    title: "Gérer les articles",
+                    onPressed: navigateToItemsAdmin),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                CustomHomeButton(
+                    title: "Gérer les catégories",
+                    onPressed: navigateToCategoriesAdmin)
+              ],
+            ),
+          ],
+        )))
+        //drawer: const CustomDrawer(),
+        );
   }
 
   Future<void> navigateToCategoriesAdmin() async {

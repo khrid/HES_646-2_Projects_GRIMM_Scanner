@@ -29,41 +29,55 @@ class _HomeState extends State<Home> {
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
-    return Scaffold(
+    return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          //fit: BoxFit.cover,
+          image: AssetImage(
+            'assets/images/logo_grimm.png',
+          ),
+        )),
+        child: Scaffold(
+            /*return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        body: Center(
-            child: SingleChildScrollView(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
+        ),*/
+            //backgroundColor: Theme.of(context).primaryColor,
+            appBar: AppBar(
+              title: const Text("Menu"),
+              backgroundColor: Theme.of(context).primaryColor,
+              elevation: 0,
+            ),
+            body: Center(
+                child: SingleChildScrollView(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  CustomHomeButton(
-                      title: "Gérer les utilisateurs",
-                      onPressed: navigateToUsersAdmin),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  CustomHomeButton(
-                      title: "Gérer l'inventaire",
-                      onPressed: navigateToItemsCatAdmin)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      CustomHomeButton(
+                          title: "Gérer les utilisateurs",
+                          onPressed: navigateToUsersAdmin),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      CustomHomeButton(
+                          title: "Gérer l'inventaire",
+                          onPressed: navigateToItemsCatAdmin)
+                    ],
+                  )
                 ],
-              )
-            ],
-          ),
-        ))
-        //drawer: const CustomDrawer(),
-        );
+              ),
+            ))
+            //drawer: const CustomDrawer(),
+            ));
   }
 
   Future<void> navigateToUsersAdmin() async {

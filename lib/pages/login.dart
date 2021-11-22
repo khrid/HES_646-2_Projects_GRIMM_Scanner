@@ -10,6 +10,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
+
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = new TextEditingController(
       text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
@@ -20,6 +21,13 @@ class _LoginState extends State<Login> {
     setState(() {
       Navigator.pushNamed(context, LoginGroup.routeName);
     });
+  }
+
+  late bool _passwordVisible;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
   }
 
   @override
@@ -100,14 +108,30 @@ class _LoginState extends State<Login> {
               height: 20,
             ),
             TextFormField(
+                keyboardType: TextInputType.text,
                 controller: passwordController,
-                obscureText: true,
+                obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   labelText: 'Mot de passe',
                   labelStyle: TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Theme.of(context).backgroundColor,
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      // Based on passwordVisible state choose the icon
+                      _passwordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
+                    onPressed: () {
+                      // Update the state i.e. toogle the state of passwordVisible variable
+                      setState(() {
+                        _passwordVisible = !_passwordVisible;
+                      });
+                    },
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
