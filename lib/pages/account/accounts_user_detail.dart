@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/update_account.dart';
+import 'package:grimm_scanner/pages/account/update_account.dart';
 
 class UserDetail extends StatefulWidget {
   static const routeName = "/users/detail";

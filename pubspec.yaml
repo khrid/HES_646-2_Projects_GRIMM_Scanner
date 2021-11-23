@@ -86,6 +86,7 @@ flutter:
   assets:
      - assets/images/drawer_header_background.png
      - assets/images/logo_grimm.png
+     - assets/images/logo_grimm_black.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

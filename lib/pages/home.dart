@@ -8,18 +8,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/accounts_admin.dart';
-import 'package:grimm_scanner/pages/items_detail.dart';
+import 'package:grimm_scanner/pages/account/accounts_admin.dart';
+import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'accounts_admin.dart';
-import 'items_admin.dart';
+//import 'accounts_admin.dart';
+//import 'items_admin.dart';
 import 'package:provider/provider.dart';
 
-import 'accounts_admin.dart';
-import 'items_manage_menu.dart';
+import 'account/accounts_admin.dart';
+import 'items/items_manage_menu.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';
@@ -126,7 +126,17 @@ class _HomeState extends State<Home> {
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
-    return Scaffold(
+    /*return Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+          //fit: BoxFit.cover,
+          image: AssetImage(
+            'assets/images/logo_grimm.png',
+          ),
+        )),
+        child: Scaffold(
+            */
+        return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
           backgroundColor: Theme.of(context).primaryColor,
@@ -136,31 +146,31 @@ class _HomeState extends State<Home> {
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                CustomHomeButton(
-                    title: "Gérer les utilisateurs",
-                    onPressed: !_connectionLost ? navigateToUsersAdmin : null),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                CustomHomeButton(
-                    title: "Gérer l'inventaire",
-                    onPressed: !_connectionLost ? navigateToItemsCatAdmin : null)
-              ],
-            ),
-          ],
-        )))
-        //drawer: const CustomDrawer(),
-        );
-  }
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                      CustomHomeButton(
+                          title: "Gérer les utilisateurs",
+                          onPressed: navigateToUsersAdmin),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      CustomHomeButton(
+                          title: "Gérer l'inventaire",
+                          onPressed: navigateToItemsCatAdmin)
+                      ],
+                                  ),
+                                ],
+                              )))
+                          //drawer: const CustomDrawer(),
+                          );
+                    }
 
   Future<void> navigateToUsersAdmin() async {
     setState(() {
