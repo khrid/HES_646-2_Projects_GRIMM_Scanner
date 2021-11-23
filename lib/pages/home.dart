@@ -10,6 +10,7 @@ import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -163,7 +164,13 @@ class _HomeState extends State<Home> {
                       ),
                       CustomHomeButton(
                           title: "Gérer l'inventaire",
-                          onPressed: navigateToItemsCatAdmin)
+                          onPressed: navigateToItemsCatAdmin),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      CustomHomeButton(
+                          title: "Gérer les droits",
+                          onPressed: navigateToAdminRights)
                       ],
                                   ),
                                 ],
@@ -175,6 +182,11 @@ class _HomeState extends State<Home> {
   Future<void> navigateToUsersAdmin() async {
     setState(() {
       Navigator.pushNamed(context, AccountsAdmin.routeName);
+    });
+  }
+    Future<void> navigateToAdminRights() async {
+    setState(() {
+      Navigator.pushNamed(context, RightsAdmin.routeName);
     });
   }
 
