@@ -4,16 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GrimmRight {
   late final String id;
-
-  String name = "";
-
   String description = "";
-
   late List permissions = [];
 
   GrimmRight(
       {this.id = "",
-      required this.name,
       required this.description,
       required this.permissions,});
 
@@ -21,7 +16,6 @@ class GrimmRight {
   GrimmRight.fromJson(json)
       : this(
     id: json.id,
-    name: (json.data()!['name'] ?? ""),
     description: (json.data()!['description']),
     permissions: (json.data()!['permissions']),
   );
@@ -31,8 +25,6 @@ class GrimmRight {
   String toString() {
     return "GrimmRight{id:" +
         id +
-        ",name:" +
-        name +
         ",description:" +
         description +
         ",permissions:" +
@@ -43,7 +35,6 @@ class GrimmRight {
   Map<String, Object?> toJson() {
     return {
       //'id': id,
-      'name': name,
       'description': description,
       'permissions': permissions
     };

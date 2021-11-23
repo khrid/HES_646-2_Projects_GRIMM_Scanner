@@ -30,7 +30,6 @@ class _RightsAdminState extends State<RightsAdmin> {
             child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("rights")
-              .orderBy("name")
               .snapshots(),
           builder: buildRightsList,
         ))

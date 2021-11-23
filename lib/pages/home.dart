@@ -160,7 +160,7 @@ class _HomeState extends State<Home> {
                     StreamBuilder(
                      stream: FirebaseFirestore.instance
                               .collection('rights')
-                              .doc("B28Bde5h8ktnphTbgu16")
+                              .doc("createButton")
                               .snapshots(),
                           builder: buildButtonAdmin,
                         ),
@@ -210,18 +210,18 @@ class _HomeState extends State<Home> {
 
   Future<void> navigateToUsersAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, AccountsAdmin.routeName);
+      Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
     });
   }
     Future<void> navigateToAdminRights() async {
     setState(() {
-      Navigator.pushNamed(context, RightsAdmin.routeName);
+      Navigator.pushNamed(context, RightsAdmin.routeName, arguments: role);
     });
   }
 
   Future<void> navigateToItemsCatAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsManageMenu.routeName);
+      Navigator.pushNamed(context, ItemsManageMenu.routeName, arguments: role);
     });
   }
 
