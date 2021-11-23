@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -42,6 +43,7 @@ class _HomeState extends State<Home> {
   late final bool _firstLaunch;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late String role;
 
   Future<bool> isFirstTime() async {
     prefs = await SharedPreferences.getInstance();
@@ -124,6 +126,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    role = ModalRoute.of(context)!.settings.arguments == null
+        ? "NULL"
+        : ModalRoute.of(context)!.settings.arguments as String;
+    if (role == "NULL") {
+      Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false));
+    }
+    print("Permissions : " + role);
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
@@ -156,12 +166,12 @@ class _HomeState extends State<Home> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                      CustomHomeButton(
-                          title: "Gérer les utilisateurs",
-                          onPressed: navigateToUsersAdmin),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
+                    CustomHomeButton(
+                              title: "Gérer les utilisateurs",
+                              onPressed: navigateToUsersAdmin),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
                       CustomHomeButton(
                           title: "Gérer l'inventaire",
                           onPressed: navigateToItemsCatAdmin),
@@ -307,4 +317,6 @@ class _HomeState extends State<Home> {
       //}
     }
   }
+
+ 
 }

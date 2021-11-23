@@ -9,11 +9,13 @@ class LoginGroup extends StatefulWidget {
   static const routeName = '/login/group';
   const LoginGroup({Key? key}) : super(key: key);
 
+
   @override
   _LoginGroupState createState() => _LoginGroupState();
 }
 
 class _LoginGroupState extends State<LoginGroup> {
+  late String role;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
@@ -35,29 +37,88 @@ class _LoginGroupState extends State<LoginGroup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 if (user!.groups.contains("Administrator"))
-                  CustomHomeButton(
-                      title: "Administrateur", onPressed: navigateToHomePage),
+                ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  fixedSize: const Size(250, 100),
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.0,
+                  ),
+                  padding: EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  {
+                    role = "Administrator";
+                    Navigator.pushNamed(context, Home.routeName, arguments: role);
+                  }
+                },
+                child: Text("Administrateur")),
                 const SizedBox(
                   height: 10.0,
                 ),
                 if (user.groups.contains("ObjectManager"))
-                  CustomHomeButton(
-                      title: "Object Manager", onPressed: navigateToHomePage),
+                ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  fixedSize: const Size(250, 100),
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.0,
+                  ),
+                  padding: EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  {
+                    role = "ObjectManager";
+                    Navigator.pushNamed(context, Home.routeName, arguments: role);
+                  }
+                },
+                child: Text("Object Manager")),
                 const SizedBox(
                   height: 10.0,
                 ),
                 if (user.groups.contains("Member"))
-                  CustomHomeButton(
-                      title: "Membre", onPressed: navigateToHomePage)
+                ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  fixedSize: const Size(250, 100),
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.0,
+                  ),
+                  padding: EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  {
+                    role = "Member";
+                    Navigator.pushNamed(context, Home.routeName, arguments: role);
+                  }
+                },
+                child: Text("Membre")),
               ],
             ),
           ],
         ))));
   }
 
+
+    /*Future<void> navigateToHomePage(String role) async {
+    setState(() {
+      Navigator.pushNamed(context, Home.routeName, arguments: role);
+    });
+  }*/
   Future<void> navigateToHomePage() async {
     setState(() {
       Navigator.pushNamed(context, Home.routeName);
     });
   }
 }
+
+
+
+
+
