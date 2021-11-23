@@ -164,9 +164,6 @@ class _HomeState extends State<Home> {
                               .snapshots(),
                           builder: buildButtonAdmin,
                         ),
-                    /*CustomHomeButton(
-                              title: "Gérer les utilisateurs",
-                              onPressed: navigateToUsersAdmin),*/
                      CustomHomeButton(
                           title: "Gérer l'inventaire",
                           onPressed: navigateToItemsCatAdmin),

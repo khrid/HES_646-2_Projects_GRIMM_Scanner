@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights_detail.dart';
 
 
 class RightsAdmin extends StatefulWidget {
@@ -24,24 +26,46 @@ class _RightsAdminState extends State<RightsAdmin> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-       body: Center(
-            child: SingleChildScrollView(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-        
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                    const Text("yo")
-                      ],
-                                  ),
-                                ],
-                              )))
+       body: SingleChildScrollView(
+            child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("rights")
+              .orderBy("name")
+              .snapshots(),
+          builder: buildRightsList,
+        ))
                           //drawer: const CustomDrawer(),
                           );
                     }
+}
+
+ Widget buildRightsList(
+    BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+    if (snapshot.hasData) {
+      return Column(children: <Widget>[
+        ListView(
+          physics: const ClampingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          children: snapshot.data!.docs.map((doc) {
+            GrimmRight grimmRight = GrimmRight.fromJson(doc);
+            return Card(
+              child: ListTile(
+                  minLeadingWidth: 10,
+                  horizontalTitleGap: 10,
+                  title: Text(grimmRight.description),
+                  onTap: () {
+                    print("GRIMM RIGHT ID"+ grimmRight.id);
+                    Navigator.pushNamed(context, RightsAdminDetail.routeName,
+                        arguments: grimmRight.id);
+                  }),
+            );
+          }).toList(),
+        )
+      ]);
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 }

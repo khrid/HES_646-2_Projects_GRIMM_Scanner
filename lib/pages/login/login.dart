@@ -175,7 +175,7 @@ class _LoginState extends State<Login> {
                           " " +
                           result.name);
                       await Future.delayed(
-                          const Duration(milliseconds: 100), () {});
+                          const Duration(milliseconds: 200), () {});
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Connexion réussie")));
                       MenuScreen(context);

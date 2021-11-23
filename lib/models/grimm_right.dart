@@ -54,7 +54,7 @@ class GrimmRight {
   }
 
   Future<void> update() async {
-    await FirebaseFirestore.instance.collection("rights").doc().set(toJson());
+    await FirebaseFirestore.instance.collection("rights").doc(id).set(toJson());
   }
 
 
