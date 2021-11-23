@@ -12,16 +12,22 @@ class CustomHomeButton extends StatelessWidget {
     // TODO: implement build
     return ElevatedButton(
       onPressed: onPressed,
-      child: Text(title.toUpperCase(), textAlign: TextAlign.center),
+      child: //Text(title.toUpperCase(), textAlign: TextAlign.center),
+          FittedBox(
+        fit: BoxFit.fitHeight,
+        child: Text(
+          title.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 25.0,
+            color: Colors.black,
+          ),
+        ),
+      ),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).primaryColor,
         side: const BorderSide(width: 1.0, color: Colors.black),
         fixedSize: const Size(250, 100),
-        textStyle: const TextStyle(
-          color: Colors.black,
-          fontSize: 25.0,
-        ),
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
       ),
     );
   }
