@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
@@ -34,7 +35,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
   //late final GrimmUser user;
-
+  late GrimmRight right;
   late SharedPreferences prefs;
   String _connectionStatus = 'Unknown';
   bool connectionLost = false;
@@ -137,16 +138,6 @@ class _HomeState extends State<Home> {
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
-    /*return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-          //fit: BoxFit.cover,
-          image: AssetImage(
-            'assets/images/logo_grimm.png',
-          ),
-        )),
-        child: Scaffold(
-            */
         return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
@@ -166,13 +157,17 @@ class _HomeState extends State<Home> {
                     const SizedBox(
                       height: 10.0,
                     ),
-                    CustomHomeButton(
+                    StreamBuilder(
+                     stream: FirebaseFirestore.instance
+                              .collection('rights')
+                              .doc("B28Bde5h8ktnphTbgu16")
+                              .snapshots(),
+                          builder: buildButtonAdmin,
+                        ),
+                    /*CustomHomeButton(
                               title: "Gérer les utilisateurs",
-                              onPressed: navigateToUsersAdmin),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                      CustomHomeButton(
+                              onPressed: navigateToUsersAdmin),*/
+                     CustomHomeButton(
                           title: "Gérer l'inventaire",
                           onPressed: navigateToItemsCatAdmin),
                       const SizedBox(
@@ -188,6 +183,33 @@ class _HomeState extends State<Home> {
                           //drawer: const CustomDrawer(),
                           );
                     }
+
+      Widget buildButtonAdmin(
+        BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          print(snapshot.data);
+          if (snapshot.hasData) {
+            if (snapshot.data!.data() != null) {
+              right = GrimmRight.fromJson(snapshot.data);
+                    
+              if (right.permissions.contains(role))
+              {
+                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                CustomHomeButton(
+                            title: "Gérer les utilisateurs",
+                            onPressed: navigateToUsersAdmin),
+                const SizedBox(
+                  height: 10,
+                ),
+              ]);
+              }
+            } else {
+              return Text ("erreur");
+            }
+          }
+          return const SizedBox(
+                  height: 0,
+                );
+        }
 
   Future<void> navigateToUsersAdmin() async {
     setState(() {
@@ -320,3 +342,4 @@ class _HomeState extends State<Home> {
 
  
 }
+
