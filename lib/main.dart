@@ -37,6 +37,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
+  var subscription;
+  var connectionStatus;
 
   /*static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =

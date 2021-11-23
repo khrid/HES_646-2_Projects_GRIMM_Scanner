@@ -65,7 +65,7 @@ class AuthenticationService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      //grimmUser.setUid(result.user!.uid);
+      grimmUser.setUid(result.user!.uid);
       print(grimmUser);
       await grimmUser.saveToFirestore();
       return grimmUser;

@@ -40,13 +40,13 @@ class _LoginGroupState extends State<LoginGroup> {
                 const SizedBox(
                   height: 10.0,
                 ),
-                if (user!.groups.contains("ObjectManager"))
+                if (user.groups.contains("ObjectManager"))
                   CustomHomeButton(
                       title: "Object Manager", onPressed: navigateToHomePage),
                 const SizedBox(
                   height: 10.0,
                 ),
-                if (user!.groups.contains("Member"))
+                if (user.groups.contains("Member"))
                   CustomHomeButton(
                       title: "Membre", onPressed: navigateToHomePage)
               ],

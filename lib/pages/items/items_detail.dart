@@ -355,10 +355,10 @@ class _ItemDetailState extends State<ItemDetail> {
               const SizedBox(height: 20.0),
             ]);
       } else {
-        return Text("Pas d'object trouvé, scannez à nouveau");
+        return Text("Pas d'objet trouvé, scannez à nouveau");
       }
     }
-    return Text("Pas d'object trouvé, scannez à nouveau");
+    return Text("Pas d'objet trouvé, scannez à nouveau");
   }
 
   Widget buildItemCategory(BuildContext context,
