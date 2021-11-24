@@ -1,4 +1,5 @@
 import 'dart:async';
+//import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -7,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +35,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String _qrCode = 'Unknown';
   //late final GrimmUser user;
-
+  late GrimmRight right;
   late SharedPreferences prefs;
   String _connectionStatus = 'Unknown';
   bool connectionLost = false;
@@ -41,6 +44,7 @@ class _HomeState extends State<Home> {
   late final bool _firstLaunch;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late String role;
 
   Future<bool> isFirstTime() async {
     prefs = await SharedPreferences.getInstance();
@@ -123,64 +127,214 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    role = ModalRoute.of(context)!.settings.arguments == null
+        ? "NULL"
+        : ModalRoute.of(context)!.settings.arguments as String;
+    if (role == "NULL") {
+      Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false));
+    }
+    print("Permissions : " + role);
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
-    /*return Container(
-        decoration: BoxDecoration(
-            image: DecorationImage(
-          //fit: BoxFit.cover,
-          image: AssetImage(
-            'assets/images/logo_grimm.png',
-          ),
-        )),
-        child: Scaffold(
-            */
-        return Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body: Center(
-            child: SingleChildScrollView(
-                child: Row(
+        body:  
+        Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        fit: BoxFit.cover,
+                        ),),   
+        child: 
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
-                      CustomHomeButton(
-                          title: "Gérer les utilisateurs",
-                          onPressed: navigateToUsersAdmin),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      CustomHomeButton(
-                          title: "Gérer l'inventaire",
-                          onPressed: navigateToItemsCatAdmin)
-                      ],
-                                  ),
-                                ],
-                              )))
-                          //drawer: const CustomDrawer(),
-                          );
-                    }
+                //Gestion des accès : StreamBuilder pour le button scan
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("scanButton")
+                      .snapshots(),
+                  builder: buildButtonScan,
+                ),
+                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("userButton")
+                      .snapshots(),
+                  builder: buildButtonAdmin,
+                ),
+                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("inventoryButton")
+                      .snapshots(),
+                  builder: buildButtonInventory,
+                ),
+
+                //Gestion des accès : StreamBuilder pour le button d'accès au droits
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("rightsButton")
+                      .snapshots(),
+                  builder: buildButtonRights,
+                ),
+              ],
+            ),
+          
+        )
+        //drawer: const CustomDrawer(),
+        );
+  }
+
+  Widget buildButtonAdmin(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer les utilisateurs",
+                onPressed: navigateToUsersAdmin),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return Text("erreur");
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
+
+  Widget buildButtonInventory(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer l'inventaire",
+                onPressed: navigateToItemsCatAdmin),
+             
+                /*ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  fixedSize: const Size(250, 100),
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25.0,
+                  ),
+                  padding: EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  {
+                   navigateToItemsCatAdmin();
+                  }
+                }, 
+                icon: Icon(Icons.build_outlined), 
+                label: Text("Gérer l'inventaire")),*/
+            const SizedBox(
+              height: 10.0,
+            ),
+          ]);
+        }
+      } else {
+        return Text("erreur");
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
+
+  Widget buildButtonRights(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer les droits", onPressed: navigateToAdminRights),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return Text("erreur");
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
+
+  Widget buildButtonScan(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return Text("erreur");
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
 
   Future<void> navigateToUsersAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, AccountsAdmin.routeName);
+      Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
+    });
+  }
+
+  Future<void> navigateToAdminRights() async {
+    setState(() {
+      Navigator.pushNamed(context, RightsAdmin.routeName, arguments: role);
     });
   }
 
   Future<void> navigateToItemsCatAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsManageMenu.routeName);
+      Navigator.pushNamed(context, ItemsManageMenu.routeName, arguments: role);
     });
   }
 
@@ -220,7 +374,7 @@ class _HomeState extends State<Home> {
           _qrCode = barcodeScanRes;
           // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
           Navigator.pushNamed(context, ItemDetail.routeName,
-              arguments: _qrCode);
+              arguments: {'qrCode': _qrCode, 'role': role});
 
           // Sinon s'il est égal à -1 (quand l'utilisateur appuie sur "annuler"
           // depuis l'écran de scannage
@@ -284,14 +438,14 @@ class _HomeState extends State<Home> {
           backgroundColor: Color(0xFFB71C1C),
         ));
       } else {*/
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          duration: Duration(days: 365),
-          backgroundColor: Color(0xFFB71C1C),
-        ));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        duration: Duration(days: 365),
+        backgroundColor: Color(0xFFB71C1C),
+      ));
       //}
     }
   }

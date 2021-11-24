@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: EdgeInsets.only(top: 10, right: 50, left: 50),
           children: <Widget>[
             Image.asset(
               'assets/images/logo_grimm.png',
@@ -52,7 +52,7 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.only(top: 10.0),
             ),
             SizedBox(
-              height: 50,
+              height: 30,
             ),
             Text(
               'Bienvenue !',
@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
                   labelStyle: TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
-                    color: Theme.of(context).backgroundColor,
+                    color: Colors.black,
                   ),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
                   labelStyle: TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
-                    color: Theme.of(context).backgroundColor,
+                    color: Colors.black,
                   ),
                   suffixIcon: IconButton(
                     icon: Icon(
@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                       _passwordVisible
                           ? Icons.visibility
                           : Icons.visibility_off,
-                      color: Theme.of(context).primaryColorDark,
+                      color: Colors.black,
                     ),
                     onPressed: () {
                       // Update the state i.e. toogle the state of passwordVisible variable
@@ -175,7 +175,7 @@ class _LoginState extends State<Login> {
                           " " +
                           result.name);
                       await Future.delayed(
-                          const Duration(milliseconds: 100), () {});
+                          const Duration(milliseconds: 200), () {});
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Connexion réussie")));
                       MenuScreen(context);

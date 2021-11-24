@@ -14,12 +14,14 @@ import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/pages/items/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/account/update_account.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'dart:async';
 
 import 'models/grimm_user.dart';
 import 'pages/items/create_item.dart';
 import 'pages/items/edit_item.dart';
 import 'pages/login/login.dart';
+import 'pages/rights/admin_rights_detail.dart';
 import 'service/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -99,6 +101,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             initialRoute: '/',
             routes: {
               LoginGroup.routeName: (context) => const LoginGroup(),
+              RightsAdmin.routeName: (context) => const RightsAdmin(),
+              RightsAdminDetail.routeName: (context) => const RightsAdminDetail(),
               Home.routeName: (context) => const Home(),
               ItemDetail.routeName: (context) => const ItemDetail(),
               ItemHistory.routeName: (context) => const ItemHistory(),

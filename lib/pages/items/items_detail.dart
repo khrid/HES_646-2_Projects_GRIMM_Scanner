@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/items/edit_item.dart';
 import 'package:grimm_scanner/pages/items/items_admin.dart';
@@ -16,7 +17,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
-
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
 
@@ -29,17 +29,57 @@ class ItemDetail extends StatefulWidget {
 class _ItemDetailState extends State<ItemDetail> {
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
   late String qrcode;
+  late String role;
   late GrimmItem grimmItem;
+  late GrimmRight right;
 
   late final CollectionReference _items =
       FirebaseFirestore.instance.collection("items");
+  late final CollectionReference _rights =
+      FirebaseFirestore.instance.collection("rights");
+  var isRight;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //setPersistenceEnabled();
+     isRightRole();
+  }
+
+    Future<bool> isRightRole() async {
+          _rights.doc("objectButton")
+              .get()
+              .then((result) {
+            print("coucou");
+            print(result.data());
+            right = GrimmRight.fromJson(result);
+            print(right.permissions);
+            print(role);
+            if (right.permissions.contains(role)) {
+               setState(() {
+                      isRight = true;
+                 });
+
+            } else {
+              setState(() {
+                      isRight = false;
+                 });
+            }
+            print("DOUDOUDOUDOU");
+            print(isRight);    });
+            return isRight;    
+      }
+
 
   @override
   Widget build(BuildContext context) {
-    qrcode = ModalRoute.of(context)!.settings.arguments == null
-        ? "NULL"
-        : ModalRoute.of(context)!.settings.arguments as String;
+    final arg = ModalRoute.of(context)!.settings.arguments as Map;
+    qrcode = arg['qrCode'];
+    role = arg['role'];
 
+
+    print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
     if (qrcode == "NULL") {
@@ -59,8 +99,19 @@ class _ItemDetailState extends State<ItemDetail> {
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
+    /*var snap = FirebaseFirestore.instance
+                              .collection('rights')
+                              .doc("createButton")
+                              .snapshots();
+                      
+    //right = GrimmRight.fromJson(snap.data);*/
+
     double cWidth = MediaQuery.of(context).size.width * 0.8;
+    print("yoyoyoyoyo");
+    print(isRight);
+
     return Scaffold(
+      
       appBar: AppBar(
         title: const Text("Détail de l'objet"),
         backgroundColor: Theme.of(context).primaryColor,
@@ -81,15 +132,9 @@ class _ItemDetailState extends State<ItemDetail> {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
-      floatingActionButton:
-          /*FloatingActionButton(
-          child: const Icon(
-            Icons.access_time,
-            color: Colors.white,
-          ),
-          onPressed: showHistory,
-        )*/
-          ExpandableFab(
+	    floatingActionButton:
+            (isRight==true)
+                ? ExpandableFab(
         distance: 112.0,
         children: [
           ActionButton(
@@ -124,8 +169,9 @@ class _ItemDetailState extends State<ItemDetail> {
               onPressed: () => _showAction(context, 2),
               icon: const Icon(Icons.videocam),
             ),*/
-        ],
-      ),
+        				  ],
+                  )
+                : null,
       body: Center(
           // enlever le Center pour ne plus centrer verticalement
           child: SingleChildScrollView(
@@ -239,9 +285,7 @@ class _ItemDetailState extends State<ItemDetail> {
     //on prend le user connecté pour enregistré le mouvement
     final user = Provider.of<GrimmUser?>(context);
     /*late CollectionReference _items;
-
   _items = FirebaseFirestore.instance.collection("items");
-
   Future<void> updateItem(GrimmItem i) async {
     _items.doc(i.id).update(i.toJson());
   }*/
@@ -339,20 +383,50 @@ class _ItemDetailState extends State<ItemDetail> {
                 ],
               ),
               const SizedBox(height: 50.0),
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("borrowButton")
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  print(snapshot.data);
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.data() != null) {
+                      right = GrimmRight.fromJson(snapshot.data);
+                      if (right.permissions.contains(role)) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Theme.of(context).primaryColor,
+                                    textStyle: TextStyle(
+                                        fontFamily: "Raleway-Regular",
+                                        fontSize: 14.0),
+                                    side: const BorderSide(
+                                        width: 1.0, color: Colors.black),
+                                    padding: EdgeInsets.all(10.0),
+                                  ),
+                                  onPressed: () async {
+                                    grimmItem.updateAvailability(user!.uid);
+                                  },
+                                  child: Text(item.available
+                                      ? "EMPRUNTER"
+                                      : "RETOURNER")),
+                              const SizedBox(height: 20.0),
+                            ]);
+                      }
+                    } else {
+                      return Text("erreur");
+                    }
+                  }
+                  return const SizedBox(
+                    height: 0,
+                  );
+                },
+              ),
               //if (item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  onPressed: () async {
-                    grimmItem.updateAvailability(user!.uid);
-                  },
-                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
-              const SizedBox(height: 20.0),
             ]);
       } else {
         return Text("Pas d'objet trouvé, scannez à nouveau");
