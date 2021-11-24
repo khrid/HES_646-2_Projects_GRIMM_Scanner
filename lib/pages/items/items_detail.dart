@@ -35,12 +35,50 @@ class _ItemDetailState extends State<ItemDetail> {
 
   late final CollectionReference _items =
       FirebaseFirestore.instance.collection("items");
+  late final CollectionReference _rights =
+      FirebaseFirestore.instance.collection("rights");
+  var isRight;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //setPersistenceEnabled();
+     isRightRole();
+  }
+
+    Future<bool> isRightRole() async {
+          _rights.doc("objectButton")
+              .get()
+              .then((result) {
+            print("coucou");
+            print(result.data());
+            right = GrimmRight.fromJson(result);
+            print(right.permissions);
+            print(role);
+            if (right.permissions.contains(role)) {
+               setState(() {
+                      isRight = true;
+                 });
+
+            } else {
+              setState(() {
+                      isRight = false;
+                 });
+            }
+            print("DOUDOUDOUDOU");
+            print(isRight);    });
+            return isRight;    
+      }
+
 
   @override
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     qrcode = arg['qrCode'];
     role = arg['role'];
+
+
     print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
@@ -67,25 +105,6 @@ class _ItemDetailState extends State<ItemDetail> {
                               .snapshots();
                       
     //right = GrimmRight.fromJson(snap.data);*/
-    bool isRight = true;
-    FirebaseFirestore.instance
-        .collection("rights")
-        .doc("objectButton")
-        .get()
-        .then((result) {
-      print("coucou");
-      print(result.data());
-      right = GrimmRight.fromJson(result);
-      print(right.permissions);
-      print(role);
-      if (right.permissions.contains(role)) {
-        isRight = true;
-      } else {
-        isRight = false;
-      }
-      print("DOUDOUDOUDOU");
-      print(isRight);
-    });
 
     double cWidth = MediaQuery.of(context).size.width * 0.8;
     print("yoyoyoyoyo");

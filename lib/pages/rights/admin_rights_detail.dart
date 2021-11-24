@@ -39,7 +39,6 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            const SizedBox(height: 20.0),
             Container(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -49,7 +48,6 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
                 builder: buildRightsDetail,
               ),
             ),
-            const SizedBox(height: 60.0),
           ],
         ),
       ),
@@ -90,9 +88,9 @@ Widget buildRightsDetail(
                       child: ListView(
                             scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                        padding: EdgeInsets.all(50),
+                        padding: EdgeInsets.all(20),
                         children: <Widget>[
-                          Text("Permission : "+right.description,
+                          Text(right.description,
                           style: TextStyle(
                           fontFamily: "Raleway-Regular", fontSize: 25.0),
                           ),
