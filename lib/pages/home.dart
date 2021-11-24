@@ -153,10 +153,13 @@ class _HomeState extends State<Home> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                    const SizedBox(
-                      height: 10.0,
-                    ),
+                    StreamBuilder(
+                     stream: FirebaseFirestore.instance
+                              .collection('rights')
+                              .doc("scanButton")
+                              .snapshots(),
+                          builder: buildButtonScan,
+                        ),
                     StreamBuilder(
                      stream: FirebaseFirestore.instance
                               .collection('rights')
@@ -194,6 +197,31 @@ class _HomeState extends State<Home> {
                 CustomHomeButton(
                             title: "Gérer les utilisateurs",
                             onPressed: navigateToUsersAdmin),
+                const SizedBox(
+                  height: 10,
+                ),
+              ]);
+              }
+            } else {
+              return Text ("erreur");
+            }
+          }
+          return const SizedBox(
+                  height: 0,
+                );
+        }
+    
+    Widget buildButtonScan(
+        BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          print(snapshot.data);
+          if (snapshot.hasData) {
+            if (snapshot.data!.data() != null) {
+              right = GrimmRight.fromJson(snapshot.data);
+                    
+              if (right.permissions.contains(role))
+              {
+                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
                 const SizedBox(
                   height: 10,
                 ),
