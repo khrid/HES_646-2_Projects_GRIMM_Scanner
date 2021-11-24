@@ -138,7 +138,7 @@ class _HomeState extends State<Home> {
     final user = Provider.of<GrimmUser?>(context);
     print("testHomepage");
     print(user);
-        return Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
           backgroundColor: Theme.of(context).primaryColor,
@@ -148,129 +148,154 @@ class _HomeState extends State<Home> {
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    StreamBuilder(
-                     stream: FirebaseFirestore.instance
-                              .collection('rights')
-                              .doc("scanButton")
-                              .snapshots(),
-                          builder: buildButtonScan,
-                        ),
-                    StreamBuilder(
-                     stream: FirebaseFirestore.instance
-                              .collection('rights')
-                              .doc("createButton")
-                              .snapshots(),
-                          builder: buildButtonAdmin,
-                        ),
-                     CustomHomeButton(
-                          title: "Gérer l'inventaire",
-                          onPressed: navigateToItemsCatAdmin),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      //StreamBuilder pour le button d'accès au droits
-                      StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection('rights')
-                            .doc("rightsButton")
-                            .snapshots(),
-                        builder: buildButtonRights,
-                      ),
-                      ],
-                                  ),
-                                ],
-                              )))
-                          //drawer: const CustomDrawer(),
-                          );
-                    }
-
-      Widget buildButtonAdmin(
-        BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          print(snapshot.data);
-          if (snapshot.hasData) {
-            if (snapshot.data!.data() != null) {
-              right = GrimmRight.fromJson(snapshot.data);
-                    
-              if (right.permissions.contains(role))
-              {
-                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                CustomHomeButton(
-                            title: "Gérer les utilisateurs",
-                            onPressed: navigateToUsersAdmin),
-                const SizedBox(
-                  height: 10,
+                //Gestion des accès : StreamBuilder pour le button scan
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("scanButton")
+                      .snapshots(),
+                  builder: buildButtonScan,
                 ),
-              ]);
-              }
-            } else {
-              return Text ("erreur");
-            }
-          }
-          return const SizedBox(
-                  height: 0,
-                );
-        }
-    
-      Widget buildButtonRights(
+                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("userButton")
+                      .snapshots(),
+                  builder: buildButtonAdmin,
+                ),
+                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("inventoryButton")
+                      .snapshots(),
+                  builder: buildButtonInventory,
+                ),
+
+                //Gestion des accès : StreamBuilder pour le button d'accès au droits
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('rights')
+                      .doc("rightsButton")
+                      .snapshots(),
+                  builder: buildButtonRights,
+                ),
+              ],
+            ),
+          ],
+        )))
+        //drawer: const CustomDrawer(),
+        );
+  }
+
+  Widget buildButtonAdmin(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          print(snapshot.data);
-          if (snapshot.hasData) {
-            if (snapshot.data!.data() != null) {
-              right = GrimmRight.fromJson(snapshot.data);
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
 
-              if (right.permissions.contains(role)) {
-                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  CustomHomeButton(
-                      title: "Gérer les droits", onPressed: navigateToAdminRights),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ]);
-              }
-            } else {
-              return Text("erreur");
-            }
-          }
-          return const SizedBox(
-            height: 0,
-          );
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer les utilisateurs",
+                onPressed: navigateToUsersAdmin),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
         }
-    Widget buildButtonScan(
-        BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          print(snapshot.data);
-          if (snapshot.hasData) {
-            if (snapshot.data!.data() != null) {
-              right = GrimmRight.fromJson(snapshot.data);
-                    
-              if (right.permissions.contains(role))
-              {
-                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                CustomHomeButton(title: "SCANNER", onPressed: scanQR),
-                const SizedBox(
-                  height: 10,
-                ),
-              ]);
-              }
-            } else {
-              return Text ("erreur");
-            }
-          }
-          return const SizedBox(
-                  height: 0,
-                );
+      } else {
+        return Text("erreur");
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
+
+  Widget buildButtonInventory(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer l'inventaire",
+                onPressed: navigateToItemsCatAdmin),
+            const SizedBox(
+              height: 10.0,
+            ),
+          ]);
         }
+      } else {
+        return const SizedBox(height: 0,);
+      }
+    }
+    return Text("erreur");
+  }
+
+  Widget buildButtonRights(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: "Gérer les droits", onPressed: navigateToAdminRights),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return const SizedBox(height: 0,);
+      }
+    }
+    return Text("erreur");
+  }
+
+  Widget buildButtonScan(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return const SizedBox(height: 0,);
+      }
+    }
+    return Text("erreur");
+  }
 
   Future<void> navigateToUsersAdmin() async {
     setState(() {
       Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
     });
   }
-    Future<void> navigateToAdminRights() async {
+
+  Future<void> navigateToAdminRights() async {
     setState(() {
       Navigator.pushNamed(context, RightsAdmin.routeName, arguments: role);
     });
@@ -382,18 +407,15 @@ class _HomeState extends State<Home> {
           backgroundColor: Color(0xFFB71C1C),
         ));
       } else {*/
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          duration: Duration(days: 365),
-          backgroundColor: Color(0xFFB71C1C),
-        ));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        duration: Duration(days: 365),
+        backgroundColor: Color(0xFFB71C1C),
+      ));
       //}
     }
   }
-
- 
 }
-
