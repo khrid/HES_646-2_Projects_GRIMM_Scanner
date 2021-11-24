@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/account/accounts_user_detail.dart';
 import 'package:grimm_scanner/pages/categories/categories_admin.dart';
@@ -85,6 +86,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // can be called before `runApp()`
     // TODO: implement build
 
+    // gestion de l'orientation de l'écran
+    SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
     return StreamProvider<GrimmUser?>.value(
         initialData: null,
         value: AuthenticationService().user,

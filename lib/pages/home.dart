@@ -241,25 +241,6 @@ class _HomeState extends State<Home> {
             CustomHomeButton(
                 title: "Gérer l'inventaire",
                 onPressed: navigateToItemsCatAdmin),
-             
-                /*ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  side: const BorderSide(width: 1.0, color: Colors.black),
-                  fixedSize: const Size(250, 100),
-                  textStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 25.0,
-                  ),
-                  padding: EdgeInsets.all(20.0),
-                ),
-                onPressed: () async {
-                  {
-                   navigateToItemsCatAdmin();
-                  }
-                }, 
-                icon: Icon(Icons.build_outlined), 
-                label: Text("Gérer l'inventaire")),*/
             const SizedBox(
               height: 10.0,
             ),
@@ -443,7 +424,7 @@ class _HomeState extends State<Home> {
       } else {*/
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
-          "Pas de connexion, seul l'emprunt/retour d'objet est disponible.",
+          "Pas de connexion internet.",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         duration: Duration(days: 365),
