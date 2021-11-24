@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/items/edit_item.dart';
 import 'package:grimm_scanner/pages/items/items_admin.dart';
@@ -16,7 +17,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
-
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
 
@@ -29,17 +29,19 @@ class ItemDetail extends StatefulWidget {
 class _ItemDetailState extends State<ItemDetail> {
   static const _actionTitles = ['Create Post', 'Upload Photo', 'Upload Video'];
   late String qrcode;
+  late String role;
   late GrimmItem grimmItem;
+  late GrimmRight right;
 
   late final CollectionReference _items =
       FirebaseFirestore.instance.collection("items");
 
   @override
   Widget build(BuildContext context) {
-    qrcode = ModalRoute.of(context)!.settings.arguments == null
-        ? "NULL"
-        : ModalRoute.of(context)!.settings.arguments as String;
-
+    final arg = ModalRoute.of(context)!.settings.arguments as Map;
+    qrcode = arg['qrCode'];
+    role = arg['role'];
+    print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
     if (qrcode == "NULL") {
@@ -339,20 +341,50 @@ class _ItemDetailState extends State<ItemDetail> {
                 ],
               ),
               const SizedBox(height: 50.0),
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("borrowButton")
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                  print(snapshot.data);
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.data() != null) {
+                      right = GrimmRight.fromJson(snapshot.data);
+                      if (right.permissions.contains(role)) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Theme.of(context).primaryColor,
+                                    textStyle: TextStyle(
+                                        fontFamily: "Raleway-Regular",
+                                        fontSize: 14.0),
+                                    side: const BorderSide(
+                                        width: 1.0, color: Colors.black),
+                                    padding: EdgeInsets.all(10.0),
+                                  ),
+                                  onPressed: () async {
+                                    grimmItem.updateAvailability(user!.uid);
+                                  },
+                                  child: Text(item.available
+                                      ? "EMPRUNTER"
+                                      : "RETOURNER")),
+                              const SizedBox(height: 20.0),
+                            ]);
+                      }
+                    } else {
+                      return Text("erreur");
+                    }
+                  }
+                  return const SizedBox(
+                    height: 0,
+                  );
+                },
+              ),
               //if (item.available)
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor,
-                    textStyle: TextStyle(
-                        fontFamily: "Raleway-Regular", fontSize: 14.0),
-                    side: const BorderSide(width: 1.0, color: Colors.black),
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  onPressed: () async {
-                    grimmItem.updateAvailability(user!.uid);
-                  },
-                  child: Text(item.available ? "EMPRUNTER" : "RETOURNER")),
-              const SizedBox(height: 20.0),
             ]);
       } else {
         return Text("Pas d'objet trouvé, scannez à nouveau");

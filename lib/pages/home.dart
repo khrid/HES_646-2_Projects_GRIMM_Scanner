@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -238,10 +238,12 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return const SizedBox(height: 0,);
+        return Text("erreur");
       }
     }
-    return Text("erreur");
+    return const SizedBox(
+      height: 0,
+    );
   }
 
   Widget buildButtonRights(
@@ -261,10 +263,12 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return const SizedBox(height: 0,);
+        return Text("erreur");
       }
     }
-    return Text("erreur");
+    return const SizedBox(
+      height: 0,
+    );
   }
 
   Widget buildButtonScan(
@@ -283,10 +287,12 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return const SizedBox(height: 0,);
+        return Text("erreur");
       }
     }
-    return Text("erreur");
+    return const SizedBox(
+      height: 0,
+    );
   }
 
   Future<void> navigateToUsersAdmin() async {
@@ -343,7 +349,7 @@ class _HomeState extends State<Home> {
           _qrCode = barcodeScanRes;
           // on passe à l'écran de détail d'un objet, en transmettant le qr plus loin
           Navigator.pushNamed(context, ItemDetail.routeName,
-              arguments: _qrCode);
+              arguments: {'qrCode': _qrCode, 'role': role});
 
           // Sinon s'il est égal à -1 (quand l'utilisateur appuie sur "annuler"
           // depuis l'écran de scannage
