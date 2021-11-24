@@ -67,9 +67,32 @@ class _ItemDetailState extends State<ItemDetail> {
                               .snapshots();
                       
     //right = GrimmRight.fromJson(snap.data);*/
+    bool isRight = true;
+    FirebaseFirestore.instance
+        .collection("rights")
+        .doc("objectButton")
+        .get()
+        .then((result) {
+      print("coucou");
+      print(result.data());
+      right = GrimmRight.fromJson(result);
+      print(right.permissions);
+      print(role);
+      if (right.permissions.contains(role)) {
+        isRight = true;
+      } else {
+        isRight = false;
+      }
+      print("DOUDOUDOUDOU");
+      print(isRight);
+    });
 
     double cWidth = MediaQuery.of(context).size.width * 0.8;
+    print("yoyoyoyoyo");
+    print(isRight);
+
     return Scaffold(
+      
       appBar: AppBar(
         title: const Text("Détail de l'objet"),
         backgroundColor: Theme.of(context).primaryColor,
@@ -90,16 +113,9 @@ class _ItemDetailState extends State<ItemDetail> {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
-      floatingActionButton:
-
-          /*FloatingActionButton(
-          child: const Icon(
-            Icons.access_time,
-            color: Colors.white,
-          ),
-          onPressed: showHistory,
-        )*/
-          ExpandableFab(
+	    floatingActionButton:
+            (isRight==true)
+                ? ExpandableFab(
         distance: 112.0,
         children: [
           ActionButton(
@@ -134,8 +150,9 @@ class _ItemDetailState extends State<ItemDetail> {
               onPressed: () => _showAction(context, 2),
               icon: const Icon(Icons.videocam),
             ),*/
-        ],
-      ),
+        				  ],
+                  )
+                : null,
       body: Center(
           // enlever le Center pour ne plus centrer verticalement
           child: SingleChildScrollView(
@@ -249,9 +266,7 @@ class _ItemDetailState extends State<ItemDetail> {
     //on prend le user connecté pour enregistré le mouvement
     final user = Provider.of<GrimmUser?>(context);
     /*late CollectionReference _items;
-
   _items = FirebaseFirestore.instance.collection("items");
-
   Future<void> updateItem(GrimmItem i) async {
     _items.doc(i.id).update(i.toJson());
   }*/
