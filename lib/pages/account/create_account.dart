@@ -5,7 +5,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
+
+import 'accounts_admin.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -283,7 +286,8 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text("Compte créé avec succès")));
-                        Navigator.pushNamed(context, "/");
+                       // Navigator.pushNamed(context, AccountsAdmin.routeName);
+                           Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                             content: Text(

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class GrimmUser {
-  late final String uid;
+  late String uid;
 
   /// User firstname
   String firstname;
@@ -12,7 +12,7 @@ class GrimmUser {
   /// User email
   String email;
 
-    ///User enable
+  ///User enable
   bool enable;
 
   /// Event that the user is attending to
@@ -20,9 +20,8 @@ class GrimmUser {
 
   /// Default constructor
   GrimmUser(
-      {
-        this.uid = "",
-        this.firstname = "",
+      {this.uid = "",
+      this.firstname = "",
       this.name = "",
       this.email = "",
       this.enable = true,
@@ -45,16 +44,16 @@ class GrimmUser {
         "}";
   }
 
-   /// Translate a User object to JSON
+  /// Translate a User object to JSON
   GrimmUser.fromJson(json)
-  : this(
-    uid: json.id,
-    firstname: (json.data()!['firstname'] ?? ""),
-    name: (json.data()!['name'] ?? ""),
-    email: (json.data()!['email'] ?? ""),
-    enable: (json.data()!['enable'] ?? false),
-    groups: (json.data()!['groups'] ?? []),
-  );
+      : this(
+          uid: json.id,
+          firstname: (json.data()!['firstname'] ?? ""),
+          name: (json.data()!['name'] ?? ""),
+          email: (json.data()!['email'] ?? ""),
+          enable: (json.data()!['enable'] ?? false),
+          groups: (json.data()!['groups'] ?? []),
+        );
 
   /// Translate a MyUser object to JSON
   Map<String, Object?> toJson() {
@@ -72,15 +71,11 @@ class GrimmUser {
   Future<void> populateUserInfoFromFirestore() async {
     DocumentSnapshot<Map<String, dynamic>> snap =
         await FirebaseFirestore.instance.collection("users").doc(uid).get();
-if (snap.exists) {
-      name =
-          (snap.data()!["name"] != null ? snap.data()!["name"] : "");
-      firstname =
-          (snap.data()!["firstname"] != null ? snap.data()!["firstname"] : "");
-      email = (snap.data()!["email"] != null ? snap.data()!["email"] : "");
-        enable = (snap.data()!["enable"] != null
-          ? snap.data()!["enable"]
-          : false);
+    if (snap.exists) {
+      name = (snap.data()!["name"] ?? "");
+      firstname = (snap.data()!["firstname"] ?? "");
+      email = (snap.data()!["email"] ?? "");
+      enable = (snap.data()!["enable"] ?? false);
       groups = (snap.data()!['groups'] != null
           ? List.from(snap.data()!['groups'].toSet())
           : []);
@@ -92,14 +87,13 @@ if (snap.exists) {
     await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
   }*/
 
-
   Future<void> updateFirestore() async {
-    print(this);
+    //print(this);
     await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
   }
 
   Future<void> saveToFirestore() async {
-    await FirebaseFirestore.instance.collection("users").add(toJson());
+    await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
   }
 
   /// Remove the group from the user groups list and sync it with Firebase
@@ -123,7 +117,8 @@ if (snap.exists) {
   void setEmail(String email) {
     this.email = email;
   }
-/// Set an user state as enable
+
+  /// Set an user state as enable
   void enableUser() {
     this.enable = true;
   }
@@ -137,6 +132,4 @@ if (snap.exists) {
     enable = !enable;
     updateFirestore();
   }
-
-
 }
