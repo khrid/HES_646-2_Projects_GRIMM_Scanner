@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/service/authentication_service.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class LoginGroup extends StatefulWidget {
 }
 
 class _LoginGroupState extends State<LoginGroup> {
+  final AuthenticationService _auth = AuthenticationService();
   late String role;
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,17 @@ class _LoginGroupState extends State<LoginGroup> {
           title: const Text("Choix du rôle"),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
+          automaticallyImplyLeading: false,
         ),
         backgroundColor: Theme.of(context).primaryColor,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: makeLogout,
+          child: Icon(
+            Icons.logout,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
         body: Center(
             child: SingleChildScrollView(
                 child: Row(
@@ -98,7 +109,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     Navigator.pushNamed(context, Home.routeName, arguments: role);
                   }
                 },
-                child: Text("Membre")),
+                child: Text("Membre")),              
               ],
             ),
           ],
@@ -111,6 +122,13 @@ class _LoginGroupState extends State<LoginGroup> {
       Navigator.pushNamed(context, Home.routeName, arguments: role);
     });
   }*/
+
+  makeLogout() async {
+    await _auth.signOut();
+    Navigator.pop(context);
+    print('Out');
+    }
+
   Future<void> navigateToHomePage() async {
     setState(() {
       Navigator.pushNamed(context, Home.routeName);
