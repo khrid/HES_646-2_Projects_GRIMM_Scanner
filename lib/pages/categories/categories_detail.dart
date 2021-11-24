@@ -100,15 +100,24 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
         return Container(
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(category.name,
-                    style: TextStyle(
+                  Text("Nom de la catégorie :",
+                  style: TextStyle(
                       fontFamily: "Raleway-Regular",
-                      fontSize: 30.0,
+                      fontSize: 25.0,
                       color: Colors.black,
                     ),
                     textAlign: TextAlign.center,),
+                  const SizedBox(height: 20.0),
+                  Text(category.name,
+                    style: TextStyle(
+                      
+                      fontFamily: "Raleway-Regular",
+                      fontSize: 20.0,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center),
                   const SizedBox(height: 20.0),
                 ]));
       } else {

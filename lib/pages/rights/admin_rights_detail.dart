@@ -156,11 +156,11 @@ Widget buildRightsDetail(
                                 if (isObjectManager) {
                                   tab.add("ObjectManager");
                                 }
-                                right!.permissions = tab;
+                                right.permissions = tab;
 
                                 if (tab.isNotEmpty) {
                                   if (_formKey.currentState!.validate()) {
-                                    updateRight(right!);
+                                    updateRight(right);
                                     print("Changements effectués");
                                     Navigator.pop(context);
                                   }

@@ -39,14 +39,21 @@ class _LoginGroupState extends State<LoginGroup> {
             color: Theme.of(context).primaryColor,
           ),
         ),
-        body: Center(
-            child: SingleChildScrollView(
-                child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        body:  
+        Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        fit: BoxFit.cover,
+                        ),),   
+        child: 
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 if (user!.groups.contains("Administrator"))
                 ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -109,11 +116,11 @@ class _LoginGroupState extends State<LoginGroup> {
                     Navigator.pushNamed(context, Home.routeName, arguments: role);
                   }
                 },
-                child: Text("Membre")),              
+                child: Text("Membre")), ])            
               ],
             ),
-          ],
-        ))));
+          
+        ));
   }
 
 

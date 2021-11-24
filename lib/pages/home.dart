@@ -145,13 +145,19 @@ class _HomeState extends State<Home> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body: Center(
-            child: SingleChildScrollView(
-                child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        body:  
+        Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        fit: BoxFit.cover,
+                        ),),   
+        child: 
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 //Gestion des accès : StreamBuilder pour le button scan
                 StreamBuilder(
@@ -188,8 +194,8 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
-          ],
-        )))
+          
+        )
         //drawer: const CustomDrawer(),
         );
   }

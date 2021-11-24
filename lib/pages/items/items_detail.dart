@@ -61,6 +61,13 @@ class _ItemDetailState extends State<ItemDetail> {
 
     print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
+    /*var snap = FirebaseFirestore.instance
+                              .collection('rights')
+                              .doc("createButton")
+                              .snapshots();
+                      
+    //right = GrimmRight.fromJson(snap.data);*/
+
     double cWidth = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
       appBar: AppBar(
@@ -84,6 +91,7 @@ class _ItemDetailState extends State<ItemDetail> {
       backgroundColor: Theme.of(context).primaryColor,
       // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
       floatingActionButton:
+
           /*FloatingActionButton(
           child: const Icon(
             Icons.access_time,
