@@ -1,17 +1,29 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:grimm_scanner/pages/accounts_admin.dart';
-import 'package:grimm_scanner/pages/accounts_user_detail.dart';
-import 'package:grimm_scanner/pages/create_account.dart';
+import 'package:grimm_scanner/pages/account/accounts_admin.dart';
+import 'package:grimm_scanner/pages/account/accounts_user_detail.dart';
+import 'package:grimm_scanner/pages/categories/categories_admin.dart';
+import 'package:grimm_scanner/pages/categories/categories_detail.dart';
+import 'package:grimm_scanner/pages/account/create_account.dart';
+import 'package:grimm_scanner/pages/categories/edit_category.dart';
 import 'package:grimm_scanner/pages/home.dart';
-import 'package:grimm_scanner/pages/items_history.dart';
-import 'package:grimm_scanner/pages/items_admin.dart';
-import 'package:grimm_scanner/pages/items_detail.dart';
-import 'package:grimm_scanner/pages/update_account.dart';
+import 'package:grimm_scanner/pages/items/items_history.dart';
+import 'package:grimm_scanner/pages/items/items_admin.dart';
+import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/pages/login/login_group.dart';
+import 'package:grimm_scanner/pages/items/items_manage_menu.dart';
+import 'package:grimm_scanner/pages/account/update_account.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights.dart';
+import 'dart:async';
 
-import 'pages/create_item.dart';
-import 'pages/edit_item.dart';
+import 'models/grimm_user.dart';
+import 'pages/items/create_item.dart';
+import 'pages/items/edit_item.dart';
+import 'pages/login/login.dart';
+import 'pages/rights/admin_rights_detail.dart';
+import 'service/authentication_service.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +39,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   // Set default `_initialized` and `_error` state to false
   bool _initialized = false;
   bool _error = false;
+  var subscription;
+  var connectionStatus;
 
   /*static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer =
@@ -70,27 +84,40 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     // Ensure that plugin services are initialized so that `availableCameras()`
     // can be called before `runApp()`
     // TODO: implement build
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'GRIMM Scanner',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        primaryColor: const Color(0xFFECF0F9),
-      ),
-      //navigatorObservers: <NavigatorObserver>[observer],
-      home: const Home(),
-      initialRoute: '/',
-      routes: {
-        ItemDetail.routeName: (context) => const ItemDetail(),
-        ItemHistory.routeName: (context) => const ItemHistory(),
-        ItemsAdmin.routeName: (context) => const ItemsAdmin(),
-        AccountsAdmin.routeName: (context) => const AccountsAdmin(),
-        UserDetail.routeName: (context) => const UserDetail(),
-        UserUpdate.routeName: (context) => const UserUpdate(),
-        CreateAccountScreen.routeName: (context) => const CreateAccountScreen(),
-        CreateItemScreen.routeName: (context) => const CreateItemScreen(),
-        EditItemScreen.routeName: (context) => const EditItemScreen(),
-      },
-    );
+
+    return StreamProvider<GrimmUser?>.value(
+        initialData: null,
+        value: AuthenticationService().user,
+        lazy: false,
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'GRIMM Scanner',
+            theme: ThemeData(
+              primarySwatch: Colors.grey,
+              primaryColor: const Color(0xFFECF0F9),
+            ),
+            //navigatorObservers: <NavigatorObserver>[observer],
+            home: Login(),
+            initialRoute: '/',
+            routes: {
+              LoginGroup.routeName: (context) => const LoginGroup(),
+              RightsAdmin.routeName: (context) => const RightsAdmin(),
+              RightsAdminDetail.routeName: (context) => const RightsAdminDetail(),
+              Home.routeName: (context) => const Home(),
+              ItemDetail.routeName: (context) => const ItemDetail(),
+              ItemHistory.routeName: (context) => const ItemHistory(),
+              ItemsManageMenu.routeName: (context) => const ItemsManageMenu(),
+              ItemsAdmin.routeName: (context) => const ItemsAdmin(),
+              CategoriesAdmin.routeName: (context) => const CategoriesAdmin(),
+              CategoryDetail.routeName: (context) => const CategoryDetail(),
+              CategoryUpdate.routeName: (context) => const CategoryUpdate(),
+              AccountsAdmin.routeName: (context) => const AccountsAdmin(),
+              UserDetail.routeName: (context) => const UserDetail(),
+              UserUpdate.routeName: (context) => const UserUpdate(),
+              CreateAccountScreen.routeName: (context) =>
+                  const CreateAccountScreen(),
+              CreateItemScreen.routeName: (context) => const CreateItemScreen(),
+              EditItemScreen.routeName: (context) => const EditItemScreen(),
+            }));
   }
 }

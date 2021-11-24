@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../models/grimm_user.dart';
 
 /// Manage the authentication with Firebase
@@ -13,7 +12,7 @@ class AuthenticationService {
     if (user == null) return null;
     GrimmUser grimmUser = GrimmUser(groups: []);
     grimmUser.setEmail(_auth.currentUser!.email.toString());
-    //grimmUser.setUid(user.uid);
+    grimmUser.setUid(user.uid);
     grimmUser.populateUserInfoFromFirestore();
     return grimmUser;
   }
@@ -26,6 +25,7 @@ class AuthenticationService {
   /// sync the user status with firebase
   Stream<GrimmUser?> get user {
     return _auth.authStateChanges().map((User? user) {
+      //print(user);
       return _userFromFirebaseUser(user!);
     });
   }
@@ -65,7 +65,7 @@ class AuthenticationService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      //grimmUser.setUid(result.user!.uid);
+      grimmUser.setUid(result.user!.uid);
       print(grimmUser);
       await grimmUser.saveToFirestore();
       return grimmUser;

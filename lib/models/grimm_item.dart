@@ -115,26 +115,28 @@ class GrimmItem {
 
   /// Returns the String for QR code generation
   String getIdForQrCode() {
-    print("GrimmItem - getIdForQrCode - " +
-        Constants.grimmQrCodeStartsWith +
-        id);
+    print(
+        "GrimmItem - getIdForQrCode - " + Constants.grimmQrCodeStartsWith + id);
     return Constants.grimmQrCodeStartsWith + id;
   }
 
   String getDescriptionForPdfFilename() {
-    String tmp = description.toLowerCase().replaceAll(" ", "_").replaceAll("[:\\\\/*?|<>]", "_");
+    String tmp = description
+        .toLowerCase()
+        .replaceAll(" ", "_")
+        .replaceAll("[:\\\\/*?|<>]", "_");
     print(tmp);
     return tmp;
   }
 
   /// Update the availability of the object
-  void updateAvailability() {
+  void updateAvailability(String uid) {
     available = !available;
     updateFirestore();
-    saveMovement();
+    saveMovement(uid);
   }
 
-  Future<void> saveMovement() async {
+  Future<void> saveMovement(String uid) async {
     // trois cas possibles
     // 1 > pas de record dispo
     // 2 > record dispo, date de retour vide
@@ -148,21 +150,18 @@ class GrimmItem {
         .get();
 
     if (existingHistory.docs.isNotEmpty) {
-      if(existingHistory.docs.length > 1) {
+      if (existingHistory.docs.length > 1) {
         // qqch de pas normal si on a plus d'un enregistrement sans date de retour
       } else {
         existingHistory.docs.forEach((element) {
           GrimmHistory grimmHistory = GrimmHistory.fromJson(element);
           grimmHistory.dateReturn = Timestamp.now();
-          grimmHistory.userReturn = "QlkuFCmJjIUd1akCuWOGxfVXNCG2";
+          grimmHistory.userReturn = uid;
           grimmHistory.update();
         });
       }
     } else {
-      GrimmHistory(
-              itemRef: id,
-              dateBorrow: Timestamp.now(),
-              userBorrow: "QlkuFCmJjIUd1akCuWOGxfVXNCG2")
+      GrimmHistory(itemRef: id, dateBorrow: Timestamp.now(), userBorrow: uid)
           .save();
     }
     /**/
