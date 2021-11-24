@@ -15,9 +15,17 @@ class ItemsManageMenu extends StatefulWidget {
 
 class _ItemsManageMenuState extends State<ItemsManageMenu> {
   String _qrCode = 'Unknown';
+  late String role;
 
   @override
   Widget build(BuildContext context) {
+    role = ModalRoute.of(context)!.settings.arguments == null
+        ? "NULL"
+        : ModalRoute.of(context)!.settings.arguments as String;
+    if (role == "NULL") {
+      Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false));
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text("Gestion de l'inventaire"),
@@ -58,7 +66,8 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
 
   Future<void> navigateToItemsAdmin() async {
     setState(() {
-      Navigator.pushNamed(context, ItemsAdmin.routeName);
+      print("Role items_manage_menu" + role);
+      Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
     });
   }
 }
