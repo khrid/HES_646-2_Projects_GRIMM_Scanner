@@ -16,37 +16,28 @@ class CategoryDetail extends StatefulWidget {
 }
 
 class _CategoryDetailState extends State<CategoryDetail> {
-
   late GrimmCategory category;
 
   late final CollectionReference _categories =
-  FirebaseFirestore.instance.collection("category");
+      FirebaseFirestore.instance.collection("category");
 
   late final CollectionReference _items =
-  FirebaseFirestore.instance.collection("items");
+      FirebaseFirestore.instance.collection("items");
 
   @override
   Widget build(BuildContext context) {
     var categoryID;
-    categoryID = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as String;
+    categoryID = ModalRoute.of(context)!.settings.arguments as String;
     print(categoryID);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Catégorie"),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
-      floatingActionButton:
-      ExpandableFab(
+      backgroundColor: Theme.of(context).primaryColor,
+      floatingActionButton: ExpandableFab(
         distance: 112.0,
         children: [
           ActionButton(
@@ -65,10 +56,10 @@ class _CategoryDetailState extends State<CategoryDetail> {
           ),
         ],
       ),
-      body:
-      Container(
+      body: Container(
         padding: EdgeInsets.all(50),
         child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20.0),
@@ -88,8 +79,8 @@ class _CategoryDetailState extends State<CategoryDetail> {
     );
   }
 
-  Widget buildUserDetails(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot> snapshot) {
+  Widget buildUserDetails(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     print(snapshot.data);
 
     if (snapshot.hasData) {
@@ -99,27 +90,20 @@ class _CategoryDetailState extends State<CategoryDetail> {
         print(category);
 
         return Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Nom de la catégorie :",
+            margin: const EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(30.0),
+            decoration:
+                BoxDecoration(border: Border.all(width: 1, color: Colors.black)),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text("Nom de la catégorie : " + category.name,
                   style: TextStyle(
-                      fontFamily: "Raleway-Regular",
-                      fontSize: 25.0,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,),
-                  const SizedBox(height: 20.0),
-                  Text(category.name,
-                    style: TextStyle(
-                      
-                      fontFamily: "Raleway-Regular",
-                      fontSize: 20.0,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center),
-                  const SizedBox(height: 20.0),
-                ]));
+                    fontFamily: "Raleway-Regular",
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center),
+            ]));
       } else {
         return Text(
             "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
@@ -161,7 +145,8 @@ class _CategoryDetailState extends State<CategoryDetail> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Suppression de la catégorie"),
-      content: Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
+      content:
+          Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
       actions: [
         cancelButton,
         continueButton,

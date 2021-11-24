@@ -33,14 +33,21 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body: Center(
-            child: SingleChildScrollView(
-                child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        body: 
+      Container(
+                constraints: BoxConstraints.expand(),
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        fit: BoxFit.cover,
+                        ),),   
+        child: 
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 CustomHomeButton(
                     title: "Gérer les articles",
                     onPressed: navigateToItemsAdmin),
@@ -50,10 +57,10 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
                 CustomHomeButton(
                     title: "Gérer les catégories",
                     onPressed: navigateToCategoriesAdmin)
-              ],
+              ],)]
             ),
-          ],
-        )))
+          
+        )
         //drawer: const CustomDrawer(),
         );
   }
