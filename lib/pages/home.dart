@@ -173,9 +173,14 @@ class _HomeState extends State<Home> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      CustomHomeButton(
-                          title: "Gérer les droits",
-                          onPressed: navigateToAdminRights)
+                      //StreamBuilder pour le button d'accès au droits
+                      StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection('rights')
+                            .doc("rightsButton")
+                            .snapshots(),
+                        builder: buildButtonRights,
+                      ),
                       ],
                                   ),
                                 ],
@@ -211,6 +216,30 @@ class _HomeState extends State<Home> {
                 );
         }
     
+      Widget buildButtonRights(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          print(snapshot.data);
+          if (snapshot.hasData) {
+            if (snapshot.data!.data() != null) {
+              right = GrimmRight.fromJson(snapshot.data);
+
+              if (right.permissions.contains(role)) {
+                return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  CustomHomeButton(
+                      title: "Gérer les droits", onPressed: navigateToAdminRights),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ]);
+              }
+            } else {
+              return Text("erreur");
+            }
+          }
+          return const SizedBox(
+            height: 0,
+          );
+        }
     Widget buildButtonScan(
         BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           print(snapshot.data);
