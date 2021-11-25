@@ -78,6 +78,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Adresse mail',
