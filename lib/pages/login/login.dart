@@ -12,10 +12,11 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   final AuthenticationService _auth = AuthenticationService();
-  TextEditingController emailController = new TextEditingController(
-      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
+  TextEditingController emailController = TextEditingController(
+      //text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
+      text: ""); // texte ajouté pour facilité le travail
   TextEditingController passwordController =
-      new TextEditingController(text: "123456");
+    TextEditingController(text: "");
 
   MenuScreen(BuildContext context) {
     setState(() {
