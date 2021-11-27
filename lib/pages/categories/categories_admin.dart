@@ -15,7 +15,6 @@ class CategoriesAdmin extends StatefulWidget {
 }
 
 class _CategoriesAdminState extends State<CategoriesAdmin> {
-  final _key = GlobalKey<FormState>();
 
   TextEditingController categoryNameController = TextEditingController(); // controlleur de la description
 
@@ -56,24 +55,22 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
   openDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Annuler"),
+      child: const Text("Annuler"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Confirmer"),
+      child: const Text("Confirmer"),
       onPressed: () {
-        //if (_key.currentState!.validate()) {
           GrimmCategory category = GrimmCategory(name: categoryNameController.text);
           category.saveToFirestore();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('Catégorie ajoutée'),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('Catégorie ajoutée'),
               duration: Duration(seconds: 2)));
           var nav = Navigator.of(context);
           nav.pop();
           setState(() {
-
           });
         }
       //}
@@ -81,17 +78,18 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text('Nouvelle catégorie :'),
+      title: const Text('Nouvelle catégorie :'),
       content: TextFormField(
           controller: categoryNameController,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Le champ "Prénom" ne peut pas être vide';
-            } else
+            } else {
               return null;
+            }
           },
           textInputAction: TextInputAction.next,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               hintText: 'Entrez la nouvelle catégorie'
           )
       ),

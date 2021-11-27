@@ -18,10 +18,8 @@ class _UserDetailState extends State<UserDetail> {
 
   @override
   Widget build(BuildContext context) {
-    var userUID;
+    String userUID;
     userUID = ModalRoute.of(context)!.settings.arguments as String;
-    print(userUID);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Détails de l'utilisateur"),
@@ -38,7 +36,7 @@ class _UserDetailState extends State<UserDetail> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -61,7 +59,7 @@ class _UserDetailState extends State<UserDetail> {
 
   Widget buildUserDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     bool isAdmin = false;
     bool isObjectManager = false;
     bool isMember = false;
@@ -75,7 +73,7 @@ class _UserDetailState extends State<UserDetail> {
         } else {
           status = "Inactif";
         }
-        print(user);
+        //print(user);
         if (user.groups.contains("Administrator")) isAdmin = true;
         if (user.groups.contains("Member")) isMember = true;
         if (user.groups.contains("ObjectManager")) isObjectManager = true;
@@ -83,7 +81,7 @@ class _UserDetailState extends State<UserDetail> {
         return Container(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Text(
+          const Text(
             "Informations",
             style: TextStyle(
               fontFamily: "Raleway-Regular",
@@ -92,20 +90,20 @@ class _UserDetailState extends State<UserDetail> {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Text("Nom : " + user.name,
-              style: TextStyle(color: Colors.black, fontSize: 14)),
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
           const SizedBox(height: 20.0),
           Text("Prénom : " + user.firstname,
-              style: TextStyle(color: Colors.black, fontSize: 14)),
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
           const SizedBox(height: 20.0),
           Text("Email : " + user.email,
-              style: TextStyle(color: Colors.black, fontSize: 14)),
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
           const SizedBox(height: 20.0),
           Text("Statut : " + status,
-              style: TextStyle(color: Colors.black, fontSize: 14)),
+              style: const TextStyle(color: Colors.black, fontSize: 14)),
           const SizedBox(height: 20.0),
           CheckboxListTile(
               title: const Text("Administrateur"),
@@ -135,11 +133,11 @@ class _UserDetailState extends State<UserDetail> {
           ),
         ]));
       } else {
-        return Text(
+        return const Text(
             "Pas d'utilisateur trouvé, erreur. Veuillez contacter les développeurs");
       }
     }
-    return Text(
+    return const Text(
         "Pas d'utilisateur trouvé, erreur. Veuillez contacter les développeurs");
   }
 

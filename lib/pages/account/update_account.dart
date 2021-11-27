@@ -17,13 +17,11 @@ class _UserUpdateState extends State<UserUpdate> {
 
   GrimmUser? _user;
   late CollectionReference _users;
-  TextEditingController userNameController = new TextEditingController();
-  TextEditingController userSurnameController = new TextEditingController();
-  TextEditingController userEmailController = new TextEditingController();
-  TextEditingController userPasswordController =
-      new TextEditingController(); //TO DO Micaela
-  TextEditingController userGroupController = new TextEditingController();
-  var eventTypeSelectedValue;
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController userSurnameController = TextEditingController();
+  TextEditingController userEmailController = TextEditingController();
+  TextEditingController userPasswordController = TextEditingController();
+  TextEditingController userGroupController = TextEditingController();
   int firstLoad = 1;
 
   bool isAdmin = false;
@@ -48,14 +46,9 @@ class _UserUpdateState extends State<UserUpdate> {
       userEmailController.text = _user!.email;
       firstLoad = 0;
     }
-
-    print(_user);
-
     _users = FirebaseFirestore.instance.collection("users");
 
-    // TO DO Micaela
     Future<void> updateUser(GrimmUser u) async {
-      //_users.doc(u.uid).update(u.toJson());
       u.updateFirestore();
     }
 
@@ -69,9 +62,9 @@ class _UserUpdateState extends State<UserUpdate> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
-            Text(
+            const Text(
               "Modifiez les informations de l'utilisateur",
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
@@ -80,7 +73,7 @@ class _UserUpdateState extends State<UserUpdate> {
               ),
               textAlign: TextAlign.left,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -88,10 +81,11 @@ class _UserUpdateState extends State<UserUpdate> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Prénom" ne peut pas être vide';
-                } else
+                } else {
                   return null;
+                }
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Prénom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -112,7 +106,7 @@ class _UserUpdateState extends State<UserUpdate> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -120,10 +114,11 @@ class _UserUpdateState extends State<UserUpdate> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Nom" ne peut pas être vide';
-                } else
+                } else {
                   return null;
+                }
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Nom',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -144,12 +139,12 @@ class _UserUpdateState extends State<UserUpdate> {
               textInputAction: TextInputAction.next,
               cursorColor: Theme.of(context).backgroundColor,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextField(
               controller: userEmailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Email (non-modifiable actuellement)',
                 labelStyle: TextStyle(
                   fontFamily: "Raleway-Regular",
@@ -170,7 +165,7 @@ class _UserUpdateState extends State<UserUpdate> {
               cursorColor: Colors.black,
               enabled: false,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             CheckboxListTile(
@@ -215,10 +210,10 @@ class _UserUpdateState extends State<UserUpdate> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
                   if (isAdmin) {
@@ -230,14 +225,6 @@ class _UserUpdateState extends State<UserUpdate> {
                   if (isObjectManager) {
                     tab.add("ObjectManager");
                   }
-                  /*GrimmUser changedUser = GrimmUser(
-                      name: userNameController.text,
-                      firstname: userSurnameController.text,
-                      email: _user!.email,
-                      //TO DO checkbox Micaela
-                      enable: _user!.enable,
-                      groups: tab);
-                  changedUser.setUid(_user!.uid);*/
                   _user!.name = userNameController.text;
                   _user!.firstname = userSurnameController.text;
                   _user!.groups = tab;
@@ -245,9 +232,7 @@ class _UserUpdateState extends State<UserUpdate> {
                   if (tab.isNotEmpty) {
                     if (_formKey.currentState!.validate()) {
                       updateUser(_user!);
-                      print("Changements effectués");
-                      //Navigator.pushNamed(context, UserDetail.routeName,
-                      //    arguments: _user!.uid);
+                      //("Changements effectués");
                       Navigator.pop(context);
                     }
                   } else {
@@ -256,17 +241,17 @@ class _UserUpdateState extends State<UserUpdate> {
                             "Veuillez sélectionner un groupe au minimum.")));
                   }
                 },
-                child: Text("Valider les modifications")),
-            SizedBox(
+                child: const Text("Valider les modifications")),
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -282,7 +267,7 @@ class _UserUpdateState extends State<UserUpdate> {
                     if (tab.isNotEmpty) {
                       _user!.updateStatus();
                       Navigator.pop(context);
-                      print("Désactivation effectuée");
+                      //print("Désactivation effectuée");
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text(
@@ -293,7 +278,7 @@ class _UserUpdateState extends State<UserUpdate> {
                 child: Text(_user!.enable
                     ? "Désactiver le compte"
                     : "Activer le compte")),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
           ],

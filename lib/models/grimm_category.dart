@@ -49,7 +49,7 @@ class GrimmCategory {
 
 
   Future<void> updateFirestore() async {
-    print(this);
+    //print(this);
     await FirebaseFirestore.instance.collection("category").doc(id).set(toJson());
   }
 

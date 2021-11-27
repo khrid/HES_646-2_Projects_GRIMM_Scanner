@@ -21,14 +21,11 @@ class _CategoryDetailState extends State<CategoryDetail> {
   late final CollectionReference _categories =
       FirebaseFirestore.instance.collection("category");
 
-  late final CollectionReference _items =
-      FirebaseFirestore.instance.collection("items");
-
   @override
   Widget build(BuildContext context) {
-    var categoryID;
+    String categoryID;
     categoryID = ModalRoute.of(context)!.settings.arguments as String;
-    print(categoryID);
+    //print(categoryID);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,14 +54,14 @@ class _CategoryDetailState extends State<CategoryDetail> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20.0),
             Container(
-              child: StreamBuilder(
+              child:  StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('category')
                     .doc(categoryID)
@@ -81,13 +78,12 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
   Widget buildUserDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
 
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         category = GrimmCategory.fromJson(snapshot.data);
-        String status;
-        print(category);
+        //print(category);
 
         return Container(
             margin: const EdgeInsets.all(0.0),
@@ -97,7 +93,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text("Nom de la catégorie : " + category.name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 20.0,
                     color: Colors.black,
@@ -105,11 +101,11 @@ class _CategoryDetailState extends State<CategoryDetail> {
                   textAlign: TextAlign.center),
             ]));
       } else {
-        return Text(
+        return const Text(
             "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
       }
     }
-    return Text(
+    return const Text(
         "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
   }
 
@@ -123,18 +119,18 @@ class _CategoryDetailState extends State<CategoryDetail> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Annuler"),
+      child: const Text("Annuler"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Continuer"),
+      child: const Text("Continuer"),
       onPressed: () {
         category.updateItemsDeletedCategory();
         _categories.doc(category.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text('Catégorie supprimée'),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Catégorie supprimée'),
             duration: Duration(seconds: 2)));
         var nav = Navigator.of(context);
         nav.pop();
@@ -144,9 +140,9 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Suppression de la catégorie"),
+      title: const Text("Suppression de la catégorie"),
       content:
-          Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
+          const Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
       actions: [
         cancelButton,
         continueButton,

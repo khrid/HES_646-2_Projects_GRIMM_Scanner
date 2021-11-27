@@ -6,7 +6,6 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Drawer(
       child: Column(
         children: <Widget>[
@@ -15,8 +14,6 @@ class CustomDrawer extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: <Widget>[
               _createHeader(),
-              /*_createDrawerItem(
-              icon: Icons.qr_code_scanner, text: "Scan something"),*/
             ],
           )),
           _createStickyBottomItems()

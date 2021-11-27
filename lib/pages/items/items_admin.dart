@@ -89,7 +89,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 title: Text(grimmItem.description),
                 subtitle: Text(grimmItem.location),
                 onTap: () {
-                  print("Role items_admin " + role);
+                  //print("Role items_admin " + role);
                   var _qr = Constants.grimmQrCodeStartsWith + grimmItem.id;
                   Navigator.pushNamed(context, ItemDetail.routeName,
                       arguments: {'qrCode': _qr, 'role': role});

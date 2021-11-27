@@ -9,21 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
-import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-//import 'accounts_admin.dart';
-//import 'items_admin.dart';
-import 'package:provider/provider.dart';
-import 'account/create_account.dart';
-import 'items/create_item.dart';
-import 'items/items_admin.dart';
-import 'items/items_admin.dart';
 import 'account/accounts_admin.dart';
 import 'items/items_manage_menu.dart';
 
@@ -54,7 +45,7 @@ class _HomeState extends State<Home> {
     prefs.setBool("first_time", true); // activer pour reset le first_time
     bool isFirstTime = prefs.getBool('first_time') ?? false;
     if (isFirstTime) {
-      print('premier lancement, on switch la variable');
+      //print('premier lancement, on switch la variable');
       setState(() {
         _firstLaunch = true;
       });
@@ -62,7 +53,7 @@ class _HomeState extends State<Home> {
       // si on a internet lors du premier lancement
       bool hasInternet = await InternetConnectionChecker().hasConnection;
       if (!await InternetConnectionChecker().hasConnection) {
-        print('First launch but no Internet, sync needed later');
+        //print('First launch but no Internet, sync needed later');
         prefs.setBool("sync_needed", true);
       } else {
         forceLocalSync();
@@ -73,7 +64,7 @@ class _HomeState extends State<Home> {
   }
 
   void forceLocalSync() {
-    print('Force sync Firebase');
+    //print('Force sync Firebase');
     FirebaseFirestore.instance.collection("items").snapshots().toList();
     FirebaseFirestore.instance.collection("items").get();
     FirebaseFirestore.instance.collection("category").snapshots().toList();
@@ -86,9 +77,7 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //setPersistenceEnabled();
     initConnectivity();
     isFirstTime();
     _connectivitySubscription =
@@ -98,8 +87,8 @@ class _HomeState extends State<Home> {
   void setPersistenceEnabled() async {
     FirebaseFirestore.instance.settings =
         const Settings(persistenceEnabled: true);
-    print("isPersistenceEnabled : " +
-        FirebaseFirestore.instance.settings.persistenceEnabled.toString());
+    /*print("isPersistenceEnabled : " +
+        FirebaseFirestore.instance.settings.persistenceEnabled.toString());*/
   }
 
   @override
@@ -137,10 +126,8 @@ class _HomeState extends State<Home> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
     }
-    print("Permissions : " + role);
-    final user = Provider.of<GrimmUser?>(context);
-    print("testHomepage");
-    print(user);
+    //print("Permissions : " + role);
+    //print("testHomepage");
     return Scaffold(
         appBar: AppBar(
           title: const Text("Menu"),
@@ -150,11 +137,11 @@ class _HomeState extends State<Home> {
         backgroundColor: Theme.of(context).primaryColor,
         body:  
         Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
-                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        image: const AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
                         fit: BoxFit.cover,
                         ),),   
         child: 
@@ -199,13 +186,12 @@ class _HomeState extends State<Home> {
             ),
           
         )
-        //drawer: const CustomDrawer(),
         );
   }
 
   Widget buildButtonAdmin(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -221,7 +207,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return Text("erreur");
+        return const Text("erreur");
       }
     }
     return const SizedBox(
@@ -231,7 +217,7 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonInventory(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -247,7 +233,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return Text("erreur");
+        return const Text("erreur");
       }
     }
     return const SizedBox(
@@ -257,11 +243,10 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonRights(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
-
         if (right.permissions.contains(role)) {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             CustomHomeButton(
@@ -272,7 +257,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return Text("erreur");
+        return const Text("erreur");
       }
     }
     return const SizedBox(
@@ -282,7 +267,7 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonScan(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -296,7 +281,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return Text("erreur");
+        return const Text("erreur");
       }
     }
     return const SizedBox(
@@ -333,13 +318,13 @@ class _HomeState extends State<Home> {
   Future<void> scanQR() async {
     // La librairie QR n'est pas prévue pour le web, il faut informer au cas où
     if (!kIsWeb) {
-      print("scanQR called");
+      // print("scanQR called");
       String barcodeScanRes;
       // Platform messages may fail, so we use a try/catch PlatformException.
       try {
         barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
             '#ff6666', 'Cancel', true, ScanMode.QR);
-        print(barcodeScanRes);
+        //print(barcodeScanRes);
       } on PlatformException {
         barcodeScanRes = 'Failed to get platform version.';
       }
@@ -383,13 +368,13 @@ class _HomeState extends State<Home> {
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     // si on a du réseau (mais pas forcément internet...)
-    print("connection lost : " + connectionLost.toString());
-    print("connectivity result : " + result.toString());
+    //print("connection lost : " + connectionLost.toString());
+    //print("connectivity result : " + result.toString());
     bool syncNeeded = prefs.getBool("sync_needed") ?? false;
     if (result != ConnectivityResult.none) {
       // check si on a internet
       bool hasInternet = await InternetConnectionChecker().hasConnection;
-      print("has internet : " + hasInternet.toString());
+      //print("has internet : " + hasInternet.toString());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       if (hasInternet && _connectionLost) {
         if (syncNeeded) {

@@ -36,13 +36,12 @@ class AuthenticationService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      print(
-          "AuthenticationService - signIn - returned user uid = " + user!.uid);
-      return _userFromFirebaseUser(user);
+      //print("AuthenticationService - signIn - returned user uid = " + user!.uid);
+      return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
-      print(
+      /*print(
           "AuthenticationService - signIn - FireBaseAuthException message = " +
-              e.message.toString());
+              e.message.toString());*/
 
       return e.message;
     }
@@ -66,13 +65,10 @@ class AuthenticationService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       grimmUser.setUid(result.user!.uid);
-      print(grimmUser);
       await grimmUser.saveToFirestore();
       return grimmUser;
-    } on FirebaseAuthException catch (e) {
-      print("firebaseauthexception");
-      // TODO: pour l'instant, avec Robin on a pas réussi à ajouter des messages d'erreurs selon le problème
-      // actuellement s'affiche sur l'app juste que soit le mdp soit le mail est faux
+    } on FirebaseAuthException {
+      //print("firebaseauthexception");
     }
   }
 }
