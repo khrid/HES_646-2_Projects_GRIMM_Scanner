@@ -42,20 +42,20 @@ class _LoginState extends State<Login> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: EdgeInsets.only(top: 10, right: 50, left: 50),
+          padding: const EdgeInsets.only(top: 10, right: 50, left: 50),
           children: <Widget>[
             Image.asset(
               'assets/images/logo_grimm.png',
               width: 250,
               height: 250,
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 10.0),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            Text(
+            const Text(
               'Bienvenue !',
               textAlign: TextAlign.left,
               style: TextStyle(
@@ -65,10 +65,10 @@ class _LoginState extends State<Login> {
                 color: Colors.black,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Entrez votre login',
               style: TextStyle(
                 fontFamily: "Raleway-Regular",
@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
             TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Adresse mail',
                   labelStyle: TextStyle(
                     fontFamily: "Raleway-Regular",
@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                   }
                   return null;
                 }),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -115,7 +115,7 @@ class _LoginState extends State<Login> {
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   labelText: 'Mot de passe',
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
@@ -135,12 +135,12 @@ class _LoginState extends State<Login> {
                       });
                     },
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -154,14 +154,14 @@ class _LoginState extends State<Login> {
                   }
                   return null;
                 }),
-            SizedBox(
+            const SizedBox(
               height: 50,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
                   textStyle:
-                      TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                      const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: EdgeInsets.all(10.0),
                 ),
@@ -171,11 +171,11 @@ class _LoginState extends State<Login> {
                         email: emailController.text,
                         password: passwordController.text);
                     if (result is GrimmUser) {
-                      print(result.toString());
-                      print("Authentification OK = " +
+                      //print(result.toString());
+                      /*print("Authentification OK = " +
                           result.uid +
                           " " +
-                          result.name);
+                          result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -185,12 +185,12 @@ class _LoginState extends State<Login> {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
                               Text("Erreur dans votre mot de passe/mail")));
-                      print(result.toString());
+                      //print(result.toString());
                     }
                   }
                 },
-                child: Text('Se connecter')),
-            SizedBox(
+                child: const Text('Se connecter')),
+            const SizedBox(
               height: 10,
             ),
           ],

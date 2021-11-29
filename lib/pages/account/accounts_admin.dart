@@ -22,8 +22,8 @@ class _AccountsAdminState extends State<AccountsAdmin> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
-    print("testHomepage");
-    print(user);
+    //print("testHomepage");
+    //print(user);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Gestion des utilisateurs"),
@@ -67,8 +67,6 @@ class _AccountsAdminState extends State<AccountsAdmin> {
           shrinkWrap: true,
           children: snapshot.data!.docs.map((doc) {
             GrimmUser grimmUser = GrimmUser.fromJson(doc);
-            //grimmUser.setUid(doc.id);
-            //print();
             return Card(
               child: ListTile(
                   minLeadingWidth: 10,

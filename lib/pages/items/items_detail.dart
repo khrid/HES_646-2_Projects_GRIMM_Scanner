@@ -6,7 +6,6 @@ import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/items/edit_item.dart';
-import 'package:grimm_scanner/pages/items/items_admin.dart';
 import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
@@ -41,36 +40,26 @@ class _ItemDetailState extends State<ItemDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //setPersistenceEnabled();
-     isRightRole();
+    isRightRole();
   }
 
-    Future<bool> isRightRole() async {
-          _rights.doc("objectButton")
-              .get()
-              .then((result) {
-            print("coucou");
-            print(result.data());
-            right = GrimmRight.fromJson(result);
-            print(right.permissions);
-            print(role);
-            if (right.permissions.contains(role)) {
-               setState(() {
-                      isRight = true;
-                 });
+  Future<bool> isRightRole() async {
+    _rights.doc("objectButton").get().then((result) {
+      right = GrimmRight.fromJson(result);
 
-            } else {
-              setState(() {
-                      isRight = false;
-                 });
-            }
-            print("DOUDOUDOUDOU");
-            print(isRight);    });
-            return isRight;    
+      if (right.permissions.contains(role)) {
+        setState(() {
+          isRight = true;
+        });
+      } else {
+        setState(() {
+          isRight = false;
+        });
       }
-
+    });
+    return isRight;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,8 +67,7 @@ class _ItemDetailState extends State<ItemDetail> {
     qrcode = arg['qrCode'];
     role = arg['role'];
 
-
-    print("Role : " + role);
+    //print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
     if (qrcode == "NULL") {
@@ -97,83 +85,53 @@ class _ItemDetailState extends State<ItemDetail> {
         remark: "remark");
     grimmItem.populateItemInfoFromFirestore();
 
-    print("ItemDetail - GrimmItem - " + grimmItem.toString());
+    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
-    /*var snap = FirebaseFirestore.instance
-                              .collection('rights')
-                              .doc("createButton")
-                              .snapshots();
-                      
-    //right = GrimmRight.fromJson(snap.data);*/
-
-    double cWidth = MediaQuery.of(context).size.width * 0.8;
-    print("yoyoyoyoyo");
-    print(isRight);
+       double cWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
-      
       appBar: AppBar(
         title: const Text("Détail de l'objet"),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
-        /*actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: handleAction,
-              itemBuilder: (BuildContext context) {
-                return Constants.actions.map((String choice) {
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              },
-            ),
-          ],*/
       ),
       backgroundColor: Theme.of(context).primaryColor,
-      // TODO https://flutter.dev/docs/cookbook/effects/expandable-fab
-	    floatingActionButton:
-            (isRight==true)
-                ? ExpandableFab(
-        distance: 112.0,
-        children: [
-          ActionButton(
-            onPressed: showHistory,
-            icon: const Icon(
-              Icons.access_time,
-              color: Colors.white,
-            ),
-          ),
-          ActionButton(
-            onPressed: () => handleAction(Constants.actionPrintQr),
-            icon: const Icon(
-              Icons.print,
-              color: Colors.white,
-            ),
-          ),
-          ActionButton(
-            onPressed: editItem,
-            icon: const Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-          ),
-          ActionButton(
-            onPressed: () => showAlertDialog(context),
-            icon: const Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          ),
-          /*ActionButton(
-              onPressed: () => _showAction(context, 2),
-              icon: const Icon(Icons.videocam),
-            ),*/
-        				  ],
-                  )
-                : null,
+      floatingActionButton: (isRight == true)
+          ? ExpandableFab(
+              distance: 112.0,
+              children: [
+                ActionButton(
+                  onPressed: showHistory,
+                  icon: const Icon(
+                    Icons.access_time,
+                    color: Colors.white,
+                  ),
+                ),
+                ActionButton(
+                  onPressed: () => handleAction(Constants.actionPrintQr),
+                  icon: const Icon(
+                    Icons.print,
+                    color: Colors.white,
+                  ),
+                ),
+                ActionButton(
+                  onPressed: editItem,
+                  icon: const Icon(
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                ),
+                ActionButton(
+                  onPressed: () => showAlertDialog(context),
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: Center(
-          // enlever le Center pour ne plus centrer verticalement
           child: SingleChildScrollView(
               child: Container(
                   child: Row(
@@ -199,31 +157,6 @@ class _ItemDetailState extends State<ItemDetail> {
           ),
         ],
       )))),
-      /*floatingActionButton:
-            Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          FloatingActionButton(
-            backgroundColor: Colors.black,
-            child: Icon(
-              Icons.edit,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () {
-              editItem();
-            },
-            heroTag: null,
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          FloatingActionButton(
-            backgroundColor: Colors.black,
-            child: Icon(
-              Icons.delete,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () => showAlertDialog(context),
-            heroTag: null,
-          )*/
     );
   }
 
@@ -238,17 +171,17 @@ class _ItemDetailState extends State<ItemDetail> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Annuler"),
+      child: const Text("Annuler"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Continuer"),
+      child: const Text("Continuer"),
       onPressed: () {
         _items.doc(grimmItem.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text('Objet supprimé'),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Objet supprimé'),
             duration: Duration(seconds: 2)));
         var nav = Navigator.of(context);
         nav.pop();
@@ -258,8 +191,8 @@ class _ItemDetailState extends State<ItemDetail> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Suppression de l'objet"),
-      content: Text("Êtes-vous vraiment sûr de vouloir supprimer cet objet ?"),
+      title: const Text("Suppression de l'objet"),
+      content: const Text("Êtes-vous vraiment sûr de vouloir supprimer cet objet ?"),
       actions: [
         cancelButton,
         continueButton,
@@ -276,7 +209,7 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   void showHistory() {
-    print("ItemDetail - showHistory - " + grimmItem.toString());
+    //print("ItemDetail - showHistory - " + grimmItem.toString());
     Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
   }
 
@@ -284,11 +217,6 @@ class _ItemDetailState extends State<ItemDetail> {
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     //on prend le user connecté pour enregistré le mouvement
     final user = Provider.of<GrimmUser?>(context);
-    /*late CollectionReference _items;
-  _items = FirebaseFirestore.instance.collection("items");
-  Future<void> updateItem(GrimmItem i) async {
-    _items.doc(i.id).update(i.toJson());
-  }*/
     // si on a des données
     if (snapshot.hasData) {
       // snapshot.hasData renvoie true même si le doc n'existe pas, il faut tester
@@ -343,8 +271,6 @@ class _ItemDetailState extends State<ItemDetail> {
                 ],
               ),
               const SizedBox(height: 20.0),
-              /*Text("Catégorie : " + item.idCategory,
-            style: TextStyle(color: Colors.black, fontSize: 14)),*/
               StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('category')
@@ -390,7 +316,7 @@ class _ItemDetailState extends State<ItemDetail> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  print(snapshot.data);
+                  //print(snapshot.data);
                   if (snapshot.hasData) {
                     if (snapshot.data!.data() != null) {
                       right = GrimmRight.fromJson(snapshot.data);
@@ -401,12 +327,12 @@ class _ItemDetailState extends State<ItemDetail> {
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     primary: Theme.of(context).primaryColor,
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                         fontFamily: "Raleway-Regular",
                                         fontSize: 14.0),
                                     side: const BorderSide(
                                         width: 1.0, color: Colors.black),
-                                    padding: EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(10.0),
                                   ),
                                   onPressed: () async {
                                     grimmItem.updateAvailability(user!.uid);
@@ -418,7 +344,7 @@ class _ItemDetailState extends State<ItemDetail> {
                             ]);
                       }
                     } else {
-                      return Text("erreur");
+                      return const Text("erreur");
                     }
                   }
                   return const SizedBox(
@@ -426,13 +352,12 @@ class _ItemDetailState extends State<ItemDetail> {
                   );
                 },
               ),
-              //if (item.available)
             ]);
       } else {
-        return Text("Pas d'objet trouvé, scannez à nouveau");
+        return const Text("Pas d'objet trouvé, scannez à nouveau");
       }
     }
-    return Text("Pas d'objet trouvé, scannez à nouveau");
+    return const Text("Pas d'objet trouvé, scannez à nouveau");
   }
 
   Widget buildItemCategory(BuildContext context,
@@ -481,7 +406,7 @@ class _ItemDetailState extends State<ItemDetail> {
 
   Future<void> handleAction(String value) async {
     if (value == Constants.actionPrintQr) {
-      print("ItemDetail - handleAction - print QR");
+      //print("ItemDetail - handleAction - print QR");
       final doc = pw.Document();
       doc.addPage(pw.MultiPage(
           pageFormat: PdfPageFormat.a4,
@@ -507,8 +432,6 @@ class _ItemDetailState extends State<ItemDetail> {
       await Printing.layoutPdf(
           onLayout: (PdfPageFormat format) async => doc.save(),
           name: "qrgrimm_" + grimmItem.getDescriptionForPdfFilename() + "");
-      //await Printing.sharePdf(bytes: await doc.save(), filename: "qrgrimm_"+grimmItem.getDescriptionForPdfFilename()+".pdf");
-
     }
   }
 }

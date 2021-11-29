@@ -115,8 +115,7 @@ class GrimmItem {
 
   /// Returns the String for QR code generation
   String getIdForQrCode() {
-    print(
-        "GrimmItem - getIdForQrCode - " + Constants.grimmQrCodeStartsWith + id);
+    //print("GrimmItem - getIdForQrCode - " + Constants.grimmQrCodeStartsWith + id);
     return Constants.grimmQrCodeStartsWith + id;
   }
 
@@ -125,7 +124,7 @@ class GrimmItem {
         .toLowerCase()
         .replaceAll(" ", "_")
         .replaceAll("[:\\\\/*?|<>]", "_");
-    print(tmp);
+    //print(tmp);
     return tmp;
   }
 
@@ -164,6 +163,5 @@ class GrimmItem {
       GrimmHistory(itemRef: id, dateBorrow: Timestamp.now(), userBorrow: uid)
           .save();
     }
-    /**/
   }
 }

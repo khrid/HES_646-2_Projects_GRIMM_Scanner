@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
 
+import 'categories_admin.dart';
+
 class CategoryUpdate extends StatefulWidget {
   static const routeName = "/items/categories/detail/update";
 
@@ -29,9 +31,9 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
 
     if (grimmCategory is! GrimmCategory) {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
-          context, "/", (Route<dynamic> route) => false));
+          context, CategoriesAdmin.routeName, (Route<dynamic> route) => false));
     }
-    print("EditItemScreen - " + grimmCategory.toString());
+    //print("EditItemScreen - " + grimmCategory.toString());
 
     categoryNameController.text = grimmCategory.name;
 
@@ -45,7 +47,7 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
             const Text(
               "Modifiez la catégorie",
@@ -64,8 +66,9 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Nom de la catégorie' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: "Nom de la catégorie",
@@ -121,12 +124,12 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
                 onPressed: () async {
                   {
                     grimmCategory.name = categoryNameController.text;
-                    print("End " + grimmCategory.toString());
+                    //print("End " + grimmCategory.toString());
                     grimmCategory.updateFirestore();
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text("Valider")),
+                child: const Text("Valider")),
             const SizedBox(
               height: 20,
             ),
