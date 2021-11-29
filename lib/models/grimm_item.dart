@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_history.dart';
@@ -23,6 +25,8 @@ class GrimmItem {
   /// Item remark
   String remark;
 
+  Map<dynamic, dynamic>? customFields = <dynamic, dynamic>{};
+
   /// Default constructor
   /*GrimmItem(
       {this.description = "",
@@ -32,15 +36,15 @@ class GrimmItem {
       this.remark = ""});*/
 
   /// Default constructor
-  GrimmItem({
-    this.id = "",
-    required this.description,
-    required this.location,
-    required this.color,
-    required this.idCategory,
-    required this.available,
-    required this.remark,
-  });
+  GrimmItem(
+      {this.id = "",
+      required this.description,
+      required this.location,
+      required this.color,
+      required this.idCategory,
+      required this.available,
+      required this.remark,
+      customFields});
 
   /// Returns a readable GrimmItem object
   @override
@@ -59,6 +63,8 @@ class GrimmItem {
         remark +
         ", available:" +
         available.toString() +
+        ", customFields:" +
+        customFields.toString() +
         "}";
   }
 
@@ -71,6 +77,7 @@ class GrimmItem {
           idCategory: (json.data()!['idCategory'] ?? "").toString().trim(),
           remark: (json.data()!['remark'] ?? "-"),
           available: (json.data()!['available'] ?? false),
+          customFields: (json.data()!['customFields'] ?? []),
         );
 
   /// Translate a MyUser object to JSON
@@ -82,7 +89,8 @@ class GrimmItem {
       'color': color,
       'idCategory': idCategory,
       'remark': remark,
-      'available': available
+      'available': available,
+      'customFields': customFields
     };
   }
 
@@ -105,6 +113,7 @@ class GrimmItem {
       idCategory = (snap.data()!["idCategory"] ?? "");
       remark = (snap.data()!["remark"] ?? "-");
       available = (snap.data()!["available"] ?? false);
+      customFields = Map.of(snap.data()!["customFields"]);
     }
   }
 
@@ -126,6 +135,11 @@ class GrimmItem {
         .replaceAll("[:\\\\/*?|<>]", "_");
     //print(tmp);
     return tmp;
+  }
+
+  void addCustomField(dynamic key, dynamic value) {
+    customFields ??= <dynamic, dynamic>{};
+    customFields!.putIfAbsent(key, () => value);
   }
 
   /// Update the availability of the object

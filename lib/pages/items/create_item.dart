@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/widgets/custom_field_widget.dart';
 
 import 'edit_item.dart';
 
@@ -15,18 +16,25 @@ class CreateItemScreen extends StatefulWidget {
 
 class _CreateItemState extends State<CreateItemScreen> {
   final _key = GlobalKey<FormState>();
+  var _customFields = <Widget>[];
   TextEditingController descriptionController =
-      TextEditingController(); // controlleur de la description
+  TextEditingController(); // controlleur de la description
   TextEditingController locationController =
-      TextEditingController(); // controlleur du email
+  TextEditingController(); // controlleur du email
   TextEditingController colorController =
-      TextEditingController(); //Controller de la color
+  TextEditingController(); //Controller de la color
   TextEditingController categorieController =
-      TextEditingController(); // controlleur de la catégorie
+  TextEditingController(); // controlleur de la catégorie
   TextEditingController remarkController =
-      TextEditingController(); // controlleur de la remarque
+  TextEditingController(); // controlleur de la remarque
 
   String dropdownValue = "Non défini";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +50,14 @@ class _CreateItemState extends State<CreateItemScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Création"),
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
         elevation: 0,
       ),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme
+          .of(context)
+          .primaryColor,
       body: Form(
         key: _key,
         child: ListView(
@@ -91,7 +103,9 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
               ),
               textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
+              cursorColor: Theme
+                  .of(context)
+                  .backgroundColor,
             ),
             const SizedBox(
               height: 20,
@@ -124,7 +138,9 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
               ),
               textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
+              cursorColor: Theme
+                  .of(context)
+                  .backgroundColor,
             ),
             const SizedBox(
               height: 20,
@@ -157,7 +173,9 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
               ),
               textInputAction: TextInputAction.next,
-              cursorColor: Theme.of(context).backgroundColor,
+              cursorColor: Theme
+                  .of(context)
+                  .backgroundColor,
             ),
             const SizedBox(
               height: 20,
@@ -243,9 +261,44 @@ class _CreateItemState extends State<CreateItemScreen> {
             const SizedBox(
               height: 20,
             ),
+            Container(
+              child: Column(
+                children: _customFields,
+              ),
+            ),
+            /***/
+            Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            side: const BorderSide(
+                                width: 1.0, color: Colors.black),
+                          ),
+                          onPressed: () {
+                            print("click");
+                            setState(() {
+                              _customFields.add(
+                                  CustomFieldWidget(customFieldKey: "", customFieldValue: ""));
+                            });
+                          },
+                          child: const Text("Ajouter un champ")),
+                      const Spacer(),
+                      getRemoveCustomFieldButton()
+                    ],
+                  )
+                ],
+              ),
+            ),
+            /***/
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
+                  primary: Theme
+                      .of(context)
+                      .primaryColor,
                   textStyle: const TextStyle(
                       fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
@@ -261,11 +314,20 @@ class _CreateItemState extends State<CreateItemScreen> {
                           remark: remarkController.text,
                           idCategory: await getIdForCategoryName(dropdownValue),
                           available: true);
+                      // si on a un champ personnalisé
+                      if (_customFields.isNotEmpty) {
+                        for (var element in _customFields) {
+                          item.addCustomField((element as CustomFieldWidget)
+                              .customFieldKey.toString(),
+                              (element).customFieldValue.toString());
+                        }
+                      }
+                      print(item);
                       await item.saveToFirestore();
                       //print("Item CREATE" + item.toString());
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text("Objet créé avec succès")));
-                           Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     }
                   }
                 },
@@ -277,5 +339,24 @@ class _CreateItemState extends State<CreateItemScreen> {
         ),
       ),
     );
+  }
+
+  Widget getRemoveCustomFieldButton() {
+    if (_customFields.isNotEmpty) {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+            side: const BorderSide(
+                width: 1.0, color: Colors.black),
+          ),
+          onPressed: () {
+            print("click");
+            setState(() {
+              _customFields.removeLast();
+            });
+          },
+          child: const Text("Enlever un champ"));
+    }
+    return const SizedBox(width: 0, height: 0);
   }
 }
