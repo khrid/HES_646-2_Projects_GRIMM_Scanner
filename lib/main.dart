@@ -15,6 +15,7 @@ import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/pages/items/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/account/update_account.dart';
+import 'package:grimm_scanner/pages/profile/profile.dart';
 import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'dart:async';
 
@@ -42,7 +43,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   bool _error = false;
   var subscription;
   var connectionStatus;
-
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -79,9 +79,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     // gestion de l'orientation de l'écran
     SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown,
-          ]);
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return StreamProvider<GrimmUser?>.value(
         initialData: null,
         value: AuthenticationService().user,
@@ -97,8 +97,10 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             initialRoute: '/',
             routes: {
               LoginGroup.routeName: (context) => const LoginGroup(),
+              ProfileAdmin.routeName: (context) => const ProfileAdmin(),
               RightsAdmin.routeName: (context) => const RightsAdmin(),
-              RightsAdminDetail.routeName: (context) => const RightsAdminDetail(),
+              RightsAdminDetail.routeName: (context) =>
+                  const RightsAdminDetail(),
               Home.routeName: (context) => const Home(),
               ItemDetail.routeName: (context) => const ItemDetail(),
               ItemHistory.routeName: (context) => const ItemHistory(),

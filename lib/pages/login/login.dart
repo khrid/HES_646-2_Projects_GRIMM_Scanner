@@ -13,10 +13,10 @@ class _LoginState extends State<Login> {
 
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = TextEditingController(
-      //text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
-      text: ""); // texte ajouté pour facilité le travail
+      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
+  //text: ""); // texte ajouté pour facilité le travail
   TextEditingController passwordController =
-    TextEditingController(text: "");
+      TextEditingController(text: "123456");
 
   MenuScreen(BuildContext context) {
     setState(() {
@@ -160,8 +160,8 @@ class _LoginState extends State<Login> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: EdgeInsets.all(10.0),
                 ),
