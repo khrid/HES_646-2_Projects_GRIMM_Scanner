@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
@@ -10,7 +11,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-
+  final auth = FirebaseAuth.instance;
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = TextEditingController(
       text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
@@ -191,8 +192,23 @@ class _LoginState extends State<Login> {
                 },
                 child: const Text('Se connecter')),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+                textStyle: const TextStyle(
+                    fontFamily: "Raleway-Regular", fontSize: 14.0),
+                padding: EdgeInsets.all(10.0),
+              ),
+              child: Text('Mot de passe oublié ?'),
+              onPressed: () async {
+                auth.sendPasswordResetEmail(email: emailController.text);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                        "Email envoyé à l'adresse " + emailController.text)));
+              },
+            )
           ],
         ),
       ),
