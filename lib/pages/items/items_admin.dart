@@ -17,8 +17,16 @@ class ItemsAdmin extends StatefulWidget {
 }
 
 class _ItemsAdminState extends State<ItemsAdmin> {
+  late String role;
   @override
   Widget build(BuildContext context) {
+    role = ModalRoute.of(context)!.settings.arguments == null
+        ? "NULL"
+        : ModalRoute.of(context)!.settings.arguments as String;
+    if (role == "NULL") {
+      Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
+          context, "/", (Route<dynamic> route) => false));
+    }
     return Scaffold(
         appBar: AppBar(
           title: const Text("Gestion de l'inventaire"),
@@ -30,8 +38,9 @@ class _ItemsAdminState extends State<ItemsAdmin> {
           backgroundColor: Colors.black,
           onPressed: createItem,
           child: Icon(
-              Icons.add,           
-              color: Theme.of(context).primaryColor,),
+            Icons.add,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         body: Center(
             child: SingleChildScrollView(
@@ -80,9 +89,10 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 title: Text(grimmItem.description),
                 subtitle: Text(grimmItem.location),
                 onTap: () {
+                  //print("Role items_admin " + role);
+                  var _qr = Constants.grimmQrCodeStartsWith + grimmItem.id;
                   Navigator.pushNamed(context, ItemDetail.routeName,
-                      arguments:
-                          Constants.grimmQrCodeStartsWith + grimmItem.id);
+                      arguments: {'qrCode': _qr, 'role': role});
                 },
               ),
             );

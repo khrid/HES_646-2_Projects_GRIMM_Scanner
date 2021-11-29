@@ -16,37 +16,25 @@ class CategoryDetail extends StatefulWidget {
 }
 
 class _CategoryDetailState extends State<CategoryDetail> {
-
   late GrimmCategory category;
 
   late final CollectionReference _categories =
-  FirebaseFirestore.instance.collection("category");
-
-  late final CollectionReference _items =
-  FirebaseFirestore.instance.collection("items");
+      FirebaseFirestore.instance.collection("category");
 
   @override
   Widget build(BuildContext context) {
-    var categoryID;
-    categoryID = ModalRoute
-        .of(context)!
-        .settings
-        .arguments as String;
-    print(categoryID);
+    String categoryID;
+    categoryID = ModalRoute.of(context)!.settings.arguments as String;
+    //print(categoryID);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Catégorie"),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
-      floatingActionButton:
-      ExpandableFab(
+      backgroundColor: Theme.of(context).primaryColor,
+      floatingActionButton: ExpandableFab(
         distance: 112.0,
         children: [
           ActionButton(
@@ -65,15 +53,15 @@ class _CategoryDetailState extends State<CategoryDetail> {
           ),
         ],
       ),
-      body:
-      Container(
-        padding: EdgeInsets.all(50),
+      body: Container(
+        padding: const EdgeInsets.all(50),
         child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20.0),
             Container(
-              child: StreamBuilder(
+              child:  StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('category')
                     .doc(categoryID)
@@ -88,35 +76,36 @@ class _CategoryDetailState extends State<CategoryDetail> {
     );
   }
 
-  Widget buildUserDetails(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+  Widget buildUserDetails(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //print(snapshot.data);
 
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         category = GrimmCategory.fromJson(snapshot.data);
-        String status;
-        print(category);
+        //print(category);
 
         return Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(category.name,
-                    style: TextStyle(
-                      fontFamily: "Raleway-Regular",
-                      fontSize: 30.0,
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,),
-                  const SizedBox(height: 20.0),
-                ]));
+            margin: const EdgeInsets.all(0.0),
+            padding: const EdgeInsets.all(30.0),
+            decoration:
+                BoxDecoration(border: Border.all(width: 1, color: Colors.black)),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text("Nom de la catégorie : " + category.name,
+                  style: const TextStyle(
+                    fontFamily: "Raleway-Regular",
+                    fontSize: 20.0,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center),
+            ]));
       } else {
-        return Text(
+        return const Text(
             "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
       }
     }
-    return Text(
+    return const Text(
         "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
   }
 
@@ -130,18 +119,18 @@ class _CategoryDetailState extends State<CategoryDetail> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: Text("Annuler"),
+      child: const Text("Annuler"),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: Text("Continuer"),
+      child: const Text("Continuer"),
       onPressed: () {
         category.updateItemsDeletedCategory();
         _categories.doc(category.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: const Text('Catégorie supprimée'),
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Catégorie supprimée'),
             duration: Duration(seconds: 2)));
         var nav = Navigator.of(context);
         nav.pop();
@@ -151,8 +140,9 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Suppression de la catégorie"),
-      content: Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
+      title: const Text("Suppression de la catégorie"),
+      content:
+          const Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
       actions: [
         cancelButton,
         continueButton,

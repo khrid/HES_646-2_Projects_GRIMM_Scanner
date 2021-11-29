@@ -9,7 +9,6 @@ class CustomHomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return ElevatedButton(
       onPressed: onPressed,
       child: //Text(title.toUpperCase(), textAlign: TextAlign.center),
@@ -27,6 +26,10 @@ class CustomHomeButton extends StatelessWidget {
         primary: Theme.of(context).primaryColor,
         side: const BorderSide(width: 1.0, color: Colors.black),
         fixedSize: const Size(250, 100),
+        textStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 25.0,
+        ),
         padding: const EdgeInsets.all(20.0),
       ),
     );

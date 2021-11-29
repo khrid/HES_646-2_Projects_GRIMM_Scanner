@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/account/accounts_user_detail.dart';
 import 'package:grimm_scanner/pages/categories/categories_admin.dart';
@@ -14,12 +15,14 @@ import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/pages/items/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/account/update_account.dart';
+import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'dart:async';
 
 import 'models/grimm_user.dart';
 import 'pages/items/create_item.dart';
 import 'pages/items/edit_item.dart';
 import 'pages/login/login.dart';
+import 'pages/rights/admin_rights_detail.dart';
 import 'service/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -40,9 +43,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   var subscription;
   var connectionStatus;
 
-  /*static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);*/
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -51,7 +51,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       await Firebase.initializeApp();
       setState(() {
         _initialized = true;
-        print("Flutterfire initialized successfully");
+        //print("Flutterfire initialized successfully");
       });
     } catch (e) {
       // Set `_error` state to true if Firebase initialization fails
@@ -66,7 +66,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         .collection("tests")
         .doc("OqwvFM4JOPZAUWCeiDhv")
         .get();
-    print("Value retrieved from Firebase Firestore : " + ds.get("target"));
+    //print("Value retrieved from Firebase Firestore : " + ds.get("target"));
   }
 
   @override
@@ -77,12 +77,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   Widget build(BuildContext context) {
-    /*analytics.logEvent(
-        name: "test_event", parameters: <String, dynamic>{'sender': 'david'});*/
-    // Ensure that plugin services are initialized so that `availableCameras()`
-    // can be called before `runApp()`
-    // TODO: implement build
-
+    // gestion de l'orientation de l'écran
+    SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
     return StreamProvider<GrimmUser?>.value(
         initialData: null,
         value: AuthenticationService().user,
@@ -94,11 +93,12 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               primarySwatch: Colors.grey,
               primaryColor: const Color(0xFFECF0F9),
             ),
-            //navigatorObservers: <NavigatorObserver>[observer],
             home: Login(),
             initialRoute: '/',
             routes: {
               LoginGroup.routeName: (context) => const LoginGroup(),
+              RightsAdmin.routeName: (context) => const RightsAdmin(),
+              RightsAdminDetail.routeName: (context) => const RightsAdminDetail(),
               Home.routeName: (context) => const Home(),
               ItemDetail.routeName: (context) => const ItemDetail(),
               ItemHistory.routeName: (context) => const ItemHistory(),

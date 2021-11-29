@@ -106,7 +106,7 @@ class _ItemHistoryState extends State<ItemHistory> {
                 },
               );
             } else {
-              returnText = Text("pas renseigné\n");
+              returnText = const Text("pas renseigné\n");
             }
 
             return SizedBox(

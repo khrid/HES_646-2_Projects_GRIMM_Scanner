@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/pages/items/items_detail.dart';
 
 class EditItemScreen extends StatefulWidget {
   static const routeName = '/edit_item';
@@ -37,9 +38,9 @@ class _EditItemState extends State<EditItemScreen> {
 
     if (grimmItem is! GrimmItem) {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
-          context, "/", (Route<dynamic> route) => false));
+          context, ItemDetail.routeName, (Route<dynamic> route) => false));
     }
-    print("EditItemScreen - " + grimmItem.toString());
+    //print("EditItemScreen - " + grimmItem.toString());
 
     descriptionController.text = grimmItem.description;
     locationController.text = grimmItem.location;
@@ -57,7 +58,7 @@ class _EditItemState extends State<EditItemScreen> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
             const Text(
               "Modifiez l'objet",
@@ -76,8 +77,9 @@ class _EditItemState extends State<EditItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Nom de l'objet' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: "Nom de l'objet",
@@ -108,8 +110,9 @@ class _EditItemState extends State<EditItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Emplacement' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Emplacement',
@@ -140,8 +143,9 @@ class _EditItemState extends State<EditItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Couleur' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: "Couleur",
@@ -194,7 +198,7 @@ class _EditItemState extends State<EditItemScreen> {
                       hint: const Text("Category"),
                       iconSize: 24,
                       //elevation: 16,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Catégorie',
                       ),
                       style: const TextStyle(color: Colors.black),
@@ -216,40 +220,6 @@ class _EditItemState extends State<EditItemScreen> {
                 return const Text("");
               },
             ),
-            /*
-           TextFormField(
-              controller: categorieController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Le champ "Catégorie" ne peut pas être vide';
-                } else {
-                  return null;
-                }
-              },
-              decoration: const InputDecoration(
-                labelText: 'Catégorie',
-                labelStyle: TextStyle(
-                  fontFamily: "Raleway-Regular",
-                  fontSize: 14.0,
-                  color: Colors.black,
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              textInputAction: TextInputAction.next,
-              cursorColor: Colors.black,
-            ),
-            const SizedBox(
-              height: 20,
-            ),*/
             TextFormField(
               controller: remarkController,
               validator: (value) {
@@ -299,12 +269,12 @@ class _EditItemState extends State<EditItemScreen> {
                     grimmItem.remark = remarkController.text;
                     grimmItem.idCategory =
                         await getIdForCategoryName(dropdownValue);
-                    print("End " + grimmItem.toString());
+                    //print("End " + grimmItem.toString());
                     grimmItem.updateFirestore();
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text("VALIDER")),
+                child: const Text("VALIDER")),
             const SizedBox(
               height: 20,
             ),

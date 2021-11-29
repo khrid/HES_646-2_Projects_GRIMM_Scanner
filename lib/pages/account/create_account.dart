@@ -5,10 +5,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
-import 'accounts_admin.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -64,7 +62,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
             const Text(
               "Créez un nouvel utilisateur",
@@ -83,8 +81,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Prénom" ne peut pas être vide';
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Prénom',
@@ -115,8 +114,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Nom" ne peut pas être vide';
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Nom',
@@ -182,8 +182,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Le champ "Mot de passe" ne peut pas être vide';
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Mot de passe',
@@ -258,7 +259,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 ),
                 onPressed: () async {
                   // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
-                  //TODO : amélioration possible, code pas ouf mais ça fonctionne
                   var tab = [];
                   if (isAdmin) {
                     tab.add("Administrator");
@@ -281,7 +281,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                           password: passwordController.text,
                           grimmUser: grimmUser);
                       if (result is GrimmUser) {
-                        print("User CREATE" + result.toString());
+                        //print("User CREATE" + result.toString());
                         changeErrorMessage("");
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -301,7 +301,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                             "Veuillez sélectionner un groupe au minimum.")));
                   }
                 },
-                child: Text("VALIDER")),
+                child: const Text("VALIDER")),
             const SizedBox(
               height: 20,
             ),
