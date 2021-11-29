@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
@@ -62,7 +63,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 textAlign: TextAlign.left,
               ),
               const SizedBox(
-                height: 20,
+                height: 50,
               ),
               TextFormField(
                 controller: userSurnameController,
@@ -95,7 +96,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 cursorColor: Theme.of(context).backgroundColor,
               ),
               const SizedBox(
-                height: 20,
+                height: 40,
               ),
               TextFormField(
                 controller: userNameController,
@@ -128,7 +129,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 cursorColor: Theme.of(context).backgroundColor,
               ),
               const SizedBox(
-                height: 20,
+                height: 40,
               ),
               TextField(
                 controller: userEmailController,
@@ -154,7 +155,33 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 enabled: false,
               ),
               const SizedBox(
-                height: 20,
+                height: 40,
+              ),
+              TextField(
+                controller: userPasswordController,
+                decoration: const InputDecoration(
+                  labelText: 'Mot de passe',
+                  labelStyle: TextStyle(
+                    fontFamily: "Raleway-Regular",
+                    fontSize: 14.0,
+                    color: Colors.black,
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                cursorColor: Colors.black,
+                enabled: true,
+              ),
+              const SizedBox(
+                height: 70,
               ),
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -167,6 +194,8 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                   onPressed: () async {
                     user.name = userNameController.text;
                     user.firstname = userSurnameController.text;
+                    _changePassword(userPasswordController.text);
+
                     if (_formKey.currentState!.validate()) {
                       updateUser(user);
                       //("Changements effectués");
@@ -183,5 +212,17 @@ class _ProfileAdminState extends State<ProfileAdmin> {
 
   Future<void> updateUser(GrimmUser u) async {
     u.updateFirestore();
+  }
+
+  void _changePassword(String password) async {
+//Create an instance of the current user.
+    User user = FirebaseAuth.instance.currentUser!;
+    //Pass in the password to updatePassword.
+    user.updatePassword(password).then((_) {
+      print("Successfully changed password");
+    }).catchError((error) {
+      print("Password can't be changed" + error.toString());
+      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+    });
   }
 }
