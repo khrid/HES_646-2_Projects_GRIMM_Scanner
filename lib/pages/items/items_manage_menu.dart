@@ -35,11 +35,11 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
         backgroundColor: Theme.of(context).primaryColor,
         body: 
       Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
-                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        image: const AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
                         fit: BoxFit.cover,
                         ),),   
         child: 
@@ -70,10 +70,11 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
       Navigator.pushNamed(context, CategoriesAdmin.routeName);
     });
   }
+  
 
   Future<void> navigateToItemsAdmin() async {
     setState(() {
-      print("Role items_manage_menu" + role);
+      //print("Role items_manage_menu" + role);
       Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
     });
   }

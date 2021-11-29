@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grimm_scanner/assets/constants.dart';
-import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
 
 
@@ -35,7 +33,7 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
       ),
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -58,17 +56,16 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
 
 Widget buildRightsDetail(
     BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    print(snapshot.data);
+    //print(snapshot.data);
     var tab = [];
     
 
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
-        print("salut");
-        print(right.toString());
+        //print("salut");
+        //print(right.toString());
         if (firstLoad == 1) {
-     // _right = ModalRoute.of(context)!.settings.arguments as GrimmRight;
 
           if (right.permissions.contains("Administrator")) isAdmin = true;
           if (right.permissions.contains("Member")) isMember = true;
@@ -88,10 +85,10 @@ Widget buildRightsDetail(
                       child: ListView(
                             scrollDirection: Axis.vertical,
                           shrinkWrap: true,
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         children: <Widget>[
                           Text(right.description,
-                          style: TextStyle(
+                          style: const TextStyle(
                           fontFamily: "Raleway-Regular", fontSize: 25.0),
                           ),
                           const SizedBox(
@@ -140,9 +137,9 @@ Widget buildRightsDetail(
                               style: ElevatedButton.styleFrom(
                                 primary: Theme.of(context).primaryColor,
                                 textStyle:
-                                    TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                                    const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
                                 side: const BorderSide(width: 1.0, color: Colors.black),
-                                padding: EdgeInsets.all(20.0),
+                                padding: const EdgeInsets.all(20.0),
                               ),
                               onPressed: () async {
                                 if (isAdmin) {
@@ -159,7 +156,7 @@ Widget buildRightsDetail(
                                 if (tab.isNotEmpty) {
                                   if (_formKey.currentState!.validate()) {
                                     updateRight(right);
-                                    print("Changements effectués");
+                                    // print("Changements effectués");
                                     Navigator.pop(context);
                                   }
                                 } else {
@@ -168,7 +165,7 @@ Widget buildRightsDetail(
                                           "Veuillez sélectionner un rôle au minimum.")));
                                 }
                               },
-                              child: Text("Valider les modifications")),
+                              child: const Text("Valider les modifications")),
                               const SizedBox(
                           height: 20,
                         ),
@@ -178,10 +175,10 @@ Widget buildRightsDetail(
                       ]
                 ));
                     } else {
-                      return Text("Erreur1");
+                      return const Text("Erreur1");
                     }
                   }
-                  return Text("Erreur2");
+                  return const Text("Erreur2");
                 }
 
 }

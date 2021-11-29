@@ -31,7 +31,6 @@ class _CreateItemState extends State<CreateItemScreen> {
   @override
   Widget build(BuildContext context) {
     GrimmItem grimmItem = GrimmItem(
-        //id: "id",
         description: "description",
         location: "location",
         color: "color",
@@ -39,7 +38,7 @@ class _CreateItemState extends State<CreateItemScreen> {
         available: true,
         remark: "remark");
 
-    print("ItemDetail - GrimmItem - " + grimmItem.toString());
+    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Création"),
@@ -50,7 +49,7 @@ class _CreateItemState extends State<CreateItemScreen> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: EdgeInsets.all(50),
+          padding: const EdgeInsets.all(50),
           children: <Widget>[
             const Text(
               "Créez un nouvel objet",
@@ -69,8 +68,9 @@ class _CreateItemState extends State<CreateItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Nom de l'objet' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: "Nom de l'objet",
@@ -101,8 +101,9 @@ class _CreateItemState extends State<CreateItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Emplacement' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Emplacement',
@@ -133,8 +134,9 @@ class _CreateItemState extends State<CreateItemScreen> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "Le champ 'Couleur' ne peut pas être vide";
-                } else
+                } else {
                   return null;
+                }
               },
               decoration: const InputDecoration(
                 labelText: 'Couleur',
@@ -179,7 +181,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                     });
                     return DropdownButtonFormField<String>(
                       value: dropdownValue,
-                      hint: Text("Category"),
+                      hint: const Text("Category"),
                       decoration: const InputDecoration(
                         labelText: 'Catégorie',
                         labelStyle: TextStyle(color: Colors.black),
@@ -196,7 +198,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                       }).toList(),
                       onChanged: (String? value) {
                         setState(() {
-                          this.dropdownValue = value!;
+                          dropdownValue = value!;
                         });
                       },
                     );
@@ -251,7 +253,6 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ),
                 onPressed: () async {
                   {
-                    print(dropdownValue);
                     if (_key.currentState!.validate()) {
                       GrimmItem item = GrimmItem(
                           description: descriptionController.text,
@@ -261,14 +262,14 @@ class _CreateItemState extends State<CreateItemScreen> {
                           idCategory: await getIdForCategoryName(dropdownValue),
                           available: true);
                       await item.saveToFirestore();
-                      print("Item CREATE" + item.toString());
+                      //print("Item CREATE" + item.toString());
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text("Objet créé avec succès")));
-                      Navigator.pushNamed(context, "/");
+                           Navigator.of(context).pop();
                     }
                   }
                 },
-                child: Text("VALIDER")),
+                child: const Text("VALIDER")),
             const SizedBox(
               height: 20,
             ),

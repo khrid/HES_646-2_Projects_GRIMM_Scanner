@@ -25,7 +25,6 @@ class _ExpandableFabState extends State<ExpandableFab>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _open = widget.initialOpen ?? false;
     _controller = AnimationController(

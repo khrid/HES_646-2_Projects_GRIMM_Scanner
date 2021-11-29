@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/account/accounts_user_detail.dart';
 import 'package:grimm_scanner/pages/categories/categories_admin.dart';
@@ -42,9 +43,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   var subscription;
   var connectionStatus;
 
-  /*static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer =
-      FirebaseAnalyticsObserver(analytics: analytics);*/
 
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
@@ -53,7 +51,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
       await Firebase.initializeApp();
       setState(() {
         _initialized = true;
-        print("Flutterfire initialized successfully");
+        //print("Flutterfire initialized successfully");
       });
     } catch (e) {
       // Set `_error` state to true if Firebase initialization fails
@@ -68,7 +66,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         .collection("tests")
         .doc("OqwvFM4JOPZAUWCeiDhv")
         .get();
-    print("Value retrieved from Firebase Firestore : " + ds.get("target"));
+    //print("Value retrieved from Firebase Firestore : " + ds.get("target"));
   }
 
   @override
@@ -79,12 +77,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   }
 
   Widget build(BuildContext context) {
-    /*analytics.logEvent(
-        name: "test_event", parameters: <String, dynamic>{'sender': 'david'});*/
-    // Ensure that plugin services are initialized so that `availableCameras()`
-    // can be called before `runApp()`
-    // TODO: implement build
-
+    // gestion de l'orientation de l'écran
+    SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
     return StreamProvider<GrimmUser?>.value(
         initialData: null,
         value: AuthenticationService().user,
@@ -96,7 +93,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               primarySwatch: Colors.grey,
               primaryColor: const Color(0xFFECF0F9),
             ),
-            //navigatorObservers: <NavigatorObserver>[observer],
             home: Login(),
             initialRoute: '/',
             routes: {

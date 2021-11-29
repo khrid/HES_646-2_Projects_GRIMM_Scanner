@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
-import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:provider/provider.dart';
 
 class LoginGroup extends StatefulWidget {
@@ -21,8 +20,8 @@ class _LoginGroupState extends State<LoginGroup> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
-    print("testLoginGroupPage");
-    print(user);
+    //print("testLoginGroupPage");
+    //print(user);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Choix du rôle"),
@@ -41,11 +40,11 @@ class _LoginGroupState extends State<LoginGroup> {
         ),
         body:  
         Container(
-                constraints: BoxConstraints.expand(),
+                constraints: const BoxConstraints.expand(),
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/images/logo_grimm_black.jpg"),
-                        colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
+                        image: const AssetImage("assets/images/logo_grimm_black.jpg"),
+                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
                         fit: BoxFit.cover,
                         ),),   
         child: 
@@ -64,7 +63,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     color: Colors.black,
                     fontSize: 25.0,
                   ),
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
                   {
@@ -72,7 +71,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     Navigator.pushNamed(context, Home.routeName, arguments: role);
                   }
                 },
-                child: Text("Administrateur")),
+                child: const Text("Administrateur")),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -86,7 +85,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     color: Colors.black,
                     fontSize: 25.0,
                   ),
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
                   {
@@ -94,7 +93,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     Navigator.pushNamed(context, Home.routeName, arguments: role);
                   }
                 },
-                child: Text("Object Manager")),
+                child: const Text("Object Manager")),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -108,7 +107,7 @@ class _LoginGroupState extends State<LoginGroup> {
                     color: Colors.black,
                     fontSize: 25.0,
                   ),
-                  padding: EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
                   {
@@ -123,17 +122,10 @@ class _LoginGroupState extends State<LoginGroup> {
         ));
   }
 
-
-    /*Future<void> navigateToHomePage(String role) async {
-    setState(() {
-      Navigator.pushNamed(context, Home.routeName, arguments: role);
-    });
-  }*/
-
   makeLogout() async {
     await _auth.signOut();
     Navigator.pop(context);
-    print('Out');
+    //print('Out');
     }
 
   Future<void> navigateToHomePage() async {
