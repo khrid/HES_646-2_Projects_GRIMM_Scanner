@@ -166,48 +166,6 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 enabled: true,
               ),
               const SizedBox(
-                height: 40,
-              ),
-              TextField(
-                controller: userPasswordController,
-                keyboardType: TextInputType.text,
-                obscureText: !_passwordVisible,
-                decoration: InputDecoration(
-                  labelText: 'Mot de passe',
-                  labelStyle: const TextStyle(
-                    fontFamily: "Raleway-Regular",
-                    fontSize: 14.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                    ),
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                cursorColor: Colors.black,
-                enabled: true,
-              ),
-              const SizedBox(
                 height: 70,
               ),
               ElevatedButton(
@@ -223,18 +181,18 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                     user.firstname = userSurnameController.text;
                     user.email = userEmailController.text;
                     if (_formKey.currentState!.validate()) {
-                      updateUser(user);
-                      _changePassword(userPasswordController.text);
+                      //_changePassword(userPasswordController.text);
                       _changeMail(userEmailController.text);
+                      updateUser(user);
                       //("Changements effectués");
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                           "Modifications réussies",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         duration: Duration(seconds: 5),
                         backgroundColor: Color(0xFF1CB731),
-                      ));
+                      ));*/
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -250,7 +208,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
     u.updateFirestore();
   }
 
-  void _changePassword(String password) async {
+  /*void _changePassword(String password) async {
 //Create an instance of the current user.
     User user = FirebaseAuth.instance.currentUser!;
     //Pass in the password to updatePassword.
@@ -260,17 +218,21 @@ class _ProfileAdminState extends State<ProfileAdmin> {
       print("Password can't be changed" + error.toString());
       //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
     });
-  }
+  } */
 
   void _changeMail(String newEmail) async {
 //Create an instance of the current user.
     User _user = FirebaseAuth.instance.currentUser!;
-    //Pass in the password to updatePassword.
     _user.updateEmail(newEmail).then((_) {
-      print("Successfully changed email");
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Adresse mail mise à jour")));
     }).catchError((error) {
       print("email can't be changed" + error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Erreur lors de la création.")));
       //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
     });
+
+    //Pass in the password to updatePassword.
   }
 }

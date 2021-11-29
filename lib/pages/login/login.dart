@@ -203,10 +203,15 @@ class _LoginState extends State<Login> {
               ),
               child: Text('Mot de passe oublié ?'),
               onPressed: () async {
-                auth.sendPasswordResetEmail(email: emailController.text);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                        "Email envoyé à l'adresse " + emailController.text)));
+                if (emailController.text == "") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Compléter le champ email ")));
+                } else {
+                  auth.sendPasswordResetEmail(email: emailController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Email envoyé à l'adresse " + emailController.text)));
+                }
               },
             )
           ],
