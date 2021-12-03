@@ -10,11 +10,14 @@ import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
+import 'dart:developer' as developer;
+
 // printing libs
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
+
 
 class ItemDetail extends StatefulWidget {
   static const routeName = "/items/detail";
@@ -45,6 +48,7 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   Future<bool> isRightRole() async {
+    isRight = false;
     _rights.doc("objectButton").get().then((result) {
       right = GrimmRight.fromJson(result);
 
@@ -65,7 +69,7 @@ class _ItemDetailState extends State<ItemDetail> {
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     qrcode = arg['qrCode'];
-    role = arg['role'];
+    role = arg['role'] ?? "null";
 
     //print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
@@ -85,7 +89,6 @@ class _ItemDetailState extends State<ItemDetail> {
         remark: "remark");
     grimmItem.populateItemInfoFromFirestore();
 
-    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
 
        double cWidth = MediaQuery.of(context).size.width * 0.8;
 
@@ -224,6 +227,8 @@ class _ItemDetailState extends State<ItemDetail> {
       // si on a des données et que le doc existe
       if (snapshot.data!.data() != null) {
         GrimmItem item = GrimmItem.fromJson(snapshot.data);
+        item.populateItemInfoFromFirestore();
+        developer.log("ItemDetail - GrimmItem - " + grimmItem.toString(), name: "ch.grimmvs.scanner.lib.pages.items.ItemDetail.buildItemDetails");
 
         String availability;
         if (item.available == true) {
@@ -308,6 +313,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   )
                 ],
               ),
+              buildCustomFields(),
               const SizedBox(height: 50.0),
               StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -433,5 +439,33 @@ class _ItemDetailState extends State<ItemDetail> {
           onLayout: (PdfPageFormat format) async => doc.save(),
           name: "qrgrimm_" + grimmItem.getDescriptionForPdfFilename() + "");
     }
+  }
+
+  buildCustomFields() {
+    var list = <Widget>[];
+    if(grimmItem.customFields!.isNotEmpty) {
+      print(grimmItem.customFields);
+      grimmItem.customFields!.forEach((key, value) {
+        list.add(const SizedBox(height: 20.0));
+        list.add(Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(key.toString()+" : ",
+                style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold)),
+            Text("" + value,
+                style: const TextStyle(color: Colors.black, fontSize: 14)),
+          ],
+        ));
+      });
+      return Container(
+        child: Column(
+          children: list,
+        ),
+      );
+    }
+    return Container();
   }
 }

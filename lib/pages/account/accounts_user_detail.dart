@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -67,6 +69,7 @@ class _UserDetailState extends State<UserDetail> {
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         user = GrimmUser.fromJson(snapshot.data);
+        print(" --- " + jsonEncode(snapshot.data!.data().toString()));
         String status;
         if (user.enable == true) {
           status = "Actif";

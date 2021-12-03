@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/widgets/custom_field_widget.dart';
 
 class EditItemScreen extends StatefulWidget {
   static const routeName = '/edit_item';
@@ -14,6 +15,8 @@ class EditItemScreen extends StatefulWidget {
 
 class _EditItemState extends State<EditItemScreen> {
   final _key = GlobalKey<FormState>();
+  var _customFields = <Widget>[];
+  bool done = false;
   TextEditingController descriptionController = TextEditingController(
       text: "ObjectLouise"); // controlleur de la description
   TextEditingController locationController =
@@ -47,6 +50,10 @@ class _EditItemState extends State<EditItemScreen> {
     colorController.text = grimmItem.color;
     categorieController.text = grimmItem.idCategory;
     remarkController.text = grimmItem.remark;
+
+    if (!done) {
+      buildCustomFields();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -253,6 +260,38 @@ class _EditItemState extends State<EditItemScreen> {
             const SizedBox(
               height: 20,
             ),
+            Container(
+              child: Column(
+                children: _customFields,
+              ),
+            ),
+            /***/
+            Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            side: const BorderSide(
+                                width: 1.0, color: Colors.black),
+                          ),
+                          onPressed: () {
+                            print("click");
+                            setState(() {
+                              _customFields.add(CustomFieldWidget(
+                                  customFieldKey: "", customFieldValue: ""));
+                            });
+                          },
+                          child: const Text("Ajouter un champ")),
+                      const Spacer(),
+                      getRemoveCustomFieldButton()
+                    ],
+                  )
+                ],
+              ),
+            ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
@@ -270,6 +309,19 @@ class _EditItemState extends State<EditItemScreen> {
                     grimmItem.idCategory =
                         await getIdForCategoryName(dropdownValue);
                     //print("End " + grimmItem.toString());
+                    if (_customFields.isNotEmpty) {
+                      grimmItem.customFields = {};
+                      for (var element in _customFields) {
+                        CustomFieldWidget widget = element as CustomFieldWidget;
+                        if (element.customFieldValue.isNotEmpty &&
+                            element.customFieldKey.isNotEmpty) {
+                          grimmItem.addCustomField(
+                              (element).customFieldKey.toString(),
+                              (element).customFieldValue.toString());
+                        }
+                      }
+                    }
+                    print(grimmItem);
                     grimmItem.updateFirestore();
                     Navigator.of(context).pop();
                   }
@@ -282,6 +334,38 @@ class _EditItemState extends State<EditItemScreen> {
         ),
       ),
     );
+  }
+
+  getRemoveCustomFieldButton() {
+    if (_customFields.isNotEmpty) {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+            side: const BorderSide(
+                width: 1.0, color: Colors.black),
+          ),
+          onPressed: () {
+            print("click");
+            setState(() {
+              _customFields.removeLast();
+            });
+          },
+          child: const Text("Enlever un champ"));
+    }
+    return const SizedBox(width: 0, height: 0);
+  }
+
+  void buildCustomFields() {
+    done = true;
+    if (grimmItem.customFields!.isNotEmpty) {
+      print("must build custom fields!");
+      setState(() {
+        grimmItem.customFields!.forEach((key, value) {
+          _customFields.add(
+              CustomFieldWidget(customFieldKey: key, customFieldValue: value));
+        });
+      });
+    }
   }
 }
 
