@@ -109,7 +109,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 title: TextField(
                   controller: TextEditingController(text: search),
                   decoration: const InputDecoration(
-                      hintText: 'Search', border: InputBorder.none),
+                      hintText: 'Rechercher...', border: InputBorder.none),
                   onChanged: null,
                   onSubmitted: (value) {
                     setState(() {
