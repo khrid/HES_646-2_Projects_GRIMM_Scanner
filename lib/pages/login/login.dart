@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
@@ -55,10 +56,9 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 30,
             ),
-            const Text(
-              'Bienvenue !',
+            Text(getTranslated(context, 'please_enter_password')!,
               textAlign: TextAlign.left,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: "Raleway-ExtraBold",
                 fontWeight: FontWeight.bold,
                 fontSize: 30.0,

@@ -17,7 +17,8 @@ import 'package:grimm_scanner/pages/items/items_manage_menu.dart';
 import 'package:grimm_scanner/pages/account/update_account.dart';
 import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'dart:async';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'localization/app_localization.dart';
 import 'models/grimm_user.dart';
 import 'pages/items/create_item.dart';
 import 'pages/items/edit_item.dart';
@@ -42,6 +43,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   bool _error = false;
   var subscription;
   var connectionStatus;
+
+  Locale? _locale;
+  void setLocale(Locale locale) {
+        setState(() {
+          _locale = locale;}); }
 
 
   // Define an async function to initialize FlutterFire
@@ -76,6 +82,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.initState();
   }
 
+
+
   Widget build(BuildContext context) {
     // gestion de l'orientation de l'écran
     SystemChrome.setPreferredOrientations([
@@ -87,6 +95,26 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         value: AuthenticationService().user,
         lazy: false,
         child: MaterialApp(
+           localizationsDelegates: [
+              AppLocalization.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,],
+            //supported languages
+            locale: _locale,
+            supportedLocales: [
+              Locale('en', 'US'),
+              Locale('fr', 'FR'),],
+              //to check if the local codes are the same to the device codes
+                  localeResolutionCallback: (deviceLocale, supportedLocales) {
+                    for (var locale in supportedLocales) {
+                      if (locale.languageCode == deviceLocale!.languageCode &&
+                          locale.countryCode == deviceLocale.countryCode) {
+                        return deviceLocale;
+                      }
+                    }
+                    return supportedLocales.first;
+                  },
             debugShowCheckedModeBanner: false,
             title: 'GRIMM Scanner',
             theme: ThemeData(
@@ -114,6 +142,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
                   const CreateAccountScreen(),
               CreateItemScreen.routeName: (context) => const CreateItemScreen(),
               EditItemScreen.routeName: (context) => const EditItemScreen(),
-            }));
+            },
+            
+              ));
   }
 }
