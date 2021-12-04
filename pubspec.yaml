@@ -86,11 +86,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-      - lib/locale/en.json
-     - lib/locale/fr.json
-     - assets/images/drawer_header_background.png
-     - assets/images/logo_grimm.png
-     - assets/images/logo_grimm_black.jpg
+    - lib/locale/i18n_en.json
+    - assets/images/drawer_header_background.png
+    - assets/images/logo_grimm.png
+    - assets/images/logo_grimm_black.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
