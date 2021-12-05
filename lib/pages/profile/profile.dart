@@ -179,60 +179,53 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                   onPressed: () async {
                     user.name = userNameController.text;
                     user.firstname = userSurnameController.text;
-                    user.email = userEmailController.text;
+                    bool emailValid = RegExp(
+                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                        .hasMatch(userEmailController.text);
                     if (_formKey.currentState!.validate()) {
-                      //_changePassword(userPasswordController.text);
-                      _changeMail(userEmailController.text);
-                      updateUser(user);
-                      //("Changements effectués");
-                      /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                          "Modifications réussies",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        duration: Duration(seconds: 5),
-                        backgroundColor: Color(0xFF1CB731),
-                      ));*/
+                      if (emailValid == true) {
+                        user.email = userEmailController.text;
+                        _changeMail(userEmailController.text);
+                        updateUser(user);
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                              "Mise à jour du profil réussie",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFF1CB731),
+                          ));
                       Navigator.pop(context);
+                      } else {
+                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                              "Erreur dans la saisie de votre adresse mail.",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFFB71C1C),
+                          ));}
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Erreur lors de la création.")));
+                            content: Text(
+                              "Erreur lors de la mise à jour du profil.",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFFB71C1C),
+                          ));
                     }
                   },
                   child: const Text("Valider les modifications")),
             ])));
-    //drawer: const CustomDrawer(),
   }
 
   Future<void> updateUser(GrimmUser u) async {
     u.updateFirestore();
   }
 
-  /*void _changePassword(String password) async {
-//Create an instance of the current user.
-    User user = FirebaseAuth.instance.currentUser!;
-    //Pass in the password to updatePassword.
-    user.updatePassword(password).then((_) {
-      print("Successfully changed password");
-    }).catchError((error) {
-      print("Password can't be changed" + error.toString());
-      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
-    });
-  } */
-
   void _changeMail(String newEmail) async {
-//Create an instance of the current user.
     User _user = FirebaseAuth.instance.currentUser!;
-    _user.updateEmail(newEmail).then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Adresse mail mise à jour")));
-    }).catchError((error) {
-      print("email can't be changed" + error.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Erreur lors de la création.")));
-      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
-    });
-
-    //Pass in the password to updatePassword.
+    _user.updateEmail(newEmail);
   }
 }

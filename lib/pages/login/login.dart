@@ -179,13 +179,24 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Connexion réussie")));
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                              "Connexion réussie",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFF1CB731),
+                          ));
                       MenuScreen(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content:
-                              Text("Erreur dans votre mot de passe/mail")));
+                            content: Text(
+                              "Erreur dans votre mot de passe/mail",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFFB71C1C),
+                          ));
                       //print(result.toString());
                     }
                   }
