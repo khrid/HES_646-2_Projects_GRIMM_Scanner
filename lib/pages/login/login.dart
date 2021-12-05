@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
@@ -10,13 +11,13 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-
+  final auth = FirebaseAuth.instance;
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = TextEditingController(
-      //text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
-      text: ""); // texte ajouté pour facilité le travail
+      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
+  //text: ""); // texte ajouté pour facilité le travail
   TextEditingController passwordController =
-    TextEditingController(text: "");
+      TextEditingController(text: "123456");
 
   MenuScreen(BuildContext context) {
     setState(() {
@@ -160,8 +161,8 @@ class _LoginState extends State<Login> {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
-                  textStyle:
-                      const TextStyle(fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
                   side: const BorderSide(width: 1.0, color: Colors.black),
                   padding: EdgeInsets.all(10.0),
                 ),
@@ -178,21 +179,52 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Connexion réussie")));
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text(
+                              "Connexion réussie",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFF1CB731),
+                          ));
                       MenuScreen(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content:
-                              Text("Erreur dans votre mot de passe/mail")));
+                            content: Text(
+                              "Erreur dans votre mot de passe/mail",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: Color(0xFFB71C1C),
+                          ));
                       //print(result.toString());
                     }
                   }
                 },
                 child: const Text('Se connecter')),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+                textStyle: const TextStyle(
+                    fontFamily: "Raleway-Regular", fontSize: 14.0),
+                padding: EdgeInsets.all(10.0),
+              ),
+              child: Text('Mot de passe oublié ?'),
+              onPressed: () async {
+                if (emailController.text == "") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Compléter le champ email ")));
+                } else {
+                  auth.sendPasswordResetEmail(email: emailController.text);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                          "Email envoyé à l'adresse " + emailController.text)));
+                }
+              },
+            )
           ],
         ),
       ),

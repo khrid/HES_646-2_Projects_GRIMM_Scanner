@@ -11,6 +11,7 @@ import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/pages/profile/profile.dart';
 import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -135,58 +136,64 @@ class _HomeState extends State<Home> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body:  
-        Container(
-                constraints: const BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: const AssetImage("assets/images/logo_grimm_black.jpg"),
-                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
-                        fit: BoxFit.cover,
-                        ),),   
-        child: 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                //Gestion des accès : StreamBuilder pour le button scan
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("scanButton")
-                      .snapshots(),
-                  builder: buildButtonScan,
-                ),
-                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("userButton")
-                      .snapshots(),
-                  builder: buildButtonAdmin,
-                ),
-                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("inventoryButton")
-                      .snapshots(),
-                  builder: buildButtonInventory,
-                ),
-
-                //Gestion des accès : StreamBuilder pour le button d'accès au droits
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("rightsButton")
-                      .snapshots(),
-                  builder: buildButtonRights,
-                ),
-              ],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: goToProfile,
+          child: Icon(
+            Icons.manage_accounts,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage("assets/images/logo_grimm_black.jpg"),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.05), BlendMode.dstATop),
+              fit: BoxFit.cover,
             ),
-          
-        )
-        );
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              //Gestion des accès : StreamBuilder pour le button scan
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("scanButton")
+                    .snapshots(),
+                builder: buildButtonScan,
+              ),
+              //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("userButton")
+                    .snapshots(),
+                builder: buildButtonAdmin,
+              ),
+              //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("inventoryButton")
+                    .snapshots(),
+                builder: buildButtonInventory,
+              ),
+
+              //Gestion des accès : StreamBuilder pour le button d'accès au droits
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("rightsButton")
+                    .snapshots(),
+                builder: buildButtonRights,
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget buildButtonAdmin(
@@ -417,5 +424,9 @@ class _HomeState extends State<Home> {
       ));
       //}
     }
+  }
+
+  goToProfile() async {
+    Navigator.pushNamed(context, ProfileAdmin.routeName, arguments: role);
   }
 }
