@@ -1,6 +1,7 @@
 {
     "title": "Bienvenue Robin",
     "validate_modif": "Validez les modifications",
+    "login_saisie": "Entrez votre login",
     "description": "Description",
     "format" : "Format : Address, Npa, City",
     "picture": "Picture",

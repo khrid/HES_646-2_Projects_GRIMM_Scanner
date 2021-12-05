@@ -81,9 +81,8 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              'Entrez votre login',
-              style: TextStyle(
+            Text(getTranslated(context, 'login_saisie')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontWeight: FontWeight.normal,
                 fontSize: 15.0,
