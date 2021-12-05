@@ -55,18 +55,18 @@ class _LoginState extends State<Login> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.only(top: 10, right: 50, left: 50),
+          padding: const EdgeInsets.only(top: 0, right: 40, left: 40),
           children: <Widget>[
             Image.asset(
               'assets/images/logo_grimm.png',
-              width: 250,
-              height: 250,
+              width: 200,
+              height: 200,
             ),
             const Padding(
               padding: EdgeInsets.only(top: 10.0),
             ),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
             Text(
               getTranslated(context, 'title')!,
@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             const Text(
               'Entrez votre login',
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                   return null;
                 }),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             TextFormField(
                 keyboardType: TextInputType.text,
@@ -168,7 +168,7 @@ class _LoginState extends State<Login> {
                   return null;
                 }),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -214,9 +214,7 @@ class _LoginState extends State<Login> {
                   }
                 },
                 child: const Text('Se connecter')),
-            const SizedBox(
-              height: 20,
-            ),
+
             TextButton(
               style: TextButton.styleFrom(
                 primary: Colors.black,
@@ -238,54 +236,66 @@ class _LoginState extends State<Login> {
               },
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
-            const Text("Choississez votre langue"),
-            const SizedBox(
-              height: 20,
+            Container(
+              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(2, 'Francais', 'fr');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("Français")),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(1, 'English', 'en');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("English")),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(3, 'Deutsch', 'de');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("Deutsch")),
+                    ],
+                  )
+                ],
+              ),
             ),
-            TextButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle: const TextStyle(
-                      fontFamily: "Raleway-Regular", fontSize: 14.0),
-                  padding: const EdgeInsets.all(20.0),
-                ),
-                onPressed: () async {
-                  Language? newLanguage = Language(2, 'Francais', 'fr');
-                  _changeLanguage(newLanguage);
-                },
-                child: const Text("Français")),
-            const SizedBox(
-              height: 20,
-            ),
-            TextButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle: const TextStyle(
-                      fontFamily: "Raleway-Regular", fontSize: 14.0),
-                  padding: const EdgeInsets.all(20.0),
-                ),
-                onPressed: () async {
-                  Language? newLanguage = Language(1, 'English', 'en');
-                  _changeLanguage(newLanguage);
-                },
-                child: const Text("English")),
-            const SizedBox(
-              height: 20,
-            ),
-            TextButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Theme.of(context).primaryColor,
-                  textStyle: const TextStyle(
-                      fontFamily: "Raleway-Regular", fontSize: 14.0),
-                  padding: const EdgeInsets.all(20.0),
-                ),
-                onPressed: () async {
-                  Language? newLanguage = Language(3, 'Deutsch', 'de');
-                  _changeLanguage(newLanguage);
-                },
-                child: const Text("Deutsch")),
           ],
         ),
       ),
