@@ -95,14 +95,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         value: AuthenticationService().user,
         lazy: false,
         child: MaterialApp(
-           localizationsDelegates: [
+           localizationsDelegates: const [
               AppLocalization.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,],
             //supported languages
             locale: _locale,
-            supportedLocales: [
+            supportedLocales: const [
               Locale('en', 'US'),
               Locale('fr', 'FR'),],
               //to check if the local codes are the same to the device codes
