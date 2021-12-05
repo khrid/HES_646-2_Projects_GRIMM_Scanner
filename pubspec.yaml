@@ -86,8 +86,6 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/locale/i18n_en.json
-    - lib/locale/i18n_fr.json
     - assets/langues/fr.json
     - assets/langues/en.json
     - assets/images/drawer_header_background.png

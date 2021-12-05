@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/models/language.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
+
+import '../../main.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -31,6 +34,13 @@ class _LoginState extends State<Login> {
   void initState() {
     _passwordVisible = false;
   }
+  Language? selectedLanguage = Language.getDefaultLanguage();
+
+    void _changeLanguage(Language language) async {
+    selectedLanguage = language;
+    Locale _locale = await setLocale(language.languageCode);
+    App.setLocale(context, _locale);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +66,7 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 30,
             ),
-            Text(getTranslated(context, 'please_enter_password')!,
+            Text(getTranslated(context, 'title')!,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 fontFamily: "Raleway-ExtraBold",
@@ -193,9 +203,11 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 10,
             ),
+            
           ],
         ),
       ),
-    );
+    )
+    ;
   }
 }

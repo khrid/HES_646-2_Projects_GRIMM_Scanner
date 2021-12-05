@@ -35,6 +35,10 @@ Future<void> main() async {
 
 class App extends StatefulWidget {
   _AppState createState() => _AppState();
+    static void setLocale(BuildContext context, Locale locale) {
+    _AppState? state = context.findAncestorStateOfType<_AppState>();
+    state!.setLocale(locale);
+  }
 }
 
 class _AppState extends State<App> with WidgetsBindingObserver {
@@ -44,6 +48,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   var subscription;
   var connectionStatus;
 
+  
+  
   Locale? _locale;
   void setLocale(Locale locale) {
         setState(() {
