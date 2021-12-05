@@ -9,6 +9,7 @@ const String LAGUAGE_CODE = 'languageCode';
 //languages code
 const String ENGLISH = 'en';
 const String FRENCH = 'fr';
+const String GERMAN = 'de';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
@@ -28,6 +29,8 @@ Locale _locale(String languageCode) {
       return Locale(ENGLISH, 'US');
     case FRENCH:
       return Locale(FRENCH, "FR");
+      case GERMAN:
+      return Locale(GERMAN, "DE");
     default:
       return Locale(ENGLISH, 'US');
   }

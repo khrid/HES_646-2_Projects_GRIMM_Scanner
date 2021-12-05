@@ -49,7 +49,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   var subscription;
   var connectionStatus;
 
-<<<<<<< HEAD
   
   
   Locale? _locale;
@@ -58,8 +57,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
           _locale = locale;}); }
 
 
-=======
->>>>>>> develop
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
@@ -114,7 +111,8 @@ class _AppState extends State<App> with WidgetsBindingObserver {
             locale: _locale,
             supportedLocales: const [
               Locale('en', 'US'),
-              Locale('fr', 'FR'),],
+              Locale('fr', 'FR'),
+              Locale('de', 'DE'),],
               //to check if the local codes are the same to the device codes
                   localeResolutionCallback: (deviceLocale, supportedLocales) {
                     for (var locale in supportedLocales) {

@@ -87,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/langues/fr.json
+    - assets/langues/de.json
     - assets/langues/en.json
     - assets/images/drawer_header_background.png
     - assets/images/logo_grimm.png

@@ -9,6 +9,7 @@ class Language {
     return <Language>[
       Language(1, 'English', 'en'),
       Language(2, 'Francais', 'fr'),
+      Language(3, 'Deutsch', 'de'),
     ];
   }
 
@@ -22,6 +23,8 @@ class Language {
         return languageList()[0];
       case 'fr':
         return languageList()[1];
+       case 'de':
+        return languageList()[2];
       default:
         return languageList()[0];
     }

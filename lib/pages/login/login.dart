@@ -29,18 +29,19 @@ class _LoginState extends State<Login> {
     });
   }
 
+  Language? selectedLanguage = Language.getDefaultLanguage();
+
+  void _changeLanguage(Language language) async {
+    selectedLanguage = language;
+    Locale _locale = await setLocale(language.languageCode);
+    App.setLocale(context, _locale);
+  }
+
   late bool _passwordVisible;
 
   @override
   void initState() {
     _passwordVisible = false;
-  }
-  Language? selectedLanguage = Language.getDefaultLanguage();
-
-    void _changeLanguage(Language language) async {
-    selectedLanguage = language;
-    Locale _locale = await setLocale(language.languageCode);
-    App.setLocale(context, _locale);
   }
 
   @override
@@ -67,7 +68,8 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 30,
             ),
-            Text(getTranslated(context, 'title')!,
+            Text(
+              getTranslated(context, 'title')!,
               textAlign: TextAlign.left,
               style: const TextStyle(
                 fontFamily: "Raleway-ExtraBold",
@@ -189,24 +191,24 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Connexion réussie",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFF1CB731),
-                          ));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text(
+                          "Connexion réussie",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: Duration(seconds: 5),
+                        backgroundColor: Color(0xFF1CB731),
+                      ));
                       MenuScreen(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur dans votre mot de passe/mail",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));
+                        content: Text(
+                          "Erreur dans votre mot de passe/mail",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: Duration(seconds: 5),
+                        backgroundColor: Color(0xFFB71C1C),
+                      ));
                       //print(result.toString());
                     }
                   }
@@ -215,9 +217,6 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 20,
             ),
-<<<<<<< HEAD
-            
-=======
             TextButton(
               style: TextButton.styleFrom(
                 primary: Colors.black,
@@ -237,12 +236,59 @@ class _LoginState extends State<Login> {
                           "Email envoyé à l'adresse " + emailController.text)));
                 }
               },
-            )
->>>>>>> develop
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text("Choississez votre langue"),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  Language? newLanguage = Language(2, 'Francais', 'fr');
+                  _changeLanguage(newLanguage);
+                },
+                child: const Text("Français")),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  Language? newLanguage = Language(1, 'English', 'en');
+                  _changeLanguage(newLanguage);
+                },
+                child: const Text("English")),
+            const SizedBox(
+              height: 20,
+            ),
+            TextButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                onPressed: () async {
+                  Language? newLanguage = Language(3, 'Deutsch', 'de');
+                  _changeLanguage(newLanguage);
+                },
+                child: const Text("Deutsch")),
           ],
         ),
       ),
-    )
-    ;
+    );
   }
 }

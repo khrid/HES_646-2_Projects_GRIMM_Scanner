@@ -1,5 +1,6 @@
 {
     "title": "Welcome",
+    "validate_modif": "Validate modifications",
     "description": "Description",
     "format" : "Format : Address, Npa, City",
     "picture": "Picture",

@@ -1,6 +1,6 @@
 {
-    "title": "Bienvenue Robin",
-    "validate_modif": "Validez les modifications",
+    "title": "Willkommen",
+    "validate_modif": "Validate modifications",
     "description": "Description",
     "format" : "Format : Address, Npa, City",
     "picture": "Picture",
