@@ -66,7 +66,7 @@ class _EditItemState extends State<EditItemScreen> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: const EdgeInsets.all(50),
+        padding: const EdgeInsets.only(top: 20, right: 50, left: 50, bottom: 50),
           children: <Widget>[
             Text(
               getTranslated(context, 'title_item_modify')!,
@@ -266,7 +266,9 @@ class _EditItemState extends State<EditItemScreen> {
                 children: _customFields,
               ),
             ),
-            /***/
+             const SizedBox(
+              height: 20,
+            ),
             Container(
               child: Column(
                 children: [
@@ -293,6 +295,9 @@ class _EditItemState extends State<EditItemScreen> {
                   )
                 ],
               ),
+            ),
+             const SizedBox(
+              height: 20,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(

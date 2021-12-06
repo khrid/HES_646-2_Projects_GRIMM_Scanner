@@ -257,7 +257,9 @@ class _CreateItemState extends State<CreateItemScreen> {
                 children: _customFields,
               ),
             ),
-            /***/
+             const SizedBox(
+              height: 20,
+            ),
             Container(
               child: Column(
                 children: [
@@ -285,7 +287,9 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ],
               ),
             ),
-            /***/
+             const SizedBox(
+              height: 20,
+            ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,

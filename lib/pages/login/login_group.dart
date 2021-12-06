@@ -20,8 +20,14 @@ class _LoginGroupState extends State<LoginGroup> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
-    //print("testLoginGroupPage");
-    //print(user);
+    
+    if (user!.enable == false) 
+    {
+      makeLogout();
+    }
+
+
+
     return Scaffold(
         appBar: AppBar(
           title: Text(getTranslated(context, 'appbar_choose_role')!),
@@ -72,7 +78,8 @@ class _LoginGroupState extends State<LoginGroup> {
                               arguments: role);
                         }
                       },
-                      child: Text(getTranslated(context, 'administrator')!)),
+                      child: Text(getTranslated(context, 'administrator')!,
+                      textAlign:TextAlign.center),),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -95,7 +102,8 @@ class _LoginGroupState extends State<LoginGroup> {
                               arguments: role);
                         }
                       },
-                      child: Text(getTranslated(context, 'objectManager')!)),
+                      child: Text(getTranslated(context, 'objectManager')!,
+                      textAlign:TextAlign.center), ),
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -118,7 +126,8 @@ class _LoginGroupState extends State<LoginGroup> {
                               arguments: role);
                         }
                       },
-                      child: Text(getTranslated(context, 'membre')!)),
+                      child: Text(getTranslated(context, 'membre')!,
+                      textAlign:TextAlign.center),),
               ])
             ],
           ),
