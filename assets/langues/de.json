@@ -10,6 +10,7 @@
     "pw_forget": "Passwort vergessen?",
     "snackbar_error_complet_email": "Füllen Sie das E-Mail-Feld aus",
     "snackbar_email_send": "E-Mail wird an die Adresse ",
+    "snackbar_logout_force": "Konto deaktiviert, bitte wenden Sie sich an den Administrator",
   
     "appbar_choose_role": "Rolle auswählen",
 
@@ -81,6 +82,7 @@
     "category": "Kategorie",
     "appbar_category_edit": "Bearbeiten",
     "category_modify": "Bearbeite die Kategorie",
+    "snackbar_category_error_cant_delete": "Die Kategorie 'Non défini' kann nicht gelöscht werden.",
 
     "appbar_item_creation": "Erstellen",
     "title_item_creation": "Erstelle ein neues Objekt",
@@ -112,7 +114,7 @@
     "item_status_detail": "Status: ",
     "item_remark_detail": "Bemerkung: ",
     "item_category_detail": "Kategorie: ",
-    "button_borrow": "EMPRUNTER",
+    "button_borrow": "Leihen",
     "button_give_back": "Zurückgeben",
     "error_item_not_found": "Kein Objekt gefunden, bitte erneut scannen",
     "button_close": "Schließen",

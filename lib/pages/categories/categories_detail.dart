@@ -127,6 +127,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
       child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
         category.updateItemsDeletedCategory();
+        if (category.name != 'Non défini'){
         _categories.doc(category.id).delete();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(getTranslated(context, 'snackbar_category_delete')!),
@@ -134,6 +135,16 @@ class _CategoryDetailState extends State<CategoryDetail> {
         var nav = Navigator.of(context);
         nav.pop();
         nav.pop();
+        }
+        else {
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(getTranslated(context, 'snackbar_category_error_cant_delete')!),
+            duration: const Duration(seconds: 2)));
+            var nav = Navigator.of(context);
+            nav.pop();
+            nav.pop();
+        }
+        
       },
     );
 

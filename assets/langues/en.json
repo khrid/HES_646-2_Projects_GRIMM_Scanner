@@ -10,6 +10,7 @@
     "pw_forget": "Forgot your password?",
     "snackbar_error_complet_email": "Complete the email field",
     "snackbar_email_send": "Email sent to the address ",
+    "snackbar_logout_force": "Account disabled, please contact the administrator",
   
     "appbar_choose_role": "Choice of role",
 
@@ -81,6 +82,7 @@
     "category": "Category",
     "appbar_category_edit": "Edit",
     "category_modify": "Modify category",
+    "snackbar_category_error_cant_delete": "The category 'Non défini' cannot be deleted",
 
     "appbar_item_creation": "Creation",
     "title_item_creation": "Create a new object",

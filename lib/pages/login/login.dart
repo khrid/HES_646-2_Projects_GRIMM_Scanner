@@ -191,7 +191,7 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                     /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           getTranslated(
                               context, 'snackbar_connection_success')!,
@@ -199,7 +199,7 @@ class _LoginState extends State<Login> {
                         ),
                         duration: const Duration(seconds: 5),
                         backgroundColor: const Color(0xFF1CB731),
-                      ));
+                      ));*/
                       MenuScreen(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
