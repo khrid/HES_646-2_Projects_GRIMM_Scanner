@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/models/language.dart';
 import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
+
+import '../../main.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -25,6 +29,14 @@ class _LoginState extends State<Login> {
     });
   }
 
+  Language? selectedLanguage = Language.getDefaultLanguage();
+
+  void _changeLanguage(Language language) async {
+    selectedLanguage = language;
+    Locale _locale = await setLocale(language.languageCode);
+    App.setLocale(context, _locale);
+  }
+
   late bool _passwordVisible;
 
   @override
@@ -43,23 +55,23 @@ class _LoginState extends State<Login> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.only(top: 10, right: 50, left: 50),
+          padding: const EdgeInsets.only(top: 0, right: 40, left: 40),
           children: <Widget>[
             Image.asset(
               'assets/images/logo_grimm.png',
-              width: 250,
-              height: 250,
+              width: 200,
+              height: 200,
             ),
             const Padding(
               padding: EdgeInsets.only(top: 10.0),
             ),
             const SizedBox(
-              height: 30,
+              height: 20,
             ),
-            const Text(
-              'Bienvenue !',
+            Text(
+              getTranslated(context, 'title')!,
               textAlign: TextAlign.left,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: "Raleway-ExtraBold",
                 fontWeight: FontWeight.bold,
                 fontSize: 30.0,
@@ -67,11 +79,11 @@ class _LoginState extends State<Login> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
-            const Text(
-              'Entrez votre login',
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'login_enter')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontWeight: FontWeight.normal,
                 fontSize: 15.0,
@@ -81,19 +93,19 @@ class _LoginState extends State<Login> {
             TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Adresse mail',
-                  labelStyle: TextStyle(
+                decoration: InputDecoration(
+                  labelText: getTranslated(context, 'mail'),
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -103,19 +115,19 @@ class _LoginState extends State<Login> {
                 cursorColor: Theme.of(context).backgroundColor,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Entrez votre adresse mail correct';
+                    return getTranslated(context, 'error_mail_empty');
                   }
                   return null;
                 }),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
             TextFormField(
                 keyboardType: TextInputType.text,
                 controller: passwordController,
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Mot de passe',
+                  labelText: getTranslated(context, 'password'),
                   labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
@@ -151,12 +163,12 @@ class _LoginState extends State<Login> {
                 cursorColor: Theme.of(context).backgroundColor,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Entrez votre mot de passe correct';
+                    return getTranslated(context, 'error_pw_empty');
                   }
                   return null;
                 }),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -179,32 +191,30 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Connexion réussie",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFF1CB731),
-                          ));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_connection_success')!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFF1CB731),
+                      ));
                       MenuScreen(context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur dans votre mot de passe/mail",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(context, 'snackbar_connection_error')!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
                       //print(result.toString());
                     }
                   }
                 },
-                child: const Text('Se connecter')),
-            const SizedBox(
-              height: 20,
-            ),
+                child: Text(getTranslated(context, 'button_connect')!)),
             TextButton(
               style: TextButton.styleFrom(
                 primary: Colors.black,
@@ -212,19 +222,81 @@ class _LoginState extends State<Login> {
                     fontFamily: "Raleway-Regular", fontSize: 14.0),
                 padding: EdgeInsets.all(10.0),
               ),
-              child: Text('Mot de passe oublié ?'),
+              child: Text(getTranslated(context, 'pw_forget')!),
               onPressed: () async {
                 if (emailController.text == "") {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Compléter le champ email ")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(getTranslated(
+                          context, 'snackbar_error_complet_email')!)));
                 } else {
                   auth.sendPasswordResetEmail(email: emailController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          "Email envoyé à l'adresse " + emailController.text)));
+                          getTranslated(context, 'snackbar_email_send')! +
+                              emailController.text)));
                 }
               },
-            )
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(2, 'Francais', 'fr');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("Français")),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(1, 'English', 'en');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("English")),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            textStyle: const TextStyle(
+                                fontFamily: "Raleway-Regular", fontSize: 14.0),
+                            padding: const EdgeInsets.all(20.0),
+                          ),
+                          onPressed: () async {
+                            Language? newLanguage =
+                                Language(3, 'Deutsch', 'de');
+                            _changeLanguage(newLanguage);
+                          },
+                          child: const Text("Deutsch")),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),

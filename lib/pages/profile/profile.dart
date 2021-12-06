@@ -3,9 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
+import 'package:grimm_scanner/models/language.dart';
 import 'package:provider/provider.dart';
+
+import '../../main.dart';
 
 class ProfileAdmin extends StatefulWidget {
   static const routeName = "/profile";
@@ -51,7 +55,7 @@ class _ProfileAdminState extends State<ProfileAdmin> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Gestion du profil"),
+          title: Text(getTranslated(context, 'appbar_admin_profil')!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
@@ -60,9 +64,9 @@ class _ProfileAdminState extends State<ProfileAdmin> {
             key: _formKey,
             child:
                 ListView(padding: const EdgeInsets.all(50), children: <Widget>[
-              const Text(
-                "Modifiez les informations de votre profil",
-                style: TextStyle(
+              Text(
+                getTranslated(context, 'title_modify_profil')!,
+                style: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 30.0,
                   color: Colors.black,
@@ -76,25 +80,25 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 controller: userSurnameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le champ "Prénom" ne peut pas être vide';
+                    return getTranslated(context, 'error_firstname_empty')!;
                   } else {
                     return null;
                   }
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Prénom',
-                  labelStyle: TextStyle(
+                decoration: InputDecoration(
+                  labelText: getTranslated(context, 'firstname_simple')!,
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -110,25 +114,25 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                 controller: userNameController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le champ "Nom" ne peut pas être vide';
+                    return getTranslated(context, 'error_lastname_empty')!;
                   } else {
                     return null;
                   }
                 },
-                decoration: const InputDecoration(
-                  labelText: 'Nom',
-                  labelStyle: TextStyle(
+                decoration: InputDecoration(
+                  labelText: getTranslated(context, 'name_simple')!,
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -143,20 +147,20 @@ class _ProfileAdminState extends State<ProfileAdmin> {
               TextField(
                 controller: userEmailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  labelStyle: TextStyle(
+                decoration: InputDecoration(
+                  labelText: getTranslated(context, 'email_simple')!,
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -187,36 +191,38 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                         user.email = userEmailController.text;
                         _changeMail(userEmailController.text);
                         updateUser(user);
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Mise à jour du profil réussie",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFF1CB731),
-                          ));
-                      Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            getTranslated(context, 'snackbar_update_success')!,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          duration: const Duration(seconds: 5),
+                          backgroundColor: const Color(0xFF1CB731),
+                        ));
+                        Navigator.pop(context);
                       } else {
-                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur dans la saisie de votre adresse mail.",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));}
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                            getTranslated(context, 'snackbar_error_mail')!,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          duration: const Duration(seconds: 5),
+                          backgroundColor: const Color(0xFFB71C1C),
+                        ));
+                      }
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur lors de la mise à jour du profil.",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(context, 'snack_error_profile')!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
                     }
                   },
-                  child: const Text("Valider les modifications")),
+                  child:
+                      Text(getTranslated(context, 'button_validate_modif')!)),
             ])));
   }
 
