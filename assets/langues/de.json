@@ -28,7 +28,32 @@
     "snackbar_account_creation_sucess": "Konto erfolgreich erstellt",
     "snackbar_error_modify_pw_mail": "Bitte ändern Sie Ihre E-Mail/Passwort",
     "snackbar_error_one_group_min": "Bitte wählen Sie mindestens eine Gruppe aus.",
-    "button_validate": "BESTÄTIGEN"
+    "button_validate": "BESTÄTIGEN",
+
+    "appbar_user_update": "Bearbeite Benutzer",
+    "title_update_account": "Bearbeite die Benutzerinformationen",
+    "email_no_change": "E-Mail (nicht änderbar)",
+    "desactivitation": "Konto deaktivieren",
+    "activation": "Konto aktivieren",
+    "appbar_category_admin": "Kategorien verwalten",
+    "button_cancel": "Abbrechen",
+    "button_confirm": "Bestätigen",
+    "category_add": "Kategorie hinzugefügt",
+    "category_new": "Neue Kategorie:",
+    "error_category_empty": "Das Feld 'Kategorie' darf nicht leer sein",
+    "category_field_new": "Geben Sie die neue Kategorie ein",
+    
+    "appbar_category": "Kategorie",
+    "category_name": "Name der Kategorie: ",
+    "category_name_simple": "Name der Kategorie",
+    "error_category_not_found": "Keine Kategorie gefunden, Fehler. Bitte wenden Sie sich an die Entwickler",
+    "button_continue": "Weiter",
+    "snackbar_category_delete": "Kategorie gelöscht",
+    "category_delete_alert": "Kategorie gelöscht",
+    "category_are_you_sure": "Sind Sie sich wirklich sicher, dass Sie diese Kategorie löschen wollen?",
+    "category": "Kategorie",
+    "appbar_category_edit": "Bearbeiten",
+    "category_modify": "Bearbeite die Kategorie"
 
 
 }

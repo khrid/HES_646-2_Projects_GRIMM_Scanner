@@ -58,7 +58,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getTranslated(context, 'appbar_user_admin')!),
+        title: Text(getTranslated(context, 'appbar_user_creation')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -69,7 +69,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
           padding: const EdgeInsets.all(50),
           children: <Widget>[
             Text(
-              getTranslated(context, 'appbar_user_creation')!,
+              getTranslated(context, 'creation_new_user')!,
               style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,

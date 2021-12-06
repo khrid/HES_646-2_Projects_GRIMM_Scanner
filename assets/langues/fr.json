@@ -28,6 +28,31 @@
     "snackbar_account_creation_sucess": "Compte créé avec succès",
     "snackbar_error_modify_pw_mail": "Veuillez modifier votre mail/mot de passe",
     "snackbar_error_one_group_min": "Veuillez sélectionner un groupe au minimum.",
-    "button_validate": "VALIDER"
+    "button_validate": "VALIDER",
+
+    "appbar_user_update" : "Éditez utilisateur",
+    "title_update_account":"Modifiez les informations de l'utilisateur",
+    "email_no_change":"Email (non-modifiable)",
+    "desactivitation":"Désactiver le compte",
+    "activation":"Activer le compte",
+    "appbar_category_admin":"Gestion des catégories",
+    "button_cancel":"Annuler",
+    "button_confirm":"Confirmer",
+    "category_add":"Catégorie ajoutée",
+    "category_new":"Nouvelle catégorie :",
+    "error_category_empty":"Le champ 'Catégorie' ne peut pas être vide",
+    "category_field_new":"Entrez la nouvelle catégorie",
+    
+    "appbar_category":"Catégorie",
+    "category_name":"Nom de la catégorie : ",
+    "category_name_simple":"Nom de la catégorie",
+    "error_category_not_found":"Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs",
+    "button_continue":"Continuer",
+    "snackbar_category_delete":"Catégorie supprimée",
+    "category_delete_alert":"Suppression de la catégorie",
+    "category_are_you_sure":"Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?",
+    "category":"Catégorie",
+    "appbar_category_edit":"Edition",
+    "category_modify":"Modifiez la catégorie"
 
 }
