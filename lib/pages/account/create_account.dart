@@ -5,12 +5,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
 import 'accounts_admin.dart';
-
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -58,7 +58,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
   Widget build(context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Création d'un compte"),
+        title: Text(getTranslated(context, 'appbar_user_admin')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -68,9 +68,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
         child: ListView(
           padding: const EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Créez un nouvel utilisateur",
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'appbar_user_creation')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
                 color: Colors.black,
@@ -84,24 +84,24 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: firstnameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Prénom" ne peut pas être vide';
+                  return getTranslated(context, 'error_firstname_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Prénom',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'firstname_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -117,24 +117,24 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: lastnameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Nom" ne peut pas être vide';
+                  return getTranslated(context, 'error_lastname_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Nom',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'name_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -151,24 +151,24 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: emailController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Email" ne peut pas être vide';
+                  return getTranslated(context, 'error_email_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'email_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -185,24 +185,24 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               controller: passwordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Mot de passe" ne peut pas être vide';
+                  return getTranslated(context, 'error_password_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Mot de passe',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'password')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -215,7 +215,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               height: 20,
             ),
             CheckboxListTile(
-              title: const Text("Administrateur"),
+              title: Text(getTranslated(context, 'administrator')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -227,7 +227,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               },
             ),
             CheckboxListTile(
-              title: const Text("Responsable inventaire"),
+              title: Text(getTranslated(context, 'objectManager')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -239,7 +239,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               },
             ),
             CheckboxListTile(
-              title: const Text("Membre"),
+              title: Text(getTranslated(context, 'membre')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -290,28 +290,28 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                       if (result is GrimmUser) {
                         //print("User CREATE" + result.toString());
                         changeErrorMessage("");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Compte créé avec succès")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(getTranslated(context,
+                                'snackbar_account_creation_sucess')!)));
                         print("AFTER");
                         User _user = FirebaseAuth.instance.currentUser!;
                         print(_user);
-                       Navigator.pushNamed(context, Home.routeName);
-                       // Navigator.pop(context);
+                        Navigator.pushNamed(context, Home.routeName);
+                        // Navigator.pop(context);
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                                "Veuillez modifier votre mail/mot de passe")));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(getTranslated(
+                                context, 'snackbar_error_modify_pw_mail')!)));
                         changeErrorMessage(result.toString());
                       }
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "Veuillez sélectionner un groupe au minimum.")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(getTranslated(
+                            context, 'snackbar_error_one_group_min')!)));
                   }
                 },
-                child: const Text("VALIDER")),
+                child: Text(getTranslated(context, 'button_validate')!)),
             const SizedBox(
               height: 20,
             ),
