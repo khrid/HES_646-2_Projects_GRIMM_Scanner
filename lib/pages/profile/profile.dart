@@ -191,37 +191,40 @@ class _ProfileAdminState extends State<ProfileAdmin> {
                         user.email = userEmailController.text;
                         _changeMail(userEmailController.text);
                         updateUser(user);
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Mise à jour du profil réussie",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFF1CB731),
-                          ));
-                      Navigator.pop(context);
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            "Mise à jour du profil réussie",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          duration: Duration(seconds: 5),
+                          backgroundColor: Color(0xFF1CB731),
+                        ));
+                        Navigator.pop(context);
                       } else {
-                         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur dans la saisie de votre adresse mail.",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));}
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text(
+                            "Erreur dans la saisie de votre adresse mail.",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          duration: Duration(seconds: 5),
+                          backgroundColor: Color(0xFFB71C1C),
+                        ));
+                      }
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text(
-                              "Erreur lors de la mise à jour du profil.",
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            duration: Duration(seconds: 5),
-                            backgroundColor: Color(0xFFB71C1C),
-                          ));
+                        content: Text(
+                          "Erreur lors de la mise à jour du profil.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        duration: Duration(seconds: 5),
+                        backgroundColor: Color(0xFFB71C1C),
+                      ));
                     }
                   },
-                  child: Text(getTranslated(context, 'validate_modif')!)),
-                  
+                  child:
+                      Text(getTranslated(context, 'button_validate_modif')!)),
             ])));
   }
 

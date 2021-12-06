@@ -1,6 +1,33 @@
 {
     "title": "Bienvenue",
-    "login_saisie": "Entrez votre login",
+    "login_enter": "Entrez votre login",
+    "mail": "Adresse mail",
+    "error_mail_empty": "Entrez votre adresse mail correct",
+    "error_pw_empty": "Entrez votre mot de passe correct",
+    "snackbar_connection_success": "Connexion réussie",
+    "snackbar_connection_error": "Erreur dans votre mot de passe/mail",
+    "button_connect":"Se connecter",
+    "pw_forget":"Mot de passe oublié ?",
+    "snackbar_error_complet_email":"Compléter le champ email ",
+    "snackbar_email_send":"Email envoyé à l'adresse ",
+  
+    "appbar_choose_role": "Choix du rôle",
+
+    "appbar_menu": "Menu",
+    "button_users_admin": "Gérer les utilisateurs",
+    "error_simple": "Erreur",
+    "button_objects": "Gérer l'inventaire",
+    "button_rights": "Gérer les droits",
+    "button_scan": "Scanner",
+    "snackbar_error_qr_cancel": "Lecture QR annulée.",
+    "snackbar_wrong_qr": "QR code scanné non géré par cette application.",
+    "snackbar_cant_computer_scan": "La lecture QR n'est possible que depuis l'application native Android / iOS.",
+    "snackbar_connection_ok": "Connexion rétablie !",
+    "snackbar_no_connection": "Pas de connexion internet.",
+
+    "appbar_rights_admin": "Gestion des droits",
+    "snackbar_choose_only_one_role": "Veuillez sélectionner un rôle au minimum.",
+  
     "button_validate_modif": "Validez les modifications",
     "appbar_users_admin": "Gestion des utilisateurs",
     "appbar_user_admin": "Détails de l'utilisateur",
@@ -54,5 +81,7 @@
     "category":"Catégorie",
     "appbar_category_edit":"Edition",
     "category_modify":"Modifiez la catégorie"
+
+
 
 }

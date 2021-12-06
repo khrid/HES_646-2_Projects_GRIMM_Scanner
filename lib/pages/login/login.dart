@@ -81,7 +81,8 @@ class _LoginState extends State<Login> {
             const SizedBox(
               height: 10,
             ),
-            Text(getTranslated(context, 'login_saisie')!,
+            Text(
+              getTranslated(context, 'login_enter')!,
               style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontWeight: FontWeight.normal,
@@ -92,19 +93,19 @@ class _LoginState extends State<Login> {
             TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Adresse mail',
-                  labelStyle: TextStyle(
+                decoration: InputDecoration(
+                  labelText: getTranslated(context, 'mail'),
+                  labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
                     color: Colors.black,
                   ),
-                  enabledBorder: UnderlineInputBorder(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
                   ),
-                  focusedBorder: UnderlineInputBorder(
+                  focusedBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black,
                     ),
@@ -114,7 +115,7 @@ class _LoginState extends State<Login> {
                 cursorColor: Theme.of(context).backgroundColor,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Entrez votre adresse mail correct';
+                    return getTranslated(context, 'error_mail_empty');
                   }
                   return null;
                 }),
@@ -126,7 +127,7 @@ class _LoginState extends State<Login> {
                 controller: passwordController,
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
-                  labelText: 'Mot de passe',
+                  labelText: getTranslated(context, 'password'),
                   labelStyle: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 14.0,
@@ -162,7 +163,7 @@ class _LoginState extends State<Login> {
                 cursorColor: Theme.of(context).backgroundColor,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Entrez votre mot de passe correct';
+                    return getTranslated(context, 'error_pw_empty');
                   }
                   return null;
                 }),
@@ -190,30 +191,30 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          "Connexion réussie",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          getTranslated(
+                              context, 'snackbar_connection_success')!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        duration: Duration(seconds: 5),
-                        backgroundColor: Color(0xFF1CB731),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFF1CB731),
                       ));
                       MenuScreen(context);
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                          "Erreur dans votre mot de passe/mail",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          getTranslated(context, 'snackbar_connection_error')!,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        duration: Duration(seconds: 5),
-                        backgroundColor: Color(0xFFB71C1C),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFFB71C1C),
                       ));
                       //print(result.toString());
                     }
                   }
                 },
-                child: const Text('Se connecter')),
-
+                child: Text(getTranslated(context, 'button_connect')!)),
             TextButton(
               style: TextButton.styleFrom(
                 primary: Colors.black,
@@ -221,16 +222,18 @@ class _LoginState extends State<Login> {
                     fontFamily: "Raleway-Regular", fontSize: 14.0),
                 padding: EdgeInsets.all(10.0),
               ),
-              child: Text('Mot de passe oublié ?'),
+              child: Text(getTranslated(context, 'pw_forget')!),
               onPressed: () async {
                 if (emailController.text == "") {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Compléter le champ email ")));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(getTranslated(
+                          context, 'snackbar_error_complet_email')!)));
                 } else {
                   auth.sendPasswordResetEmail(email: emailController.text);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          "Email envoyé à l'adresse " + emailController.text)));
+                          getTranslated(context, 'snackbar_email_send')! +
+                              emailController.text)));
                 }
               },
             ),
@@ -239,8 +242,7 @@ class _LoginState extends State<Login> {
             ),
             Container(
               child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
