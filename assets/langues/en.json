@@ -80,6 +80,58 @@
     "category_are_you_sure": "Are you really sure you want to delete this category?",
     "category": "Category",
     "appbar_category_edit": "Edit",
-    "category_modify": "Modify category"
+    "category_modify": "Modify category",
+
+    "appbar_item_creation": "Creation",
+    "title_item_creation": "Create a new object",
+    "error_name_item_empty": "The 'Object name' field cannot be empty",
+    "item_name": "Name of the object",
+    "error_location_item_empty": "The 'Location' field cannot be empty",
+    "item_location": "Location",
+    "error_color_item_empty": "The 'Colour' field cannot be empty",
+    "color": "Color",
+    "error_remark_item_empty": "Remark field cannot be empty",
+    "remark": "Remark",
+    "button_add_field": "Add a field",
+    "snackbar_item_create_success": "Object created successfully",
+    "button_delete_field": "Remove a field",
+
+    "appbar_item_edit": "Edit",
+    "title_item_modify": "Modify object",
+
+    "appbar_item_list": "Inventory management",
+
+    "appbar_item_detail": "Detail of the object",
+    "snackbar_item_delete": "object deleted",
+    "alert_item_delete": "object deleted",
+    "item_delete__are_you_sure": "Are you really sure you want to delete this item?",
+    "available": "Available",
+    "unavailable": "Borrowed",
+    "item_location_detail": "Location: ",
+    "item_color_detail": "Color: ",
+    "item_status_detail": "Status: ",
+    "item_remark_detail": "Note: ",
+    "item_category_detail": "Category: ",
+    "button_borrow": "BORROW",
+    "button_give_back": "RETURN",
+    "error_item_not_found": "No item found, scan again",
+    "button_close": "Close",
+
+    "appbar_history": "Borrowing history",
+    "error_empty": "not filled in",
+    "borrow": "Borrowing",
+    "return": "Return",
+
+    "title_field": "Label",
+    "value": "Value",
+
+    "button_items_admin": "Manage items",
+    "button_categories_admin": "Manage categories",
+
+    "appbar_admin_profile": "Profile management",
+    "title_modify_profile": "Modify your profile information",
+    "snackbar_update_success": "Profile update successful",
+    "snackbar_error_mail": "Error in entering your email address.",
+    "snack_error_profile": "Error updating profile."
 
 }

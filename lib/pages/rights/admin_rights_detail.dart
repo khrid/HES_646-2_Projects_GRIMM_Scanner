@@ -85,7 +85,7 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
                   padding: const EdgeInsets.all(20),
                   children: <Widget>[
                     Text(
-                      right.description,
+                      '"' + right.description + '"',
                       style: const TextStyle(
                           fontFamily: "Raleway-Regular", fontSize: 25.0),
                     ),

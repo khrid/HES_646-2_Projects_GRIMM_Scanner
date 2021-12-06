@@ -18,7 +18,7 @@
     "error_simple": "Fehler",
     "button_objects": "Inventar verwalten",
     "button_rights": "Rechte verwalten",
-    "button_scan": "Scanner",
+    "button_scan": "Scannen",
     "snackbar_error_qr_cancel": "QR-Lesung abgebrochen",
     "snackbar_wrong_qr": "Gescannter QR-Code wird von dieser Anwendung nicht verarbeitet.",
     "snackbar_cant_computer_scan": "QR-Scanning ist nur über die native Android/iOS-App möglich.",
@@ -80,7 +80,59 @@
     "category_are_you_sure": "Sind Sie sich wirklich sicher, dass Sie diese Kategorie löschen wollen?",
     "category": "Kategorie",
     "appbar_category_edit": "Bearbeiten",
-    "category_modify": "Bearbeite die Kategorie"
+    "category_modify": "Bearbeite die Kategorie",
+
+    "appbar_item_creation": "Erstellen",
+    "title_item_creation": "Erstelle ein neues Objekt",
+    "error_name_item_empty": "Das Feld 'Objektname' darf nicht leer sein",
+    "item_name": "Name des Objekts",
+    "error_location_item_empty": "Das Feld 'Standort' kann nicht leer sein",
+    "item_location": "Standort",
+    "error_color_item_empty": "Das Feld 'Farbe' kann nicht leer sein",
+    "color": "Farbe",
+    "error_remark_item_empty": "Das Feld 'Bemerkung' darf nicht leer sein",
+    "remark": "Hinweis",
+    "button_add_field": "Ein Feld hinzufügen",
+    "snackbar_item_create_success": "Objekt erfolgreich erstellt",
+    "button_delete_field": "Feld entfernen",
+
+    "appbar_item_edit": "Bearbeiten",
+    "title_item_modify": "Bearbeite das Objekt",
+
+    "appbar_item_list": "Inventarverwaltung",
+
+    "appbar_item_detail": "Objektdetails",
+    "snackbar_item_delete": "Objekt gelöscht",
+    "alert_item_delete": "Objekt gelöscht",
+    "item_delete__are_you_sure": "Sind Sie sich wirklich sicher, dass Sie dieses Objekt löschen wollen?",
+    "available": "Verfügbar",
+    "unavailable": "Geliehen",
+    "item_location_detail": "Standort: ",
+    "item_color_detail": "Farbe: ",
+    "item_status_detail": "Status: ",
+    "item_remark_detail": "Bemerkung: ",
+    "item_category_detail": "Kategorie: ",
+    "button_borrow": "EMPRUNTER",
+    "button_give_back": "Zurückgeben",
+    "error_item_not_found": "Kein Objekt gefunden, bitte erneut scannen",
+    "button_close": "Schließen",
+
+    "appbar_history": "Verlauf der Ausleihungen",
+    "error_empty": "nicht ausgefüllt",
+    "borrow": "Ausleihe",
+    "return": "Rückgabe",
+
+    "title_field": "Beschriftung",
+    "value": "Wert",
+
+    "button_items_admin": "Artikel verwalten",
+    "button_categories_admin": "Kategorien verwalten",
+
+    "appbar_admin_profil": "Profil verwalten",
+    "title_modify_profil": "Bearbeiten Sie Ihre Profilinformationen",
+    "snackbar_update_success": "Profil erfolgreich aktualisiert",
+    "snackbar_error_mail": "Fehler bei der Eingabe Ihrer E-Mail-Adresse",
+    "snack_error_profile": "Fehler beim Aktualisieren des Profils"
 
 
 }

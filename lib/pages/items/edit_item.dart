@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
 import 'package:grimm_scanner/widgets/custom_field_widget.dart';
@@ -57,7 +58,7 @@ class _EditItemState extends State<EditItemScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edition"),
+        title: Text(getTranslated(context, 'appbar_item_edit')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -67,9 +68,9 @@ class _EditItemState extends State<EditItemScreen> {
         child: ListView(
           padding: const EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Modifiez l'objet",
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'title_item_modify')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
                 color: Colors.black,
@@ -83,24 +84,24 @@ class _EditItemState extends State<EditItemScreen> {
               controller: descriptionController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Nom de l'objet' ne peut pas être vide";
+                  return getTranslated(context, 'error_name_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: "Nom de l'objet",
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'item_name')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -116,24 +117,24 @@ class _EditItemState extends State<EditItemScreen> {
               controller: locationController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Emplacement' ne peut pas être vide";
+                  return getTranslated(context, 'error_location_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Emplacement',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'item_location')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -149,24 +150,24 @@ class _EditItemState extends State<EditItemScreen> {
               controller: colorController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Couleur' ne peut pas être vide";
+                  return getTranslated(context, 'error_color_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: "Couleur",
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'color')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -202,11 +203,11 @@ class _EditItemState extends State<EditItemScreen> {
                     firstLoad = 0;
                     return DropdownButtonFormField<String>(
                       value: dropdownValue,
-                      hint: const Text("Category"),
+                      hint: Text(getTranslated(context, 'category')!),
                       iconSize: 24,
                       //elevation: 16,
-                      decoration: const InputDecoration(
-                        labelText: 'Catégorie',
+                      decoration: InputDecoration(
+                        labelText: getTranslated(context, 'category')!,
                       ),
                       style: const TextStyle(color: Colors.black),
                       items: categories
@@ -231,24 +232,24 @@ class _EditItemState extends State<EditItemScreen> {
               controller: remarkController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Remarque" ne peut pas être vide';
+                  return getTranslated(context, 'error_remark_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Remarque',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'remark')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -284,7 +285,8 @@ class _EditItemState extends State<EditItemScreen> {
                                   customFieldKey: "", customFieldValue: ""));
                             });
                           },
-                          child: const Text("Ajouter un champ")),
+                          child: Text(
+                              getTranslated(context, 'button_add_field')!)),
                       const Spacer(),
                       getRemoveCustomFieldButton()
                     ],
@@ -326,7 +328,7 @@ class _EditItemState extends State<EditItemScreen> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text("VALIDER")),
+                child: Text(getTranslated(context, 'button_validate')!)),
             const SizedBox(
               height: 20,
             ),
@@ -341,8 +343,7 @@ class _EditItemState extends State<EditItemScreen> {
       return ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary: Theme.of(context).primaryColor,
-            side: const BorderSide(
-                width: 1.0, color: Colors.black),
+            side: const BorderSide(width: 1.0, color: Colors.black),
           ),
           onPressed: () {
             print("click");
@@ -350,7 +351,7 @@ class _EditItemState extends State<EditItemScreen> {
               _customFields.removeLast();
             });
           },
-          child: const Text("Enlever un champ"));
+          child: Text(getTranslated(context, 'button_delete_field')!));
     }
     return const SizedBox(width: 0, height: 0);
   }

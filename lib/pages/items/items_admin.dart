@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 
 import 'create_item.dart';
@@ -29,7 +30,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Gestion de l'inventaire"),
+          title: Text(getTranslated(context, 'appbar_item_list')!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),

@@ -80,8 +80,58 @@
     "category_are_you_sure":"Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?",
     "category":"Catégorie",
     "appbar_category_edit":"Edition",
-    "category_modify":"Modifiez la catégorie"
+    "category_modify":"Modifiez la catégorie",
 
+    "appbar_item_creation": "Création",
+    "title_item_creation": "Créez un nouvel objet",
+    "error_name_item_empty": "Le champ 'Nom de l'objet' ne peut pas être vide",
+    "item_name": "Nom de l'objet",
+    "error_location_item_empty": "Le champ 'Emplacement' ne peut pas être vid",
+    "item_location": "Emplacement",
+    "error_color_item_empty": "Le champ 'Couleur' ne peut pas être vide",
+    "color": "Couleur",
+    "error_remark_item_empty": "Le champ 'Remarque' ne peut pas être vide",
+    "remark": "Remarque",
+    "button_add_field": "Ajouter un champ",
+    "snackbar_item_create_success": "Objet créé avec succès",
+    "button_delete_field": "Enlever un champ",
 
+    "appbar_item_edit": "Edition",
+    "title_item_modify": "Modifiez l'objet",
+
+    "appbar_item_list": "Gestion de l'inventaire",
+
+    "appbar_item_detail": "Détail de l'objet",
+    "snackbar_item_delete": "Objet supprimé",
+    "alert_item_delete": "Suppression de l'objet",
+    "item_delete__are_you_sure": "Êtes-vous vraiment sûr de vouloir supprimer cet objet ?",
+    "available": "Disponible",
+    "unavailable": "Emprunté",
+    "item_location_detail": "Emplacement : ",
+    "item_color_detail": "Couleur : ",
+    "item_status_detail": "Statut : ",
+    "item_remark_detail": "Remarque : ",
+    "item_category_detail": "Catégorie : ",
+    "button_borrow": "EMPRUNTER",
+    "button_give_back": "RETOURNER",
+    "error_item_not_found": "Pas d'objet trouvé, scannez à nouveau",
+    "button_close": "Fermer",
+
+    "appbar_history": "Historique des emprunts",
+    "error_empty": "pas renseigné",
+    "borrow": "Emprunt",
+    "return": "Retour",
+
+    "title_field": "Libellé",
+    "value": "Valeur",
+
+    "button_items_admin": "Gérer les articles",
+    "button_categories_admin": "Gérer les catégories",
+
+    "appbar_admin_profil": "Gestion du profil",
+    "title_modify_profil": "Modifiez les informations de votre profil",
+    "snackbar_update_success": "Mise à jour du profil réussie",
+    "snackbar_error_mail": "Erreur dans la saisie de votre adresse mail.",
+    "snack_error_profile": "Erreur lors de la mise à jour du profil."
 
 }

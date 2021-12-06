@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_history.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
@@ -30,7 +31,7 @@ class _ItemHistoryState extends State<ItemHistory> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Historique des emprunts"),
+          title: Text(getTranslated(context, 'appbar_history')!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
@@ -106,13 +107,15 @@ class _ItemHistoryState extends State<ItemHistory> {
                 },
               );
             } else {
-              returnText = const Text("pas renseigné\n");
+              returnText = Text(getTranslated(context, 'error_empty')!);
             }
 
             return SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: CardHistory(borrowText: borrowText, returnText: returnText,)
-            );
+                width: MediaQuery.of(context).size.width,
+                child: CardHistory(
+                  borrowText: borrowText,
+                  returnText: returnText,
+                ));
           }).toList(),
         )
       ]);
