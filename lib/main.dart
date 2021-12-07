@@ -9,6 +9,7 @@ import 'package:grimm_scanner/pages/categories/categories_detail.dart';
 import 'package:grimm_scanner/pages/account/create_account.dart';
 import 'package:grimm_scanner/pages/categories/edit_category.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/items/items_filter.dart';
 import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/pages/items/items_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
@@ -142,6 +143,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               ItemHistory.routeName: (context) => const ItemHistory(),
               ItemsManageMenu.routeName: (context) => const ItemsManageMenu(),
               ItemsAdmin.routeName: (context) => const ItemsAdmin(),
+              ItemsFilter.routeName: (context) => const ItemsFilter(),
               CategoriesAdmin.routeName: (context) => const CategoriesAdmin(),
               CategoryDetail.routeName: (context) => const CategoryDetail(),
               CategoryUpdate.routeName: (context) => const CategoryUpdate(),
