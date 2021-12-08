@@ -8,6 +8,7 @@
     "snackbar_connection_error": "Erreur dans votre mot de passe/mail",
     "button_connect":"Se connecter",
     "pw_forget":"Mot de passe oublié ?",
+    "button_create_account": "S'inscrire",
     "snackbar_error_complet_email":"Compléter le champ email ",
     "snackbar_email_send":"Email envoyé à l'adresse ",
     "snackbar_logout_force": "Compte désactivé, veuillez contacter l'administrateur",

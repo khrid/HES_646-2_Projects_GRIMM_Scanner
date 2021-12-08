@@ -8,6 +8,7 @@
     "snackbar_connection_error": "Error in your password/mail",
     "button_connect": "Connect",
     "pw_forget": "Forgot your password?",
+    "button_create_account": "Register",
     "snackbar_error_complet_email": "Complete the email field",
     "snackbar_email_send": "Email sent to the address ",
     "snackbar_logout_force": "Account disabled, please contact the administrator",
