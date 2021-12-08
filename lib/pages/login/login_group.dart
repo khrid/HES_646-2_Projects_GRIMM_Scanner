@@ -138,7 +138,8 @@ class _LoginGroupState extends State<LoginGroup> {
   makeLogout() async {
     await _auth.signOut();
      //Navigator.pushNamed(context, '/');
-     Navigator.pop(context, '/');
+     //Navigator.pop(context, '/');
+     Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
     //print('Out');
   }
 
