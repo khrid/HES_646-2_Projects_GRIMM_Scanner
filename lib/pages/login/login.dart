@@ -80,6 +80,7 @@ class _LoginState extends State<Login> {
             TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
+                showCursor: true,
                 decoration: const InputDecoration(
                   labelText: 'Adresse mail',
                   labelStyle: TextStyle(
@@ -181,6 +182,7 @@ class _LoginState extends State<Login> {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text("Connexion réussie")));
                       MenuScreen(context);
+                      passwordController.text = "";
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content:
