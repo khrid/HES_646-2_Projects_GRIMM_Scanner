@@ -110,6 +110,7 @@
     "item_delete__are_you_sure": "Are you really sure you want to delete this item?",
     "available": "Available",
     "unavailable": "Borrowed",
+    "availability": "Availability",
     "item_location_detail": "Location: ",
     "item_color_detail": "Color: ",
     "item_status_detail": "Status: ",
@@ -135,6 +136,10 @@
     "title_modify_profile": "Modify your profile information",
     "snackbar_update_success": "Profile update successful",
     "snackbar_error_mail": "Error in entering your email address.",
-    "snack_error_profile": "Error updating profile."
+    "snack_error_profile": "Error updating profile.",
+    "snackbar_error_max_10_cat_or_all": "Max 10 categories (or all).",
+
+    "apply": "Apply",
+    "filter": "Filter"
 
 }

@@ -109,6 +109,7 @@
     "alert_item_delete": "Objekt gelöscht",
     "item_delete__are_you_sure": "Sind Sie sich wirklich sicher, dass Sie dieses Objekt löschen wollen?",
     "available": "Verfügbar",
+    "availability": "Verfügbarkeit",
     "unavailable": "Geliehen",
     "item_location_detail": "Standort: ",
     "item_color_detail": "Farbe: ",
@@ -135,7 +136,11 @@
     "title_modify_profil": "Bearbeiten Sie Ihre Profilinformationen",
     "snackbar_update_success": "Profil erfolgreich aktualisiert",
     "snackbar_error_mail": "Fehler bei der Eingabe Ihrer E-Mail-Adresse",
-    "snack_error_profile": "Fehler beim Aktualisieren des Profils"
+    "snack_error_profile": "Fehler beim Aktualisieren des Profils",
+    "snackbar_error_max_10_cat_or_all": "Max. 10 Kategorien (oder alle)..",
+
+    "apply": "Anwenden",
+    "filter": "Filtern"
 
 
 }

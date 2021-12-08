@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
 import 'package:grimm_scanner/pages/items/items_admin.dart';
 
@@ -20,6 +21,7 @@ class _ItemsFilterState extends State<ItemsFilter> {
   late bool borrowed = true;
   late var categoryStatus = {};
   bool firstbuild = true;
+  late var tmpCat = [];
   late String role;
   late Function refresh;
 
@@ -36,9 +38,38 @@ class _ItemsFilterState extends State<ItemsFilter> {
     //role = ModalRoute.of(context)!.settings.arguments ?? "";
     //refresh = arg['refresh'] ?? "";
 
-    final arguments = ModalRoute.of(context)!.settings.arguments as LinkedHashSet;
-    role = arguments.first; // very ugly but it works for now
-    refresh = arguments.last;
+    if(firstbuild) {
+      final arguments = [];
+      arguments.addAll(ModalRoute.of(context)!.settings.arguments as LinkedHashSet);
+      print(arguments.elementAt(3).runtimeType);
+      role = arguments.elementAt(0);
+      refresh = arguments.elementAt(1);
+      bool? temp = arguments.elementAt(2);
+      tmpCat = arguments.elementAt(3);
+      for (var element in tmpCat) {
+        categoryStatus.putIfAbsent(element, () => 1);
+      }
+
+      print(tmpCat);
+
+      if(temp == null) {
+        setState(() {
+          available = true;
+          borrowed = true;
+        });
+      } else {
+        if(temp) {
+          setState(() {
+            borrowed = false;
+          });
+        } else {
+          setState(() {
+            available = false;
+          });
+        }
+      }
+    }
+
 
     return Scaffold(
         appBar: AppBar(
@@ -50,11 +81,11 @@ class _ItemsFilterState extends State<ItemsFilter> {
         body: SingleChildScrollView(
             child: Center(
                 child: Column(children: [
-                  
-          const Text("Disponiblité",
+
+          Text(getTranslated(context, "availability")!,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold)),
@@ -63,7 +94,7 @@ class _ItemsFilterState extends State<ItemsFilter> {
             children: [
               FilterChip(
                 selected: available,
-                label: const Text('Disponible'),
+                label: Text(getTranslated(context, "available")!),
                 onSelected: (bool value) {
                   setState(() {
                     available = !available;
@@ -75,7 +106,7 @@ class _ItemsFilterState extends State<ItemsFilter> {
               ),
               FilterChip(
                 selected: borrowed,
-                label: const Text('Emprunté'),
+                label: Text(getTranslated(context, "unavailable")!),
                 onSelected: (bool value) {
                   setState(() {
                     borrowed = !borrowed;
@@ -87,10 +118,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
           const SizedBox(
             height: 20,
           ),
-          const Text("Catégorie",
+          Text(getTranslated(context, "category")!,
               overflow: TextOverflow.fade,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20,
                   fontWeight: FontWeight.bold)),
@@ -113,11 +144,11 @@ class _ItemsFilterState extends State<ItemsFilter> {
             children: [
               ElevatedButton(onPressed: () {
                 applyFiltersToList();
-              }, child: const Text("Appliquer")),
+              }, child: Text(getTranslated(context, "apply")!)),
               const SizedBox(
                 width: 20,
               ),
-              const ElevatedButton(onPressed: null, child: Text("Reset")),
+              //const ElevatedButton(onPressed: null, child: Text("Reset")),
             ],
           ),
         ]))));
@@ -130,7 +161,11 @@ class _ItemsFilterState extends State<ItemsFilter> {
       for (var element in snapshot.data!.docs) {
         GrimmCategory grimmCategory = GrimmCategory.fromJson(element);
         if (firstbuild) {
-          categoryStatus.putIfAbsent(grimmCategory.id, () => 1);
+          if(tmpCat.isNotEmpty) {
+            categoryStatus.putIfAbsent(grimmCategory.id, () => 0);
+          } else {
+            categoryStatus.putIfAbsent(grimmCategory.id, () => 1);
+          }
         }
         chips.add(FilterChip(
           selected: (categoryStatus[grimmCategory.id] == 1) ? true : false,
@@ -174,7 +209,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
     } else if(!available && borrowed) {
       print("only borrowed");
       objectStatus = false;
+    } else {
+      objectStatus = null;
     }
+    print(objectStatus);
     List categoryToDisplay = [];
     categoryStatus.forEach((key, value) {
       if(value == 1) {
@@ -191,6 +229,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
       refresh(objectStatus, categoryToDisplay);
       Navigator.of(context).pushReplacementNamed(ItemsAdmin.routeName, arguments: {'role': role, 'available': available});
       Navigator.of(context).pop();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(getTranslated(
+              context, 'snackbar_error_max_10_cat_or_all')!)));
     }
   }
 }
