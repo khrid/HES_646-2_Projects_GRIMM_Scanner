@@ -71,8 +71,6 @@ class _ItemDetailState extends State<ItemDetail> {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     qrcode = arg['qrCode'];
     role = arg['role'] ?? "null";
-
-    //print("Role : " + role);
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
     if (qrcode == "NULL") {
@@ -213,7 +211,6 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   void showHistory() {
-    //print("ItemDetail - showHistory - " + grimmItem.toString());
     Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
   }
 

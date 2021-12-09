@@ -82,13 +82,8 @@ class GrimmUser {
     }
   }
 
-  /// Save the user info to Firebase
-  /*Future<void> saveToFirestore() async {
-    await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
-  }*/
 
   Future<void> updateFirestore() async {
-    //print(this);
     await FirebaseFirestore.instance.collection("users").doc(uid).set(toJson());
   }
 

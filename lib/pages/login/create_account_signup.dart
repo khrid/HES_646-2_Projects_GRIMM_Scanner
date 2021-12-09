@@ -2,16 +2,13 @@
 * Classe pour l'écran de création d'un nouveau compte 
 * Lié directement avec la firebase Authentification
 */
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
 import 'login_group.dart';
-
 
 class CreateNewAccountScreen extends StatefulWidget {
   static const routeName = '/create_new_user';
@@ -55,7 +52,7 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
     });
   }
 
-    MenuScreen(BuildContext context) {
+  MenuScreen(BuildContext context) {
     setState(() {
       Navigator.pushNamed(context, LoginGroup.routeName);
     });
@@ -73,7 +70,7 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
       body: Form(
         key: _key,
         child: ListView(
-           padding: const EdgeInsets.only(top: 20, right: 40, left: 40),
+          padding: const EdgeInsets.only(top: 20, right: 40, left: 40),
           children: <Widget>[
             Text(
               getTranslated(context, 'creation_new_user')!,
@@ -221,7 +218,6 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
             const SizedBox(
               height: 40,
             ),
-            
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
@@ -231,60 +227,56 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
                   padding: const EdgeInsets.all(20.0),
                 ),
                 onPressed: () async {
-                  // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
                   var tab = [];
                   tab.add("Member");
-                  print(lastnameController.text);
-                  print(firstnameController.text);
-                  print(emailController.text);
-                  print(tab);
-                  //User _user = FirebaseAuth.instance.currentUser!;
-                    if (_key.currentState!.validate()) {
-                      GrimmUser grimmUser = GrimmUser(
-                          name: lastnameController.text,
-                          firstname: firstnameController.text,
-                          email: emailController.text,
-                          groups: tab);
-                      Object? result = await _auth.signUp(
-                          email: emailController.text,
-                          password: passwordController.text,
-                          grimmUser: grimmUser);
-                          print(result);
-                      if (result is GrimmUser) {
-                        //print("User CREATE" + result.toString());
-                        changeErrorMessage("");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(getTranslated(context,
-                                'snackbar_account_creation_sucess')!)));
-                        print("AFTER");
-                        User _user = FirebaseAuth.instance.currentUser!;
-                        print(_user);
-                        await Future.delayed(
+                  if (_key.currentState!.validate()) {
+                    GrimmUser grimmUser = GrimmUser(
+                        name: lastnameController.text,
+                        firstname: firstnameController.text,
+                        email: emailController.text,
+                        groups: tab);
+                    Object? result = await _auth.signUp(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        grimmUser: grimmUser);
+                    if (result is GrimmUser) {
+                      changeErrorMessage("");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_account_creation_sucess')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFF1CB731),
+                      ));
+                      await Future.delayed(
                           const Duration(milliseconds: 300), () {});
-                        Navigator.pushNamed(context, LoginGroup.routeName);
-                        // Navigator.pop(context);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(getTranslated(
-                                context, 'snackbar_error_modify_pw_mail')!)));
-                        changeErrorMessage(result.toString());
-                      }
+                      Navigator.pushNamed(context, LoginGroup.routeName);
+                      // Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_error_modify_pw_mail')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
+                      changeErrorMessage(result.toString());
                     }
+                  }
                 },
                 child: Text(getTranslated(context, 'button_validate')!)),
-                   const SizedBox(
+            const SizedBox(
               height: 40,
             ),
-                Image.asset(
+            Image.asset(
               'assets/images/logo_grimm.png',
               width: 100,
               height: 100,
             ),
-           
           ],
-          
         ),
-        
       ),
     );
   }

@@ -12,9 +12,10 @@
     "snackbar_error_complet_email": "Complete the email field",
     "snackbar_email_send": "Email sent to the address ",
     "snackbar_logout_force": "Account disabled, please contact the administrator",
+    "button_item_list": "List of items",
   
     "appbar_choose_role": "Choice of role",
-
+    "appbar_filtrer": "Filters",
     "appbar_menu": "Menu",
     "button_users_admin": "Manage users",
     "error_simple": "Error",

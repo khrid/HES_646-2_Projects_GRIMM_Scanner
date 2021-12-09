@@ -54,19 +54,16 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
 
   Widget buildRightsDetail(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     var tab = [];
-
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
-        //print("salut");
-        //print(right.toString());
         if (firstLoad == 1) {
           if (right.permissions.contains("Administrator")) isAdmin = true;
           if (right.permissions.contains("Member")) isMember = true;
-          if (right.permissions.contains("ObjectManager"))
+          if (right.permissions.contains("ObjectManager")) {
             isObjectManager = true;
+          }
           firstLoad = 0;
         }
 
@@ -155,13 +152,17 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
                           if (tab.isNotEmpty) {
                             if (_formKey.currentState!.validate()) {
                               updateRight(right);
-                              // print("Changements effectués");
                               Navigator.pop(context);
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(getTranslated(context,
-                                    'snackbar_choose_only_one_role')!)));
+                              content: Text(
+                                getTranslated(
+                                    context, 'snackbar_choose_only_one_role')!,
+                              ),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: const Color(0xFFB71C1C),
+                            ));
                           }
                         },
                         child: Text(

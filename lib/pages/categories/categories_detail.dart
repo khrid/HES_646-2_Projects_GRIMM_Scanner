@@ -26,7 +26,6 @@ class _CategoryDetailState extends State<CategoryDetail> {
   Widget build(BuildContext context) {
     String categoryID;
     categoryID = ModalRoute.of(context)!.settings.arguments as String;
-    //print(categoryID);
 
     return Scaffold(
       appBar: AppBar(
@@ -79,12 +78,9 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
   Widget buildUserDetails(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
-
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         category = GrimmCategory.fromJson(snapshot.data);
-        //print(category);
 
         return Container(
             margin: const EdgeInsets.all(0.0),
@@ -127,24 +123,30 @@ class _CategoryDetailState extends State<CategoryDetail> {
       child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
         category.updateItemsDeletedCategory();
-        if (category.name != 'Non défini'){
-        _categories.doc(category.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(getTranslated(context, 'snackbar_category_delete')!),
-            duration: const Duration(seconds: 2)));
-        var nav = Navigator.of(context);
-        nav.pop();
-        nav.pop();
+        if (category.name != 'Non défini') {
+          _categories.doc(category.id).delete();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              getTranslated(context, 'snackbar_category_delete')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFF1CB731),
+          ));
+          var nav = Navigator.of(context);
+          nav.pop();
+          nav.pop();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              getTranslated(context, 'snackbar_category_error_cant_delete')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
+          var nav = Navigator.of(context);
+          nav.pop();
+          nav.pop();
         }
-        else {
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(getTranslated(context, 'snackbar_category_error_cant_delete')!),
-            duration: const Duration(seconds: 2)));
-            var nav = Navigator.of(context);
-            nav.pop();
-            nav.pop();
-        }
-        
       },
     );
 

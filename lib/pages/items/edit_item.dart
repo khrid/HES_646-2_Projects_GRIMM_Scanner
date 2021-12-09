@@ -44,7 +44,6 @@ class _EditItemState extends State<EditItemScreen> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, ItemDetail.routeName, (Route<dynamic> route) => false));
     }
-    //print("EditItemScreen - " + grimmItem.toString());
 
     descriptionController.text = grimmItem.description;
     locationController.text = grimmItem.location;

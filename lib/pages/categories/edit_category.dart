@@ -36,8 +36,6 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, CategoriesAdmin.routeName, (Route<dynamic> route) => false));
     }
-    //print("EditItemScreen - " + grimmCategory.toString());
-
     categoryNameController.text = grimmCategory.name;
 
     return Scaffold(
@@ -126,7 +124,6 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
                 onPressed: () async {
                   {
                     grimmCategory.name = categoryNameController.text;
-                    //print("End " + grimmCategory.toString());
                     grimmCategory.updateFirestore();
                     Navigator.of(context).pop();
                   }

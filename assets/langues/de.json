@@ -12,9 +12,10 @@
     "snackbar_error_complet_email": "Füllen Sie das E-Mail-Feld aus",
     "snackbar_email_send": "E-Mail wird an die Adresse ",
     "snackbar_logout_force": "Konto deaktiviert, bitte wenden Sie sich an den Administrator",
-  
-    "appbar_choose_role": "Rolle auswählen",
+    "button_item_list": "Liste der Objekte",
 
+    "appbar_choose_role": "Rolle auswählen",
+    "appbar_filtrer": "Filter",
     "appbar_menu": "Menü",
     "button_users_admin": "Benutzer verwalten",
     "error_simple": "Fehler",

@@ -18,6 +18,7 @@ import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'account/accounts_admin.dart';
+import 'items/items_admin.dart';
 import 'items/items_manage_menu.dart';
 
 class Home extends StatefulWidget {
@@ -47,7 +48,6 @@ class _HomeState extends State<Home> {
     prefs.setBool("first_time", true); // activer pour reset le first_time
     bool isFirstTime = prefs.getBool('first_time') ?? false;
     if (isFirstTime) {
-      //print('premier lancement, on switch la variable');
       setState(() {
         _firstLaunch = true;
       });
@@ -55,7 +55,6 @@ class _HomeState extends State<Home> {
       // si on a internet lors du premier lancement
       bool hasInternet = await InternetConnectionChecker().hasConnection;
       if (!await InternetConnectionChecker().hasConnection) {
-        //print('First launch but no Internet, sync needed later');
         prefs.setBool("sync_needed", true);
       } else {
         forceLocalSync();
@@ -66,7 +65,6 @@ class _HomeState extends State<Home> {
   }
 
   void forceLocalSync() {
-    //print('Force sync Firebase');
     FirebaseFirestore.instance.collection("items").snapshots().toList();
     FirebaseFirestore.instance.collection("items").get();
     FirebaseFirestore.instance.collection("category").snapshots().toList();
@@ -89,8 +87,6 @@ class _HomeState extends State<Home> {
   void setPersistenceEnabled() async {
     FirebaseFirestore.instance.settings =
         const Settings(persistenceEnabled: true);
-    /*print("isPersistenceEnabled : " +
-        FirebaseFirestore.instance.settings.persistenceEnabled.toString());*/
   }
 
   @override
@@ -128,8 +124,6 @@ class _HomeState extends State<Home> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
     }
-    //print("Permissions : " + role);
-    //print("testHomepage");
     return Scaffold(
         appBar: AppBar(
           title: Text(getTranslated(context, 'appbar_menu')!),
@@ -192,14 +186,46 @@ class _HomeState extends State<Home> {
                     .snapshots(),
                 builder: buildButtonRights,
               ),
+              //Gestion des accès : StreamBuilder pour le button d'accès au droits
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("listItems")
+                    .snapshots(),
+                builder: buildButtonItemList,
+              ),
             ],
           ),
         ));
   }
 
+  Widget buildButtonItemList(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: getTranslated(context, 'button_item_list')!,
+                onPressed: navigateToListItem),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return Text(getTranslated(context, 'error_simple')!);
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
+  }
+
   Widget buildButtonAdmin(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -225,7 +251,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonInventory(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -251,7 +276,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonRights(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -276,7 +300,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonScan(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -303,6 +326,12 @@ class _HomeState extends State<Home> {
   Future<void> navigateToUsersAdmin() async {
     setState(() {
       Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
+    });
+  }
+
+  Future<void> navigateToListItem() async {
+    setState(() {
+      Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
     });
   }
 
@@ -361,32 +390,40 @@ class _HomeState extends State<Home> {
         } else if (barcodeScanRes == "-1") {
           // on affiche un message indiquant que l'action a été annulée
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(getTranslated(context, 'snackbar_error_qr_cancel')!)));
-
-          // sinon
+            content: Text(
+              getTranslated(context, 'snackbar_error_qr_cancel')!,
+            ),
+            duration: const Duration(seconds: 5),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
         } else {
           // on affiche un message indiquant qu'on ne gère pas ce code QR
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(getTranslated(context, 'snackbar_wrong_qr')!)));
+            content: Text(
+              getTranslated(context, 'snackbar_wrong_qr')!,
+            ),
+            duration: const Duration(seconds: 5),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
         }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(getTranslated(context, 'snackbar_cant_computer_scan')!)));
+        content: Text(
+          getTranslated(context, 'snackbar_cant_computer_scan')!,
+        ),
+        duration: const Duration(seconds: 5),
+        backgroundColor: const Color(0xFFB71C1C),
+      ));
     }
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     // si on a du réseau (mais pas forcément internet...)
-    //print("connection lost : " + connectionLost.toString());
-    //print("connectivity result : " + result.toString());
     bool syncNeeded = prefs.getBool("sync_needed") ?? false;
     if (result != ConnectivityResult.none) {
       // check si on a internet
       bool hasInternet = await InternetConnectionChecker().hasConnection;
-      //print("has internet : " + hasInternet.toString());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       if (hasInternet && _connectionLost) {
         if (syncNeeded) {
@@ -418,7 +455,6 @@ class _HomeState extends State<Home> {
         duration: const Duration(days: 365),
         backgroundColor: const Color(0xFFB71C1C),
       ));
-      //}
     }
   }
 

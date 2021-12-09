@@ -12,8 +12,10 @@
     "snackbar_error_complet_email":"Compléter le champ email ",
     "snackbar_email_send":"Email envoyé à l'adresse ",
     "snackbar_logout_force": "Compte désactivé, veuillez contacter l'administrateur",
+    "button_item_list": "Liste des objets",
   
     "appbar_choose_role": "Choix du rôle",
+    "appbar_filtrer": "Filtres",
 
     "appbar_menu": "Menu",
     "button_users_admin": "Gérer les utilisateurs",

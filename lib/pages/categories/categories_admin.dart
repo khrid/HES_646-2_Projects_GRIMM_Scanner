@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
-
 import 'categories_detail.dart';
 
 class CategoriesAdmin extends StatefulWidget {
@@ -43,9 +42,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
               .orderBy("name")
               .snapshots(),
           builder: buildCategoriesList,
-        ))
-        //drawer: const CustomDrawer(),
-        );
+        )));
   }
 
   openDialog(BuildContext context) {
@@ -63,8 +60,12 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
               GrimmCategory(name: categoryNameController.text);
           category.saveToFirestore();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(getTranslated(context, 'category_add')!),
-              duration: const Duration(seconds: 2)));
+            content: Text(
+              getTranslated(context, 'category_add')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFF1CB731),
+          ));
           var nav = Navigator.of(context);
           nav.pop();
           setState(() {});

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/grimm_user.dart';
+import 'dart:developer' as developer;
 
 /// Manage the authentication with Firebase
 class AuthenticationService {
@@ -25,7 +26,6 @@ class AuthenticationService {
   /// sync the user status with firebase
   Stream<GrimmUser?> get user {
     return _auth.authStateChanges().map((User? user) {
-      //print(user);
       return _userFromFirebaseUser(user!);
     });
   }
@@ -36,13 +36,13 @@ class AuthenticationService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
-      //print("AuthenticationService - signIn - returned user uid = " + user!.uid);
+      developer.log(
+          "AuthenticationService - signIn - returned user uid = " + user!.uid);
       return _userFromFirebaseUser(user!);
     } on FirebaseAuthException catch (e) {
-      /*print(
+      developer.log(
           "AuthenticationService - signIn - FireBaseAuthException message = " +
-              e.message.toString());*/
-
+              e.message.toString());
       return e.message;
     }
   }
@@ -67,8 +67,6 @@ class AuthenticationService {
       grimmUser.setUid(result.user!.uid);
       await grimmUser.saveToFirestore();
       return grimmUser;
-    } on FirebaseAuthException {
-      //print("firebaseauthexception");
-    }
+    } on FirebaseAuthException {}
   }
 }

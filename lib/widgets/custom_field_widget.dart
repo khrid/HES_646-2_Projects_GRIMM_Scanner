@@ -19,7 +19,6 @@ class CustomFieldWidget extends StatefulWidget {
 
 class CustomFieldWidgetState extends State<CustomFieldWidget> {
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
       children: [
         Row(

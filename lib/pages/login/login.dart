@@ -18,10 +18,8 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final auth = FirebaseAuth.instance;
   final AuthenticationService _auth = AuthenticationService();
-  TextEditingController emailController = TextEditingController(
-      text: "");
-  TextEditingController passwordController =
-      TextEditingController(text: "");
+  TextEditingController emailController = TextEditingController(text: "");
+  TextEditingController passwordController = TextEditingController(text: "");
 
   MenuScreen(BuildContext context) {
     setState(() {
@@ -185,22 +183,8 @@ class _LoginState extends State<Login> {
                         email: emailController.text,
                         password: passwordController.text);
                     if (result is GrimmUser) {
-                      //print(result.toString());
-                      /*print("Authentification OK = " +
-                          result.uid +
-                          " " +
-                          result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                      /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                          getTranslated(
-                              context, 'snackbar_connection_success')!,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        duration: const Duration(seconds: 5),
-                        backgroundColor: const Color(0xFF1CB731),
-                      ));*/
                       MenuScreen(context);
                       passwordController.text = "";
                     } else {
@@ -212,7 +196,6 @@ class _LoginState extends State<Login> {
                         duration: const Duration(seconds: 5),
                         backgroundColor: const Color(0xFFB71C1C),
                       ));
-                      //print(result.toString());
                     }
                   }
                 },
@@ -252,8 +235,13 @@ class _LoginState extends State<Login> {
                         onPressed: () async {
                           if (emailController.text == "") {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(getTranslated(context,
-                                    'snackbar_error_complet_email')!)));
+                              content: Text(
+                                getTranslated(
+                                    context, 'snackbar_error_complet_email')!,
+                              ),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: const Color(0xFFB71C1C),
+                            ));
                           } else {
                             auth.sendPasswordResetEmail(
                                 email: emailController.text);

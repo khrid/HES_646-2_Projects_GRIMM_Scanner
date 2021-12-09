@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
-import 'package:grimm_scanner/pages/login/login.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -21,13 +20,10 @@ class _LoginGroupState extends State<LoginGroup> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<GrimmUser?>(context);
-    
-    if (user!.enable == false) 
-    {
+
+    if (user!.enable == false) {
       makeLogout();
     }
-
-
 
     return Scaffold(
         appBar: AppBar(
@@ -62,73 +58,76 @@ class _LoginGroupState extends State<LoginGroup> {
               Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 if (user.groups.contains("Administrator"))
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
-                        side: const BorderSide(width: 1.0, color: Colors.black),
-                        fixedSize: const Size(250, 100),
-                        textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
-                        ),
-                        padding: const EdgeInsets.all(20.0),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      side: const BorderSide(width: 1.0, color: Colors.black),
+                      fixedSize: const Size(250, 100),
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 25.0,
                       ),
-                      onPressed: () async {
-                        {
-                          role = "Administrator";
-                          Navigator.pushNamed(context, Home.routeName,
-                              arguments: role);
-                        }
-                      },
-                      child: Text(getTranslated(context, 'administrator')!,
-                      textAlign:TextAlign.center),),
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                    onPressed: () async {
+                      {
+                        role = "Administrator";
+                        Navigator.pushNamed(context, Home.routeName,
+                            arguments: role);
+                      }
+                    },
+                    child: Text(getTranslated(context, 'administrator')!,
+                        textAlign: TextAlign.center),
+                  ),
                 const SizedBox(
                   height: 10.0,
                 ),
                 if (user.groups.contains("ObjectManager"))
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
-                        side: const BorderSide(width: 1.0, color: Colors.black),
-                        fixedSize: const Size(250, 100),
-                        textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
-                        ),
-                        padding: const EdgeInsets.all(20.0),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      side: const BorderSide(width: 1.0, color: Colors.black),
+                      fixedSize: const Size(250, 100),
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 25.0,
                       ),
-                      onPressed: () async {
-                        {
-                          role = "ObjectManager";
-                          Navigator.pushNamed(context, Home.routeName,
-                              arguments: role);
-                        }
-                      },
-                      child: Text(getTranslated(context, 'objectManager')!,
-                      textAlign:TextAlign.center), ),
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                    onPressed: () async {
+                      {
+                        role = "ObjectManager";
+                        Navigator.pushNamed(context, Home.routeName,
+                            arguments: role);
+                      }
+                    },
+                    child: Text(getTranslated(context, 'objectManager')!,
+                        textAlign: TextAlign.center),
+                  ),
                 const SizedBox(
                   height: 10.0,
                 ),
                 if (user.groups.contains("Member"))
                   ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor,
-                        side: const BorderSide(width: 1.0, color: Colors.black),
-                        fixedSize: const Size(250, 100),
-                        textStyle: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0,
-                        ),
-                        padding: const EdgeInsets.all(20.0),
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor,
+                      side: const BorderSide(width: 1.0, color: Colors.black),
+                      fixedSize: const Size(250, 100),
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 25.0,
                       ),
-                      onPressed: () async {
-                        {
-                          role = "Member";
-                          Navigator.pushNamed(context, Home.routeName,
-                              arguments: role);
-                        }
-                      },
-                      child: Text(getTranslated(context, 'membre')!,
-                      textAlign:TextAlign.center),),
+                      padding: const EdgeInsets.all(20.0),
+                    ),
+                    onPressed: () async {
+                      {
+                        role = "Member";
+                        Navigator.pushNamed(context, Home.routeName,
+                            arguments: role);
+                      }
+                    },
+                    child: Text(getTranslated(context, 'membre')!,
+                        textAlign: TextAlign.center),
+                  ),
               ])
             ],
           ),
@@ -137,10 +136,7 @@ class _LoginGroupState extends State<LoginGroup> {
 
   makeLogout() async {
     await _auth.signOut();
-     //Navigator.pushNamed(context, '/');
-     //Navigator.pop(context, '/');
-     Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
-    //print('Out');
+    Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
   }
 
   Future<void> navigateToHomePage() async {
