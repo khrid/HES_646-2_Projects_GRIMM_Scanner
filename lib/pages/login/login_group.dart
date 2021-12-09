@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
+import 'package:grimm_scanner/pages/login/login.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +60,7 @@ class _LoginGroupState extends State<LoginGroup> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                if (user!.groups.contains("Administrator"))
+                if (user.groups.contains("Administrator"))
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary: Theme.of(context).primaryColor,
@@ -136,7 +137,9 @@ class _LoginGroupState extends State<LoginGroup> {
 
   makeLogout() async {
     await _auth.signOut();
-    Navigator.pop(context);
+     //Navigator.pushNamed(context, '/');
+     //Navigator.pop(context, '/');
+     Navigator.of(context).pushNamedAndRemoveUntil("/", (route) => false);
     //print('Out');
   }
 

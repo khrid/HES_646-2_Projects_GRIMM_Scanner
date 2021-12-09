@@ -43,15 +43,15 @@ class _ItemsAdminState extends State<ItemsAdmin> {
     setState(() {
       searchQuery =
           FirebaseFirestore.instance.collection("items").orderBy("description");
+      filtersAvailable = objectStatus;
       if (objectStatus != null) {
-        filtersAvailable = objectStatus;
         searchQuery =
             searchQuery.where("available", isEqualTo: filtersAvailable);
         print(searchQuery.parameters);
       }
 
+      filtersCategory = categoryToDisplay;
       if (categoryToDisplay.isNotEmpty) {
-        filtersCategory = categoryToDisplay;
         print(" ---> state cat " + filtersCategory.toString());
         // limitation firebase, wherein que 10 elements à la fois
 
@@ -76,7 +76,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
       final arg = ModalRoute.of(context)!.settings.arguments as Map;
       role = arg['role'] ?? "";
       filtersAvailable = arg['available'] ?? "";
-      print("----" + filtersAvailable.toString());
     } else {
       role = ModalRoute.of(context)!.settings.arguments == null
           ? "NULL"
@@ -110,7 +109,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 title: TextField(
                   controller: TextEditingController(text: search),
                   decoration: const InputDecoration(
-                      hintText: 'Rechercher...', border: InputBorder.none),
+                      border: InputBorder.none, hintText: "..."),
                   onChanged: null,
                   onSubmitted: (value) {
                     setState(() {
@@ -125,7 +124,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                     Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                   IconButton(
                       onPressed: () {
-                        print("empty");
                         setState(() {
                           search = "";
                           filtersAvailable = null;
@@ -133,17 +131,16 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                           refresh(filtersAvailable, filtersCategory);
                         });
                       },
-                      icon: Icon(Icons.cancel)),
-                  SizedBox(
+                      icon: const Icon(Icons.cancel)),
+                  const SizedBox(
                     width: 10,
                   ),
                   IconButton(
                       onPressed: () {
-                        print("filter");
                         Navigator.of(context).pushNamed(ItemsFilter.routeName,
-                            arguments: {role, refresh});
+                            arguments: {role, refresh, filtersAvailable, filtersCategory});
                       },
-                      icon: Icon(Icons.filter_list)),
+                      icon: const Icon(Icons.filter_list)),
                 ]),
               ),
             ),

@@ -24,6 +24,7 @@ import 'localization/app_localization.dart';
 import 'models/grimm_user.dart';
 import 'pages/items/create_item.dart';
 import 'pages/items/edit_item.dart';
+import 'pages/login/create_account_signup.dart';
 import 'pages/login/login.dart';
 import 'pages/rights/admin_rights_detail.dart';
 import 'service/authentication_service.dart';
@@ -150,6 +151,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               AccountsAdmin.routeName: (context) => const AccountsAdmin(),
               UserDetail.routeName: (context) => const UserDetail(),
               UserUpdate.routeName: (context) => const UserUpdate(),
+              CreateNewAccountScreen.routeName: (context) => const CreateNewAccountScreen(),
               CreateAccountScreen.routeName: (context) =>
                   const CreateAccountScreen(),
               CreateItemScreen.routeName: (context) => const CreateItemScreen(),

@@ -7,6 +7,7 @@ import 'package:grimm_scanner/pages/login/login_group.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
 import '../../main.dart';
+import 'create_account_signup.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -191,7 +192,7 @@ class _LoginState extends State<Login> {
                           result.name);*/
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
-                     /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      /* ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
                           getTranslated(
                               context, 'snackbar_connection_success')!,
@@ -215,27 +216,57 @@ class _LoginState extends State<Login> {
                   }
                 },
                 child: Text(getTranslated(context, 'button_connect')!)),
-            TextButton(
-              style: TextButton.styleFrom(
-                primary: Colors.black,
-                textStyle: const TextStyle(
-                    fontFamily: "Raleway-Regular", fontSize: 14.0),
-                padding: EdgeInsets.all(10.0),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: const TextStyle(
+                              fontFamily: "Raleway-Regular", fontSize: 14.0),
+                          padding: EdgeInsets.all(10.0),
+                        ),
+                        child: Text(
+                            getTranslated(context, 'button_create_account')!),
+                        onPressed: () async {
+                          Navigator.pushNamed(
+                              context, CreateNewAccountScreen.routeName);
+                        },
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: const TextStyle(
+                              fontFamily: "Raleway-Regular", fontSize: 14.0),
+                          padding: EdgeInsets.all(10.0),
+                        ),
+                        child: Text(getTranslated(context, 'pw_forget')!),
+                        onPressed: () async {
+                          if (emailController.text == "") {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(getTranslated(context,
+                                    'snackbar_error_complet_email')!)));
+                          } else {
+                            auth.sendPasswordResetEmail(
+                                email: emailController.text);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(getTranslated(
+                                        context, 'snackbar_email_send')! +
+                                    emailController.text)));
+                          }
+                        },
+                      ),
+                    ],
+                  )
+                ],
               ),
-              child: Text(getTranslated(context, 'pw_forget')!),
-              onPressed: () async {
-                if (emailController.text == "") {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(getTranslated(
-                          context, 'snackbar_error_complet_email')!)));
-                } else {
-                  auth.sendPasswordResetEmail(email: emailController.text);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          getTranslated(context, 'snackbar_email_send')! +
-                              emailController.text)));
-                }
-              },
             ),
             const SizedBox(
               height: 10,

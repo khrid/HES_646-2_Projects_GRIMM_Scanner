@@ -8,6 +8,7 @@
     "snackbar_connection_error": "Erreur dans votre mot de passe/mail",
     "button_connect":"Se connecter",
     "pw_forget":"Mot de passe oublié ?",
+    "button_create_account": "S'inscrire",
     "snackbar_error_complet_email":"Compléter le champ email ",
     "snackbar_email_send":"Email envoyé à l'adresse ",
     "snackbar_logout_force": "Compte désactivé, veuillez contacter l'administrateur",
@@ -98,10 +99,12 @@
     "snackbar_item_create_success": "Objet créé avec succès",
     "button_delete_field": "Enlever un champ",
 
+
     "appbar_item_edit": "Edition",
     "title_item_modify": "Modifiez l'objet",
 
     "appbar_item_list": "Gestion de l'inventaire",
+
 
     "appbar_item_detail": "Détail de l'objet",
     "snackbar_item_delete": "Objet supprimé",
@@ -109,6 +112,7 @@
     "item_delete__are_you_sure": "Êtes-vous vraiment sûr de vouloir supprimer cet objet ?",
     "available": "Disponible",
     "unavailable": "Emprunté",
+    "availability": "Disponibilité",
     "item_location_detail": "Emplacement : ",
     "item_color_detail": "Couleur : ",
     "item_status_detail": "Statut : ",
@@ -134,6 +138,9 @@
     "title_modify_profil": "Modifiez les informations de votre profil",
     "snackbar_update_success": "Mise à jour du profil réussie",
     "snackbar_error_mail": "Erreur dans la saisie de votre adresse mail.",
-    "snack_error_profile": "Erreur lors de la mise à jour du profil."
+    "snack_error_profile": "Erreur lors de la mise à jour du profil.",
+    "snackbar_error_max_10_cat_or_all": "Max 10 catégories (ou toutes).",
 
+    "apply": "Appliquer",
+    "filter": "Filtrer"
 }
