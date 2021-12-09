@@ -390,20 +390,31 @@ class _HomeState extends State<Home> {
         } else if (barcodeScanRes == "-1") {
           // on affiche un message indiquant que l'action a été annulée
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(getTranslated(context, 'snackbar_error_qr_cancel')!)));
-
-          // sinon
+            content: Text(
+              getTranslated(context, 'snackbar_error_qr_cancel')!,
+            ),
+            duration: const Duration(seconds: 5),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
         } else {
           // on affiche un message indiquant qu'on ne gère pas ce code QR
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(getTranslated(context, 'snackbar_wrong_qr')!)));
+            content: Text(
+              getTranslated(context, 'snackbar_wrong_qr')!,
+            ),
+            duration: const Duration(seconds: 5),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
         }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(getTranslated(context, 'snackbar_cant_computer_scan')!)));
+        content: Text(
+          getTranslated(context, 'snackbar_cant_computer_scan')!,
+        ),
+        duration: const Duration(seconds: 5),
+        backgroundColor: const Color(0xFFB71C1C),
+      ));
     }
   }
 

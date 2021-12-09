@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
                     Object? result = await _auth.signIn(
                         email: emailController.text,
                         password: passwordController.text);
-                    if (result is GrimmUser) {   
+                    if (result is GrimmUser) {
                       await Future.delayed(
                           const Duration(milliseconds: 200), () {});
                       MenuScreen(context);
@@ -235,8 +235,13 @@ class _LoginState extends State<Login> {
                         onPressed: () async {
                           if (emailController.text == "") {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(getTranslated(context,
-                                    'snackbar_error_complet_email')!)));
+                              content: Text(
+                                getTranslated(
+                                    context, 'snackbar_error_complet_email')!,
+                              ),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: const Color(0xFFB71C1C),
+                            ));
                           } else {
                             auth.sendPasswordResetEmail(
                                 email: emailController.text);

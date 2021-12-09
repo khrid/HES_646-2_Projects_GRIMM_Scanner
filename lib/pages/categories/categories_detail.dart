@@ -126,17 +126,23 @@ class _CategoryDetailState extends State<CategoryDetail> {
         if (category.name != 'Non défini') {
           _categories.doc(category.id).delete();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content:
-                  Text(getTranslated(context, 'snackbar_category_delete')!),
-              duration: const Duration(seconds: 2)));
+            content: Text(
+              getTranslated(context, 'snackbar_category_delete')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFF1CB731),
+          ));
           var nav = Navigator.of(context);
           nav.pop();
           nav.pop();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(getTranslated(
-                  context, 'snackbar_category_error_cant_delete')!),
-              duration: const Duration(seconds: 2)));
+            content: Text(
+              getTranslated(context, 'snackbar_category_error_cant_delete')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFFB71C1C),
+          ));
           var nav = Navigator.of(context);
           nav.pop();
           nav.pop();

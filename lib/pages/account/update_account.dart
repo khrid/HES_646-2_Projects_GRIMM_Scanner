@@ -238,8 +238,12 @@ class _UserUpdateState extends State<UserUpdate> {
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(getTranslated(
-                            context, 'snackbar_error_one_group_min')!)));
+                      content: Text(
+                        getTranslated(context, 'snackbar_error_one_group_min')!,
+                      ),
+                      duration: const Duration(seconds: 5),
+                      backgroundColor: const Color(0xFFB71C1C),
+                    ));
                   }
                 },
                 child: Text(getTranslated(context, 'button_validate')!)),
@@ -270,8 +274,13 @@ class _UserUpdateState extends State<UserUpdate> {
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(getTranslated(
-                              context, 'snackbar_error_one_group_min')!)));
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_error_one_group_min')!,
+                        ),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
                     }
                   }
                 },

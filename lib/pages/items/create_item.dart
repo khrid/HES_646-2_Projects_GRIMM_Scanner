@@ -318,8 +318,13 @@ class _CreateItemState extends State<CreateItemScreen> {
                       developer.log(item.toString());
                       await item.saveToFirestore();
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(getTranslated(
-                              context, 'snackbar_item_create_success')!)));
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_item_create_success')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFF1CB731),
+                      ));
                       Navigator.of(context).pop();
                     }
                   }

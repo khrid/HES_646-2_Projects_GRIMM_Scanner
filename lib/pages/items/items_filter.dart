@@ -254,7 +254,11 @@ class _ItemsFilterState extends State<ItemsFilter> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-              getTranslated(context, 'snackbar_error_max_10_cat_or_all')!)));
+            getTranslated(context, 'snackbar_error_max_10_cat_or_all')!,
+          ),
+          duration: const Duration(seconds: 3),
+          backgroundColor: const Color(0xFFB71C1C),
+        ));
     }
   }
 }

@@ -156,8 +156,13 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
                             }
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(getTranslated(context,
-                                    'snackbar_choose_only_one_role')!)));
+                              content: Text(
+                                getTranslated(
+                                    context, 'snackbar_choose_only_one_role')!,
+                              ),
+                              duration: const Duration(seconds: 3),
+                              backgroundColor: const Color(0xFFB71C1C),
+                            ));
                           }
                         },
                         child: Text(

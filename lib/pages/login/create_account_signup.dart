@@ -242,16 +242,26 @@ class _CreateNewAccountState extends State<CreateNewAccountScreen> {
                     if (result is GrimmUser) {
                       changeErrorMessage("");
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(getTranslated(
-                              context, 'snackbar_account_creation_sucess')!)));
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_account_creation_sucess')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFF1CB731),
+                      ));
                       await Future.delayed(
                           const Duration(milliseconds: 300), () {});
                       Navigator.pushNamed(context, LoginGroup.routeName);
                       // Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(getTranslated(
-                              context, 'snackbar_error_modify_pw_mail')!)));
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_error_modify_pw_mail')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
                       changeErrorMessage(result.toString());
                     }
                   }

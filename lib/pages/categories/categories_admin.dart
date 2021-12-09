@@ -60,8 +60,12 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
               GrimmCategory(name: categoryNameController.text);
           category.saveToFirestore();
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(getTranslated(context, 'category_add')!),
-              duration: const Duration(seconds: 2)));
+            content: Text(
+              getTranslated(context, 'category_add')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFF1CB731),
+          ));
           var nav = Navigator.of(context);
           nav.pop();
           setState(() {});

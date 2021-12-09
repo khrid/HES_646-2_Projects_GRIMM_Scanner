@@ -284,20 +284,34 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                       if (result is GrimmUser) {
                         changeErrorMessage("");
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(getTranslated(context,
-                                'snackbar_account_creation_sucess')!)));
+                          content: Text(
+                            getTranslated(
+                                context, 'snackbar_account_creation_sucess')!,
+                          ),
+                          duration: const Duration(seconds: 5),
+                          backgroundColor: const Color(0xFF1CB731),
+                        ));
                         Navigator.pushNamed(context, Home.routeName);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(getTranslated(
-                                context, 'snackbar_error_modify_pw_mail')!)));
+                          content: Text(
+                            getTranslated(
+                                context, 'snackbar_error_modify_pw_mail')!,
+                          ),
+                          duration: const Duration(seconds: 5),
+                          backgroundColor: const Color(0xFFB71C1C),
+                        ));
                         changeErrorMessage(result.toString());
                       }
                     }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(getTranslated(
-                            context, 'snackbar_error_one_group_min')!)));
+                      content: Text(
+                        getTranslated(context, 'snackbar_error_one_group_min')!,
+                      ),
+                      duration: const Duration(seconds: 5),
+                      backgroundColor: const Color(0xFFB71C1C),
+                    ));
                   }
                 },
                 child: Text(getTranslated(context, 'button_validate')!)),
