@@ -183,6 +183,7 @@ class _ItemDetailState extends State<ItemDetail> {
     Widget continueButton = TextButton(
       child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
+        _items.doc(grimmItem.id).delete();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(getTranslated(context, 'snackbar_item_delete')!),
             duration: Duration(seconds: 2)));
