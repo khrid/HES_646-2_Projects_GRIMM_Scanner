@@ -19,15 +19,15 @@ class _EditItemState extends State<EditItemScreen> {
   var _customFields = <Widget>[];
   bool done = false;
   TextEditingController descriptionController = TextEditingController(
-      text: "ObjectLouise"); // controlleur de la description
+      text: ""); // controlleur de la description
   TextEditingController locationController =
-      TextEditingController(text: "C6"); // controlleur du email
+      TextEditingController(text: ""); // controlleur du email
   TextEditingController colorController =
-      TextEditingController(text: "red"); // controlleur de la color
+      TextEditingController(text: ""); // controlleur de la color
   TextEditingController categorieController = TextEditingController(
-      text: "CkptVTldFGQLlF0QLRvv"); // controlleur de la catégorie
+      text: ""); // controlleur de la catégorie
   TextEditingController remarkController = TextEditingController(
-      text: "Pas de remarque"); // controlleur de la remarque
+      text: ""); // controlleur de la remarque
   String dropdownValue = "pansement";
   String dropdownValueId = "";
   int firstLoad = 1;

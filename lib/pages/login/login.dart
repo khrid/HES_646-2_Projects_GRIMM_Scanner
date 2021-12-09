@@ -19,10 +19,9 @@ class _LoginState extends State<Login> {
   final auth = FirebaseAuth.instance;
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = TextEditingController(
-      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
-  //text: ""); // texte ajouté pour facilité le travail
+      text: "");
   TextEditingController passwordController =
-      TextEditingController(text: "123456");
+      TextEditingController(text: "");
 
   MenuScreen(BuildContext context) {
     setState(() {
