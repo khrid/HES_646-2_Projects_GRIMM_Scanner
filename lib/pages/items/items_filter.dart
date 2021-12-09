@@ -38,9 +38,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
     //role = ModalRoute.of(context)!.settings.arguments ?? "";
     //refresh = arg['refresh'] ?? "";
 
-    if(firstbuild) {
+    if (firstbuild) {
       final arguments = [];
-      arguments.addAll(ModalRoute.of(context)!.settings.arguments as LinkedHashSet);
+      arguments
+          .addAll(ModalRoute.of(context)!.settings.arguments as LinkedHashSet);
       print(arguments.elementAt(3).runtimeType);
       role = arguments.elementAt(0);
       refresh = arguments.elementAt(1);
@@ -52,13 +53,13 @@ class _ItemsFilterState extends State<ItemsFilter> {
 
       print(tmpCat);
 
-      if(temp == null) {
+      if (temp == null) {
         setState(() {
           available = true;
           borrowed = true;
         });
       } else {
-        if(temp) {
+        if (temp) {
           setState(() {
             borrowed = false;
           });
@@ -70,7 +71,6 @@ class _ItemsFilterState extends State<ItemsFilter> {
       }
     }
 
-
     return Scaffold(
         appBar: AppBar(
           title: const Text("Filtrer"),
@@ -79,79 +79,104 @@ class _ItemsFilterState extends State<ItemsFilter> {
         ),
         backgroundColor: Theme.of(context).primaryColor,
         body: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Center(
                 child: Column(children: [
-
-          Text(getTranslated(context, "availability")!,
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FilterChip(
-                selected: available,
-                label: Text(getTranslated(context, "available")!),
-                onSelected: (bool value) {
-                  setState(() {
-                    available = !available;
-                  });
-                },
+              Text(getTranslated(context, "availability")!,
+                  overflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+                       const SizedBox(
+                height: 20,
               ),
-              SizedBox(
-                width: 20,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FilterChip(
+                    selected: available,
+                    label: Text(getTranslated(context, "available")!),
+                    labelStyle: TextStyle(
+                    color: available ? Colors.white : Colors.black),
+                    onSelected: (bool value) {
+                      setState(() {
+                        available = !available;
+                      });
+                    },
+                    elevation: 4,
+                    selectedColor: Colors.black,
+                    selectedShadowColor: Colors.black,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    checkmarkColor: Colors.white
+                  ),
+                 const SizedBox(
+                    width: 20,
+                  ),
+                  FilterChip(
+                    selected: borrowed,
+                    label: Text(getTranslated(context, "unavailable")!),
+                     labelStyle: TextStyle(
+                    color: borrowed ? Colors.white : Colors.black),
+                    onSelected: (bool value) {
+                      setState(() {
+                        borrowed = !borrowed;
+                      });
+                    },
+                    elevation: 4,
+                    selectedColor: Colors.black,
+                    selectedShadowColor: Colors.black,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    checkmarkColor: Colors.white
+                  )
+                ],
               ),
-              FilterChip(
-                selected: borrowed,
-                label: Text(getTranslated(context, "unavailable")!),
-                onSelected: (bool value) {
-                  setState(() {
-                    borrowed = !borrowed;
-                  });
-                },
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(getTranslated(context, "category")!,
-              overflow: TextOverflow.fade,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold)),
-          Wrap(
-            children: [
-              StreamBuilder<QuerySnapshot>(
-                builder: buildCategoryChips,
-                stream: FirebaseFirestore.instance
-                    .collection("category")
-                    .orderBy("name")
-                    .snapshots(),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: () {
-                applyFiltersToList();
-              }, child: Text(getTranslated(context, "apply")!)),
               const SizedBox(
-                width: 20,
+                height: 20,
               ),
-              //const ElevatedButton(onPressed: null, child: Text("Reset")),
-            ],
-          ),
-        ]))));
+              Text(getTranslated(context, "category")!,
+                  overflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)),
+              
+               const SizedBox(
+                height: 20,
+              ),Wrap(
+                children: [
+                  StreamBuilder<QuerySnapshot>(
+                    builder: buildCategoryChips,
+                    stream: FirebaseFirestore.instance
+                        .collection("category")
+                        .orderBy("name")
+                        .snapshots(),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).primaryColor,
+                  textStyle: const TextStyle(
+                      fontFamily: "Raleway-Regular", fontSize: 14.0),
+                  side: const BorderSide(width: 1.0, color: Colors.black),
+                  padding: const EdgeInsets.only(top: 10, right: 50, left: 50, bottom: 10),
+                ),
+                      onPressed: () {
+                        applyFiltersToList();
+                      },
+                      child: Text(getTranslated(context, "apply")!)),
+                ],
+              ),
+            ]))));
   }
 
   Widget buildCategoryChips(
@@ -161,15 +186,24 @@ class _ItemsFilterState extends State<ItemsFilter> {
       for (var element in snapshot.data!.docs) {
         GrimmCategory grimmCategory = GrimmCategory.fromJson(element);
         if (firstbuild) {
-          if(tmpCat.isNotEmpty) {
+          if (tmpCat.isNotEmpty) {
             categoryStatus.putIfAbsent(grimmCategory.id, () => 0);
           } else {
             categoryStatus.putIfAbsent(grimmCategory.id, () => 1);
           }
         }
+        bool isSelected ;
+        isSelected =(categoryStatus[grimmCategory.id] == 1) ? true : false;
         chips.add(FilterChip(
+          elevation: 4,
+                    selectedColor: Colors.black,
+                    selectedShadowColor: Colors.black,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    checkmarkColor: Colors.white,
           selected: (categoryStatus[grimmCategory.id] == 1) ? true : false,
           label: Text(grimmCategory.name),
+          labelStyle: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black),
           onSelected: (bool value) {
             setState(() {
               if (categoryStatus[grimmCategory.id] == 1) {
@@ -191,10 +225,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
           child: GridView.count(
             childAspectRatio: (itemWidth / itemHeight),
             shrinkWrap: true,
-        crossAxisCount: 2,
+            crossAxisCount: 2,
             scrollDirection: Axis.vertical,
-        children: chips,
-      ));
+            children: chips,
+          ));
     } else {
       return const Text("Pas de catégorie pour filtrer.");
     }
@@ -203,10 +237,10 @@ class _ItemsFilterState extends State<ItemsFilter> {
   void applyFiltersToList() {
     print(categoryStatus);
     bool? objectStatus;
-    if(available && !borrowed) {
+    if (available && !borrowed) {
       print("only available");
       objectStatus = true;
-    } else if(!available && borrowed) {
+    } else if (!available && borrowed) {
       print("only borrowed");
       objectStatus = false;
     } else {
@@ -215,24 +249,26 @@ class _ItemsFilterState extends State<ItemsFilter> {
     print(objectStatus);
     List categoryToDisplay = [];
     categoryStatus.forEach((key, value) {
-      if(value == 1) {
+      if (value == 1) {
         categoryToDisplay.add(key);
       }
     });
     print(categoryToDisplay.length);
     print(categoryStatus.length);
 
-    if(categoryToDisplay.length < 10 || categoryStatus.length == categoryToDisplay.length) {
-      if(categoryStatus.length == categoryToDisplay.length) {
+    if (categoryToDisplay.length < 10 ||
+        categoryStatus.length == categoryToDisplay.length) {
+      if (categoryStatus.length == categoryToDisplay.length) {
         categoryToDisplay = [];
       }
       refresh(objectStatus, categoryToDisplay);
-      Navigator.of(context).pushReplacementNamed(ItemsAdmin.routeName, arguments: {'role': role, 'available': available});
+      Navigator.of(context).pushReplacementNamed(ItemsAdmin.routeName,
+          arguments: {'role': role, 'available': available});
       Navigator.of(context).pop();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(getTranslated(
-              context, 'snackbar_error_max_10_cat_or_all')!)));
+          content: Text(
+              getTranslated(context, 'snackbar_error_max_10_cat_or_all')!)));
     }
   }
 }
