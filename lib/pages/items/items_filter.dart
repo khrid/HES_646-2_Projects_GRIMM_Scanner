@@ -184,14 +184,14 @@ class _ItemsFilterState extends State<ItemsFilter> {
       firstbuild = false;
 
       var size = MediaQuery.of(context).size;
-      final double itemHeight = (size.height - kToolbarHeight - 24) / 10;
+      final double itemHeight = (size.height - kToolbarHeight - 24) / 15;
       final double itemWidth = size.width / 2;
       return Container(
-          margin: new EdgeInsets.all(1.0),
+          margin: const EdgeInsets.all(1.0),
           child: GridView.count(
             childAspectRatio: (itemWidth / itemHeight),
             shrinkWrap: true,
-        crossAxisCount: 3,
+        crossAxisCount: 2,
             scrollDirection: Axis.vertical,
         children: chips,
       ));

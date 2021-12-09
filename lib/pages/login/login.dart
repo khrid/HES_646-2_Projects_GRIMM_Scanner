@@ -19,10 +19,9 @@ class _LoginState extends State<Login> {
   final auth = FirebaseAuth.instance;
   final AuthenticationService _auth = AuthenticationService();
   TextEditingController emailController = TextEditingController(
-      text: "bretzlouise@gmail.com"); // texte ajouté pour facilité le travail
-  //text: ""); // texte ajouté pour facilité le travail
+      text: "");
   TextEditingController passwordController =
-      TextEditingController(text: "123456");
+      TextEditingController(text: "");
 
   MenuScreen(BuildContext context) {
     setState(() {
@@ -94,6 +93,7 @@ class _LoginState extends State<Login> {
             TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
+                showCursor: true,
                 decoration: InputDecoration(
                   labelText: getTranslated(context, 'mail'),
                   labelStyle: const TextStyle(
@@ -202,6 +202,7 @@ class _LoginState extends State<Login> {
                         backgroundColor: const Color(0xFF1CB731),
                       ));*/
                       MenuScreen(context);
+                      passwordController.text = "";
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
