@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/pages/account/accounts_admin.dart';
 import 'package:grimm_scanner/pages/items/items_detail.dart';
+import 'package:grimm_scanner/pages/profile/profile.dart';
 import 'package:grimm_scanner/pages/rights/admin_rights.dart';
 import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -130,63 +132,69 @@ class _HomeState extends State<Home> {
     //print("testHomepage");
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Menu"),
+          title: Text(getTranslated(context, 'appbar_menu')!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        body:  
-        Container(
-                constraints: const BoxConstraints.expand(),
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: const AssetImage("assets/images/logo_grimm_black.jpg"),
-                        colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.05), BlendMode.dstATop),
-                        fit: BoxFit.cover,
-                        ),),   
-        child: 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                //Gestion des accès : StreamBuilder pour le button scan
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("scanButton")
-                      .snapshots(),
-                  builder: buildButtonScan,
-                ),
-                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("userButton")
-                      .snapshots(),
-                  builder: buildButtonAdmin,
-                ),
-                //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("inventoryButton")
-                      .snapshots(),
-                  builder: buildButtonInventory,
-                ),
-
-                //Gestion des accès : StreamBuilder pour le button d'accès au droits
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('rights')
-                      .doc("rightsButton")
-                      .snapshots(),
-                  builder: buildButtonRights,
-                ),
-              ],
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.black,
+          onPressed: goToProfile,
+          child: Icon(
+            Icons.manage_accounts,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: const AssetImage("assets/images/logo_grimm_black.jpg"),
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.05), BlendMode.dstATop),
+              fit: BoxFit.cover,
             ),
-          
-        )
-        );
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              //Gestion des accès : StreamBuilder pour le button scan
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("scanButton")
+                    .snapshots(),
+                builder: buildButtonScan,
+              ),
+              //Gestion des accès : StreamBuilder pour le button d'accès de la gestion des utilisateurs
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("userButton")
+                    .snapshots(),
+                builder: buildButtonAdmin,
+              ),
+              //Gestion des accès : StreamBuilder pour le button d'accès de la gestion d'inventaire
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("inventoryButton")
+                    .snapshots(),
+                builder: buildButtonInventory,
+              ),
+
+              //Gestion des accès : StreamBuilder pour le button d'accès au droits
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("rightsButton")
+                    .snapshots(),
+                builder: buildButtonRights,
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget buildButtonAdmin(
@@ -199,7 +207,7 @@ class _HomeState extends State<Home> {
         if (right.permissions.contains(role)) {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             CustomHomeButton(
-                title: "Gérer les utilisateurs",
+                title: getTranslated(context, 'button_users_admin')!,
                 onPressed: navigateToUsersAdmin),
             const SizedBox(
               height: 10,
@@ -207,7 +215,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return const Text("erreur");
+        return Text(getTranslated(context, 'error_simple')!);
       }
     }
     return const SizedBox(
@@ -225,7 +233,7 @@ class _HomeState extends State<Home> {
         if (right.permissions.contains(role)) {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             CustomHomeButton(
-                title: "Gérer l'inventaire",
+                title: getTranslated(context, 'button_objects')!,
                 onPressed: navigateToItemsCatAdmin),
             const SizedBox(
               height: 10.0,
@@ -233,7 +241,7 @@ class _HomeState extends State<Home> {
           ]);
         }
       } else {
-        return const Text("erreur");
+        return Text(getTranslated(context, 'error_simple')!);
       }
     }
     return const SizedBox(
@@ -250,14 +258,15 @@ class _HomeState extends State<Home> {
         if (right.permissions.contains(role)) {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
             CustomHomeButton(
-                title: "Gérer les droits", onPressed: navigateToAdminRights),
+                title: getTranslated(context, 'button_rights')!,
+                onPressed: navigateToAdminRights),
             const SizedBox(
               height: 10,
             ),
           ]);
         }
       } else {
-        return const Text("erreur");
+        return Text(getTranslated(context, 'error_simple')!);
       }
     }
     return const SizedBox(
@@ -274,14 +283,16 @@ class _HomeState extends State<Home> {
 
         if (right.permissions.contains(role)) {
           return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            CustomHomeButton(title: "SCANNER", onPressed: scanQR),
+            CustomHomeButton(
+                title: getTranslated(context, 'button_scan')!,
+                onPressed: scanQR),
             const SizedBox(
               height: 10,
             ),
           ]);
         }
       } else {
-        return const Text("erreur");
+        return Text(getTranslated(context, 'error_simple')!);
       }
     }
     return const SizedBox(
@@ -349,20 +360,21 @@ class _HomeState extends State<Home> {
           // depuis l'écran de scannage
         } else if (barcodeScanRes == "-1") {
           // on affiche un message indiquant que l'action a été annulée
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Lecture QR annulée.")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content:
+                  Text(getTranslated(context, 'snackbar_error_qr_cancel')!)));
 
           // sinon
         } else {
           // on affiche un message indiquant qu'on ne gère pas ce code QR
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("QR code scanné non géré par cette application.")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(getTranslated(context, 'snackbar_wrong_qr')!)));
         }
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "La lecture QR n'est possible que depuis l'application native Android / iOS.")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text(getTranslated(context, 'snackbar_cant_computer_scan')!)));
     }
   }
 
@@ -384,38 +396,33 @@ class _HomeState extends State<Home> {
         setState(() {
           _connectionLost = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-            "Connexion rétablie!",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            getTranslated(context, 'snackbar_connection_ok')!,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
-          duration: Duration(seconds: 5),
-          backgroundColor: Color(0xFF1CB731),
+          duration: const Duration(seconds: 5),
+          backgroundColor: const Color(0xFF1CB731),
         ));
       }
     } else {
       setState(() {
         _connectionLost = true;
       });
-      /*if (syncNeeded) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Connexion internet nécessaire lors du premier lancement.",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          duration: Duration(days: 365),
-          backgroundColor: Color(0xFFB71C1C),
-        ));
-      } else {*/
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          "Pas de connexion internet.",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          getTranslated(context, 'snackbar_no_connection')!,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        duration: Duration(days: 365),
-        backgroundColor: Color(0xFFB71C1C),
+        duration: const Duration(days: 365),
+        backgroundColor: const Color(0xFFB71C1C),
       ));
       //}
     }
+  }
+
+  goToProfile() async {
+    Navigator.pushNamed(context, ProfileAdmin.routeName, arguments: role);
   }
 }

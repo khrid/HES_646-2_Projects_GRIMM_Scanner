@@ -10,18 +10,19 @@ import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
 
-import 'accounts_admin.dart';
+import 'login_group.dart';
 
-class CreateAccountScreen extends StatefulWidget {
-  static const routeName = '/create_account';
 
-  const CreateAccountScreen({Key? key}) : super(key: key);
+class CreateNewAccountScreen extends StatefulWidget {
+  static const routeName = '/create_new_user';
+
+  const CreateNewAccountScreen({Key? key}) : super(key: key);
 
   @override
-  _CreateAccountState createState() => _CreateAccountState();
+  _CreateNewAccountState createState() => _CreateNewAccountState();
 }
 
-class _CreateAccountState extends State<CreateAccountScreen> {
+class _CreateNewAccountState extends State<CreateNewAccountScreen> {
   final _key = GlobalKey<FormState>();
   final AuthenticationService _auth =
       AuthenticationService(); // app du service d'autentification pour ensuite appeler la méthode signIn()
@@ -54,6 +55,12 @@ class _CreateAccountState extends State<CreateAccountScreen> {
     });
   }
 
+    MenuScreen(BuildContext context) {
+    setState(() {
+      Navigator.pushNamed(context, LoginGroup.routeName);
+    });
+  }
+
   @override
   Widget build(context) {
     return Scaffold(
@@ -66,7 +73,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
       body: Form(
         key: _key,
         child: ListView(
-          padding: const EdgeInsets.all(50),
+           padding: const EdgeInsets.only(top: 20, right: 40, left: 40),
           children: <Widget>[
             Text(
               getTranslated(context, 'creation_new_user')!,
@@ -212,47 +219,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
               cursorColor: Colors.black,
             ),
             const SizedBox(
-              height: 20,
+              height: 40,
             ),
-            CheckboxListTile(
-              title: Text(getTranslated(context, 'administrator')!),
-              tileColor: Theme.of(context).primaryColor,
-              checkColor: Colors.white,
-              activeColor: Colors.black,
-              value: isAdmin,
-              onChanged: (bool? value) {
-                setState(() {
-                  isAdmin = value!;
-                });
-              },
-            ),
-            CheckboxListTile(
-              title: Text(getTranslated(context, 'objectManager')!),
-              tileColor: Theme.of(context).primaryColor,
-              checkColor: Colors.white,
-              activeColor: Colors.black,
-              value: isObjectManager,
-              onChanged: (bool? value) {
-                setState(() {
-                  isObjectManager = value!;
-                });
-              },
-            ),
-            CheckboxListTile(
-              title: Text(getTranslated(context, 'membre')!),
-              tileColor: Theme.of(context).primaryColor,
-              checkColor: Colors.white,
-              activeColor: Colors.black,
-              value: isMember,
-              onChanged: (bool? value) {
-                setState(() {
-                  isMember = value!;
-                });
-              },
-            ),
-            const SizedBox(
-              height: 20,
-            ),
+            
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
@@ -264,19 +233,12 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                 onPressed: () async {
                   // ici on gère si l'entrée est valide ou non et on crée le User, puis le modelUser
                   var tab = [];
-                  if (isAdmin) {
-                    tab.add("Administrator");
-                  }
-                  if (isMember) {
-                    tab.add("Member");
-                  }
-                  if (isObjectManager) {
-                    tab.add("ObjectManager");
-                  }
-                  User _user = FirebaseAuth.instance.currentUser!;
-                  print("BEFORE");
-                  print(_user);
-                  if (tab.isNotEmpty) {
+                  tab.add("Member");
+                  print(lastnameController.text);
+                  print(firstnameController.text);
+                  print(emailController.text);
+                  print(tab);
+                  //User _user = FirebaseAuth.instance.currentUser!;
                     if (_key.currentState!.validate()) {
                       GrimmUser grimmUser = GrimmUser(
                           name: lastnameController.text,
@@ -287,6 +249,7 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                           email: emailController.text,
                           password: passwordController.text,
                           grimmUser: grimmUser);
+                          print(result);
                       if (result is GrimmUser) {
                         //print("User CREATE" + result.toString());
                         changeErrorMessage("");
@@ -296,7 +259,9 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                         print("AFTER");
                         User _user = FirebaseAuth.instance.currentUser!;
                         print(_user);
-                        Navigator.pushNamed(context, Home.routeName);
+                        await Future.delayed(
+                          const Duration(milliseconds: 300), () {});
+                        Navigator.pushNamed(context, LoginGroup.routeName);
                         // Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -305,18 +270,21 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                         changeErrorMessage(result.toString());
                       }
                     }
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(getTranslated(
-                            context, 'snackbar_error_one_group_min')!)));
-                  }
                 },
                 child: Text(getTranslated(context, 'button_validate')!)),
-            const SizedBox(
-              height: 20,
+                   const SizedBox(
+              height: 40,
             ),
+                Image.asset(
+              'assets/images/logo_grimm.png',
+              width: 100,
+              height: 100,
+            ),
+           
           ],
+          
         ),
+        
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
 
 import 'categories_admin.dart';
@@ -16,8 +17,6 @@ class CategoryUpdate extends StatefulWidget {
 
 class _CategoryUpdateState extends State<CategoryUpdate> {
   final _key = GlobalKey<FormState>();
-  TextEditingController categoryNameController = TextEditingController(
-      text: "Catégorie"); // controlleur de la description
 
   int firstLoad = 1;
   List test = [];
@@ -25,6 +24,10 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController categoryNameController = TextEditingController(
+        text: getTranslated(
+            context, 'category')); // controlleur de la description
+
     grimmCategory = (ModalRoute.of(context)!.settings.arguments == null
         ? null
         : ModalRoute.of(context)!.settings.arguments as GrimmCategory)!;
@@ -39,7 +42,7 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edition"),
+        title: Text(getTranslated(context, 'appbar_category_edit')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -49,9 +52,9 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
         child: ListView(
           padding: const EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Modifiez la catégorie",
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'category_modify')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
                 color: Colors.black,
@@ -65,24 +68,24 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
               controller: categoryNameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Nom de la catégorie' ne peut pas être vide";
+                  return getTranslated(context, 'error_category_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: "Nom de la catégorie",
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'category_name_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -112,7 +115,6 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
                 return const Text("");
               },
             ),
-
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
@@ -129,7 +131,7 @@ class _CategoryUpdateState extends State<CategoryUpdate> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const Text("Valider")),
+                child: Text(getTranslated(context, 'button_validate')!)),
             const SizedBox(
               height: 20,
             ),

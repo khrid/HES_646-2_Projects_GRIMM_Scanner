@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
 import 'package:grimm_scanner/pages/categories/edit_category.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
@@ -29,7 +30,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Catégorie"),
+        title: Text(getTranslated(context, 'appbar_category')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -56,12 +57,12 @@ class _CategoryDetailState extends State<CategoryDetail> {
       body: Container(
         padding: const EdgeInsets.all(50),
         child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const SizedBox(height: 20.0),
             Container(
-              child:  StreamBuilder(
+              child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('category')
                     .doc(categoryID)
@@ -88,11 +89,11 @@ class _CategoryDetailState extends State<CategoryDetail> {
         return Container(
             margin: const EdgeInsets.all(0.0),
             padding: const EdgeInsets.all(30.0),
-            decoration:
-                BoxDecoration(border: Border.all(width: 1, color: Colors.black)),
+            decoration: BoxDecoration(
+                border: Border.all(width: 1, color: Colors.black)),
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text("Nom de la catégorie : " + category.name,
+              Text(getTranslated(context, 'category_name')! + category.name,
                   style: const TextStyle(
                     fontFamily: "Raleway-Regular",
                     fontSize: 20.0,
@@ -101,12 +102,10 @@ class _CategoryDetailState extends State<CategoryDetail> {
                   textAlign: TextAlign.center),
             ]));
       } else {
-        return const Text(
-            "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
+        return Text(getTranslated(context, 'error_category_not_found')!);
       }
     }
-    return const Text(
-        "Pas de catégorie trouvée, erreur. Veuillez contacter les développeurs");
+    return Text(getTranslated(context, 'error_category_not_found')!);
   }
 
   Future<void> editCategory() async {
@@ -119,30 +118,40 @@ class _CategoryDetailState extends State<CategoryDetail> {
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: const Text("Annuler"),
+      child: Text(getTranslated(context, 'button_cancel')!),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: const Text("Continuer"),
+      child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
         category.updateItemsDeletedCategory();
+        if (category.name != 'Non défini'){
         _categories.doc(category.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Catégorie supprimée'),
-            duration: Duration(seconds: 2)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(getTranslated(context, 'snackbar_category_delete')!),
+            duration: const Duration(seconds: 2)));
         var nav = Navigator.of(context);
         nav.pop();
         nav.pop();
+        }
+        else {
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(getTranslated(context, 'snackbar_category_error_cant_delete')!),
+            duration: const Duration(seconds: 2)));
+            var nav = Navigator.of(context);
+            nav.pop();
+            nav.pop();
+        }
+        
       },
     );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("Suppression de la catégorie"),
-      content:
-          const Text("Êtes-vous vraiment sûr de vouloir supprimer cette catégorie ?"),
+      title: Text(getTranslated(context, 'category_delete_alert')!),
+      content: Text(getTranslated(context, 'category_are_you_sure')!),
       actions: [
         cancelButton,
         continueButton,
