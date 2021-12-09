@@ -108,6 +108,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 leading: const Icon(Icons.search),
                 title: TextField(
                   controller: TextEditingController(text: search),
+                  textInputAction: TextInputAction.search,
                   decoration: const InputDecoration(
                       border: InputBorder.none, hintText: "..."),
                   onChanged: null,
