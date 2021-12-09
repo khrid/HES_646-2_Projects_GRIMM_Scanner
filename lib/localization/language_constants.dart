@@ -31,7 +31,7 @@ Locale _locale(String languageCode) {
       case GERMAN:
       return const Locale(GERMAN, "DE");
     default:
-      return const Locale(ENGLISH, 'US');
+      return const Locale(FRENCH, "FR");
   }
 }
 
