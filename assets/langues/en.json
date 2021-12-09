@@ -133,11 +133,11 @@
     "button_items_admin": "Manage items",
     "button_categories_admin": "Manage categories",
 
-    "appbar_admin_profile": "Profile management",
-    "title_modify_profile": "Modify your profile information",
+    "appbar_admin_profil": "Profile management",
+    "title_modify_profil": "Modify your profile information",
     "snackbar_update_success": "Profile update successful",
     "snackbar_error_mail": "Error in entering your email address.",
-    "snack_error_profile": "Error updating profile.",
+    "snack_error_profil": "Error updating profile.",
     "snackbar_error_max_10_cat_or_all": "Max 10 categories (or all).",
 
     "apply": "Apply",
