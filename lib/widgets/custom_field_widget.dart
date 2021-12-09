@@ -57,6 +57,8 @@ class CustomFieldWidgetState extends State<CustomFieldWidget> {
             Expanded(
                 flex: 10,
                 child: TextFormField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     initialValue: widget.customFieldValue,
                     onChanged: (string) {
                       setState(() {

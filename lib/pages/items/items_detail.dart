@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,7 +13,6 @@ import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
-import 'dart:developer' as developer;
 
 // printing libs
 import 'package:pdf/pdf.dart';
@@ -166,7 +167,8 @@ class _ItemDetailState extends State<ItemDetail> {
     setState(() {
       grimmItem.populateItemInfoFromFirestore();
       Navigator.pushNamed(context, EditItemScreen.routeName,
-          arguments: grimmItem);
+              arguments: grimmItem)
+          .then((value) => setState(() {}));
     });
   }
 
@@ -181,7 +183,6 @@ class _ItemDetailState extends State<ItemDetail> {
     Widget continueButton = TextButton(
       child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
-        _items.doc(grimmItem.id).delete();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(getTranslated(context, 'snackbar_item_delete')!),
             duration: Duration(seconds: 2)));
@@ -257,9 +258,10 @@ class _ItemDetailState extends State<ItemDetail> {
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
-                  Text("" + item.location,
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 14)),
+                  Flexible(
+                      child: Text("" + item.location,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14))),
                 ],
               ),
               const SizedBox(height: 20.0),
@@ -446,19 +448,20 @@ class _ItemDetailState extends State<ItemDetail> {
   buildCustomFields() {
     var list = <Widget>[];
     if (grimmItem.customFields!.isNotEmpty) {
-      print(grimmItem.customFields);
       grimmItem.customFields!.forEach((key, value) {
         list.add(const SizedBox(height: 20.0));
         list.add(Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(key.toString() + " : ",
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold)),
-            Text("" + value,
-                style: const TextStyle(color: Colors.black, fontSize: 14)),
+            Flexible(
+                child: Text(key.toString() + " : ",
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold))),
+            Flexible(
+                child: Text("" + value,
+                    style: const TextStyle(color: Colors.black, fontSize: 14))),
           ],
         ));
       });

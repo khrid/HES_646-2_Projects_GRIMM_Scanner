@@ -229,6 +229,8 @@ class _EditItemState extends State<EditItemScreen> {
               },
             ),
             TextFormField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               controller: remarkController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -315,7 +317,7 @@ class _EditItemState extends State<EditItemScreen> {
                     grimmItem.remark = remarkController.text;
                     grimmItem.idCategory =
                         await getIdForCategoryName(dropdownValue);
-                    //print("End " + grimmItem.toString());
+                    print("End " + grimmItem.toString());
                     if (_customFields.isNotEmpty) {
                       grimmItem.customFields = {};
                       for (var element in _customFields) {
@@ -327,6 +329,8 @@ class _EditItemState extends State<EditItemScreen> {
                               (element).customFieldValue.toString());
                         }
                       }
+                    } else {
+                      grimmItem.customFields = {};
                     }
                     print(grimmItem);
                     grimmItem.updateFirestore();
