@@ -197,7 +197,7 @@ class _LoginState extends State<Login> {
                         password: passwordController.text);
                     if (result is GrimmUser) {
                       await Future.delayed(
-                          const Duration(milliseconds: 200), () {});
+                          const Duration(milliseconds: 400), () {});
                       MenuScreen(context);
                       passwordController.text = "";
                     } else {
