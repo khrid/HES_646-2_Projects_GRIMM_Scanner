@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 
 class UserUpdate extends StatefulWidget {
@@ -54,7 +55,7 @@ class _UserUpdateState extends State<UserUpdate> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Éditez utilisateur"),
+        title: Text(getTranslated(context, 'appbar_user_update')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -64,9 +65,9 @@ class _UserUpdateState extends State<UserUpdate> {
         child: ListView(
           padding: const EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Modifiez les informations de l'utilisateur",
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'title_update_account')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
                 color: Colors.black,
@@ -80,24 +81,24 @@ class _UserUpdateState extends State<UserUpdate> {
               controller: userSurnameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Prénom" ne peut pas être vide';
+                  return getTranslated(context, 'error_firstname_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Prénom',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'firstname_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -113,24 +114,24 @@ class _UserUpdateState extends State<UserUpdate> {
               controller: userNameController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Nom" ne peut pas être vide';
+                  return getTranslated(context, 'error_lastname_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Nom',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'name_simple')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -144,19 +145,19 @@ class _UserUpdateState extends State<UserUpdate> {
             ),
             TextField(
               controller: userEmailController,
-              decoration: const InputDecoration(
-                labelText: 'Email (non-modifiable actuellement)',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'email_no_change')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -169,7 +170,7 @@ class _UserUpdateState extends State<UserUpdate> {
               height: 20,
             ),
             CheckboxListTile(
-              title: const Text("Administrateur"),
+              title: Text(getTranslated(context, 'administrator')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -181,7 +182,7 @@ class _UserUpdateState extends State<UserUpdate> {
               },
             ),
             CheckboxListTile(
-              title: const Text("Responsable inventaire"),
+              title: Text(getTranslated(context, 'objectManager')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -193,7 +194,7 @@ class _UserUpdateState extends State<UserUpdate> {
               },
             ),
             CheckboxListTile(
-              title: const Text("Membre"),
+              title: Text(getTranslated(context, 'membre')!),
               tileColor: Theme.of(context).primaryColor,
               checkColor: Colors.white,
               activeColor: Colors.black,
@@ -236,12 +237,16 @@ class _UserUpdateState extends State<UserUpdate> {
                       Navigator.pop(context);
                     }
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            "Veuillez sélectionner un groupe au minimum.")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        getTranslated(context, 'snackbar_error_one_group_min')!,
+                      ),
+                      duration: const Duration(seconds: 5),
+                      backgroundColor: const Color(0xFFB71C1C),
+                    ));
                   }
                 },
-                child: const Text("Valider les modifications")),
+                child: Text(getTranslated(context, 'button_validate')!)),
             const SizedBox(
               height: 20,
             ),
@@ -267,17 +272,21 @@ class _UserUpdateState extends State<UserUpdate> {
                     if (tab.isNotEmpty) {
                       _user!.updateStatus();
                       Navigator.pop(context);
-                      //print("Désactivation effectuée");
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              "Veuillez sélectionner un groupe au minimum.")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_error_one_group_min')!,
+                        ),
+                        duration: const Duration(seconds: 5),
+                        backgroundColor: const Color(0xFFB71C1C),
+                      ));
                     }
                   }
                 },
                 child: Text(_user!.enable
-                    ? "Désactiver le compte"
-                    : "Activer le compte")),
+                    ? getTranslated(context, 'desactivitation')!
+                    : getTranslated(context, 'activation')!)),
             const SizedBox(
               height: 20,
             ),

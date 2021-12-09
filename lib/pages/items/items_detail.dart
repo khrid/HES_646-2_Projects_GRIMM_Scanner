@@ -1,7 +1,10 @@
+import 'dart:developer' as developer;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/assets/constants.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
@@ -10,6 +13,7 @@ import 'package:grimm_scanner/pages/items/items_history.dart';
 import 'package:grimm_scanner/utils/qrutils.dart';
 import 'package:grimm_scanner/widgets/action_button.dart';
 import 'package:grimm_scanner/widgets/expandable_fab.dart';
+
 // printing libs
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -45,6 +49,7 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   Future<bool> isRightRole() async {
+    isRight = false;
     _rights.doc("objectButton").get().then((result) {
       right = GrimmRight.fromJson(result);
 
@@ -65,9 +70,7 @@ class _ItemDetailState extends State<ItemDetail> {
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as Map;
     qrcode = arg['qrCode'];
-    role = arg['role'];
-
-    //print("Role : " + role);
+    role = arg['role'] ?? "null";
     // on s'assure que "qrcode" vaut quelque chose, car sinon plus loin ça va péter
     // s'il vaut "NULL", on force le retour au home screen
     if (qrcode == "NULL") {
@@ -85,13 +88,11 @@ class _ItemDetailState extends State<ItemDetail> {
         remark: "remark");
     grimmItem.populateItemInfoFromFirestore();
 
-    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
-
-       double cWidth = MediaQuery.of(context).size.width * 0.8;
+    double cWidth = MediaQuery.of(context).size.width * 0.8;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Détail de l'objet"),
+        title: Text(getTranslated(context, 'appbar_item_detail')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -164,24 +165,25 @@ class _ItemDetailState extends State<ItemDetail> {
     setState(() {
       grimmItem.populateItemInfoFromFirestore();
       Navigator.pushNamed(context, EditItemScreen.routeName,
-          arguments: grimmItem);
+              arguments: grimmItem)
+          .then((value) => setState(() {}));
     });
   }
 
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: const Text("Annuler"),
+      child: Text(getTranslated(context, 'button_cancel')!),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: const Text("Continuer"),
+      child: Text(getTranslated(context, 'button_continue')!),
       onPressed: () {
         _items.doc(grimmItem.id).delete();
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Objet supprimé'),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(getTranslated(context, 'snackbar_item_delete')!),
             duration: Duration(seconds: 2)));
         var nav = Navigator.of(context);
         nav.pop();
@@ -191,8 +193,8 @@ class _ItemDetailState extends State<ItemDetail> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text("Suppression de l'objet"),
-      content: const Text("Êtes-vous vraiment sûr de vouloir supprimer cet objet ?"),
+      title: Text(getTranslated(context, 'alert_item_delete')!),
+      content: Text(getTranslated(context, 'item_delete__are_you_sure')!),
       actions: [
         cancelButton,
         continueButton,
@@ -209,7 +211,6 @@ class _ItemDetailState extends State<ItemDetail> {
   }
 
   void showHistory() {
-    //print("ItemDetail - showHistory - " + grimmItem.toString());
     Navigator.pushNamed(context, ItemHistory.routeName, arguments: grimmItem);
   }
 
@@ -224,12 +225,16 @@ class _ItemDetailState extends State<ItemDetail> {
       // si on a des données et que le doc existe
       if (snapshot.data!.data() != null) {
         GrimmItem item = GrimmItem.fromJson(snapshot.data);
+        item.populateItemInfoFromFirestore();
+        developer.log("ItemDetail - GrimmItem - " + grimmItem.toString(),
+            name:
+                "ch.grimmvs.scanner.lib.pages.items.ItemDetail.buildItemDetails");
 
         String availability;
         if (item.available == true) {
-          availability = "Disponible";
+          availability = getTranslated(context, 'available')!;
         } else {
-          availability = "Emprunté";
+          availability = getTranslated(context, 'unavailable')!;
         }
 
         return Column(
@@ -246,22 +251,23 @@ class _ItemDetailState extends State<ItemDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Emplacement : ",
-                      style: TextStyle(
+                  Text(getTranslated(context, 'item_location_detail')!,
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
-                  Text("" + item.location,
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 14)),
+                  Flexible(
+                      child: Text("" + item.location,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14))),
                 ],
               ),
               const SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Couleur : ",
-                      style: TextStyle(
+                  Text(getTranslated(context, 'item_color_detail')!,
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
@@ -282,8 +288,8 @@ class _ItemDetailState extends State<ItemDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Statut : ",
-                      style: TextStyle(
+                  Text(getTranslated(context, 'item_status_detail')!,
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
@@ -296,8 +302,8 @@ class _ItemDetailState extends State<ItemDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Remarque : ",
-                      style: TextStyle(
+                  Text(getTranslated(context, 'item_remark_detail')!,
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontWeight: FontWeight.bold)),
@@ -308,6 +314,7 @@ class _ItemDetailState extends State<ItemDetail> {
                   )
                 ],
               ),
+              buildCustomFields(),
               const SizedBox(height: 50.0),
               StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -338,13 +345,14 @@ class _ItemDetailState extends State<ItemDetail> {
                                     grimmItem.updateAvailability(user!.uid);
                                   },
                                   child: Text(item.available
-                                      ? "EMPRUNTER"
-                                      : "RETOURNER")),
+                                      ? getTranslated(context, 'button_borrow')!
+                                      : getTranslated(
+                                          context, 'button_give_back')!)),
                               const SizedBox(height: 20.0),
                             ]);
                       }
                     } else {
-                      return const Text("erreur");
+                      return Text(getTranslated(context, 'error_simple')!);
                     }
                   }
                   return const SizedBox(
@@ -354,10 +362,10 @@ class _ItemDetailState extends State<ItemDetail> {
               ),
             ]);
       } else {
-        return const Text("Pas d'objet trouvé, scannez à nouveau");
+        return Text(getTranslated(context, 'error_item_not_found')!);
       }
     }
-    return const Text("Pas d'objet trouvé, scannez à nouveau");
+    return Text(getTranslated(context, 'error_item_not_found')!);
   }
 
   Widget buildItemCategory(BuildContext context,
@@ -372,8 +380,8 @@ class _ItemDetailState extends State<ItemDetail> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Catégorie : ",
-                style: TextStyle(
+            Text(getTranslated(context, 'item_category_detail')!,
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.bold)),
@@ -396,7 +404,7 @@ class _ItemDetailState extends State<ItemDetail> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('CLOSE'),
+              child: Text(getTranslated(context, 'button_close')!),
             ),
           ],
         );
@@ -433,5 +441,34 @@ class _ItemDetailState extends State<ItemDetail> {
           onLayout: (PdfPageFormat format) async => doc.save(),
           name: "qrgrimm_" + grimmItem.getDescriptionForPdfFilename() + "");
     }
+  }
+
+  buildCustomFields() {
+    var list = <Widget>[];
+    if (grimmItem.customFields!.isNotEmpty) {
+      grimmItem.customFields!.forEach((key, value) {
+        list.add(const SizedBox(height: 20.0));
+        list.add(Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+                child: Text(key.toString() + " : ",
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold))),
+            Flexible(
+                child: Text("" + value,
+                    style: const TextStyle(color: Colors.black, fontSize: 14))),
+          ],
+        ));
+      });
+      return Container(
+        child: Column(
+          children: list,
+        ),
+      );
+    }
+    return Container();
   }
 }

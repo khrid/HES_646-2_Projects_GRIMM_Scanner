@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
-
+import 'package:grimm_scanner/widgets/custom_field_widget.dart';
+import 'dart:developer' as developer;
 import 'edit_item.dart';
 
 class CreateItemScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class CreateItemScreen extends StatefulWidget {
 
 class _CreateItemState extends State<CreateItemScreen> {
   final _key = GlobalKey<FormState>();
+  var _customFields = <Widget>[];
   TextEditingController descriptionController =
       TextEditingController(); // controlleur de la description
   TextEditingController locationController =
@@ -29,6 +32,11 @@ class _CreateItemState extends State<CreateItemScreen> {
   String dropdownValue = "Non défini";
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     GrimmItem grimmItem = GrimmItem(
         description: "description",
@@ -38,10 +46,9 @@ class _CreateItemState extends State<CreateItemScreen> {
         available: true,
         remark: "remark");
 
-    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Création"),
+        title: Text(getTranslated(context, 'appbar_item_creation')!),
         backgroundColor: Theme.of(context).primaryColor,
         elevation: 0,
       ),
@@ -51,9 +58,9 @@ class _CreateItemState extends State<CreateItemScreen> {
         child: ListView(
           padding: const EdgeInsets.all(50),
           children: <Widget>[
-            const Text(
-              "Créez un nouvel objet",
-              style: TextStyle(
+            Text(
+              getTranslated(context, 'title_item_creation')!,
+              style: const TextStyle(
                 fontFamily: "Raleway-Regular",
                 fontSize: 30.0,
                 color: Colors.black,
@@ -67,24 +74,24 @@ class _CreateItemState extends State<CreateItemScreen> {
               controller: descriptionController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Nom de l'objet' ne peut pas être vide";
+                  return getTranslated(context, 'error_name_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: "Nom de l'objet",
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'item_name')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -100,24 +107,24 @@ class _CreateItemState extends State<CreateItemScreen> {
               controller: locationController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Emplacement' ne peut pas être vide";
+                  return getTranslated(context, 'error_location_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Emplacement',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'item_location')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -133,24 +140,24 @@ class _CreateItemState extends State<CreateItemScreen> {
               controller: colorController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Le champ 'Couleur' ne peut pas être vide";
+                  return getTranslated(context, 'error_color_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Couleur',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'color')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -181,10 +188,10 @@ class _CreateItemState extends State<CreateItemScreen> {
                     });
                     return DropdownButtonFormField<String>(
                       value: dropdownValue,
-                      hint: const Text("Category"),
-                      decoration: const InputDecoration(
-                        labelText: 'Catégorie',
-                        labelStyle: TextStyle(color: Colors.black),
+                      hint: Text(getTranslated(context, 'category')!),
+                      decoration: InputDecoration(
+                        labelText: getTranslated(context, 'category')!,
+                        labelStyle: const TextStyle(color: Colors.black),
                       ),
                       iconSize: 24,
                       //elevation: 16,
@@ -214,24 +221,24 @@ class _CreateItemState extends State<CreateItemScreen> {
               controller: remarkController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Le champ "Remarque" ne peut pas être vide';
+                  return getTranslated(context, 'error_remark_item_empty')!;
                 } else {
                   return null;
                 }
               },
-              decoration: const InputDecoration(
-                labelText: 'Remarque',
-                labelStyle: TextStyle(
+              decoration: InputDecoration(
+                labelText: getTranslated(context, 'remark')!,
+                labelStyle: const TextStyle(
                   fontFamily: "Raleway-Regular",
                   fontSize: 14.0,
                   color: Colors.black,
                 ),
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
                 ),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.black,
                   ),
@@ -239,6 +246,43 @@ class _CreateItemState extends State<CreateItemScreen> {
               ),
               textInputAction: TextInputAction.next,
               cursorColor: Colors.black,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              child: Column(
+                children: _customFields,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            side: const BorderSide(
+                                width: 1.0, color: Colors.black),
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _customFields.add(CustomFieldWidget(
+                                  customFieldKey: "", customFieldValue: ""));
+                            });
+                          },
+                          child: Text(
+                              getTranslated(context, 'button_add_field')!)),
+                      const Spacer(),
+                      getRemoveCustomFieldButton()
+                    ],
+                  )
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,
@@ -261,15 +305,31 @@ class _CreateItemState extends State<CreateItemScreen> {
                           remark: remarkController.text,
                           idCategory: await getIdForCategoryName(dropdownValue),
                           available: true);
+                      // si on a un champ personnalisé
+                      if (_customFields.isNotEmpty) {
+                        for (var element in _customFields) {
+                          item.addCustomField(
+                              (element as CustomFieldWidget)
+                                  .customFieldKey
+                                  .toString(),
+                              (element).customFieldValue.toString());
+                        }
+                      }
+                      developer.log(item.toString());
                       await item.saveToFirestore();
-                      //print("Item CREATE" + item.toString());
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Objet créé avec succès")));
-                           Navigator.of(context).pop();
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                          getTranslated(
+                              context, 'snackbar_item_create_success')!,
+                        ),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: const Color(0xFF1CB731),
+                      ));
+                      Navigator.of(context).pop();
                     }
                   }
                 },
-                child: const Text("VALIDER")),
+                child: Text(getTranslated(context, 'button_validate')!)),
             const SizedBox(
               height: 20,
             ),
@@ -277,5 +337,22 @@ class _CreateItemState extends State<CreateItemScreen> {
         ),
       ),
     );
+  }
+
+  Widget getRemoveCustomFieldButton() {
+    if (_customFields.isNotEmpty) {
+      return ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Theme.of(context).primaryColor,
+            side: const BorderSide(width: 1.0, color: Colors.black),
+          ),
+          onPressed: () {
+            setState(() {
+              _customFields.removeLast();
+            });
+          },
+          child: Text(getTranslated(context, 'button_delete_field')!));
+    }
+    return const SizedBox(width: 0, height: 0);
   }
 }

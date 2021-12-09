@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/account/accounts_user_detail.dart';
-import 'package:provider/provider.dart';
-
 import 'create_account.dart';
 
 class AccountsAdmin extends StatefulWidget {
@@ -21,12 +20,9 @@ class _AccountsAdminState extends State<AccountsAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<GrimmUser?>(context);
-    //print("testHomepage");
-    //print(user);
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Gestion des utilisateurs"),
+          title: Text(getTranslated(context, 'appbar_users_admin')!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
@@ -46,9 +42,7 @@ class _AccountsAdminState extends State<AccountsAdmin> {
               .orderBy("name")
               .snapshots(),
           builder: buildUsersList,
-        ))
-        //drawer: const CustomDrawer(),
-        );
+        )));
   }
 
   Future<void> createUser() async {

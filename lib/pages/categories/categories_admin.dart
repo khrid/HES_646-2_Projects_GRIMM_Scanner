@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
-
 import 'categories_detail.dart';
 
 class CategoriesAdmin extends StatefulWidget {
@@ -15,84 +15,79 @@ class CategoriesAdmin extends StatefulWidget {
 }
 
 class _CategoriesAdminState extends State<CategoriesAdmin> {
-
-  TextEditingController categoryNameController = TextEditingController(); // controlleur de la description
+  TextEditingController categoryNameController =
+      TextEditingController(); // controlleur de la description
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Gestion des catégories"),
-          backgroundColor: Theme
-              .of(context)
-              .primaryColor,
+          title: Text(getTranslated(context, 'appbar_category_admin')!),
+          backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.black,
           onPressed: () => openDialog(context),
-          child: Icon(Icons.add,
-            color: Theme
-                .of(context)
-                .primaryColor,),
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         body: SingleChildScrollView(
             child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("category")
-                  .orderBy("name")
-                  .snapshots(),
-              builder: buildCategoriesList,
-            ))
-      //drawer: const CustomDrawer(),
-    );
+          stream: FirebaseFirestore.instance
+              .collection("category")
+              .orderBy("name")
+              .snapshots(),
+          builder: buildCategoriesList,
+        )));
   }
-
 
   openDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = TextButton(
-      child: const Text("Annuler"),
+      child: Text(getTranslated(context, 'button_cancel')!),
       onPressed: () {
         Navigator.of(context).pop();
       },
     );
     Widget continueButton = TextButton(
-      child: const Text("Confirmer"),
-      onPressed: () {
-          GrimmCategory category = GrimmCategory(name: categoryNameController.text);
+        child: Text(getTranslated(context, 'button_confirm')!),
+        onPressed: () {
+          GrimmCategory category =
+              GrimmCategory(name: categoryNameController.text);
           category.saveToFirestore();
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('Catégorie ajoutée'),
-              duration: Duration(seconds: 2)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              getTranslated(context, 'category_add')!,
+            ),
+            duration: const Duration(seconds: 3),
+            backgroundColor: const Color(0xFF1CB731),
+          ));
           var nav = Navigator.of(context);
           nav.pop();
-          setState(() {
-          });
+          setState(() {});
         }
-      //}
-    );
+        //}
+        );
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: const Text('Nouvelle catégorie :'),
+      title: Text(getTranslated(context, 'category_new')!),
       content: TextFormField(
           controller: categoryNameController,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Le champ "Prénom" ne peut pas être vide';
+              return getTranslated(context, 'error_category_empty')!;
             } else {
               return null;
             }
           },
           textInputAction: TextInputAction.next,
-          decoration: const InputDecoration(
-              hintText: 'Entrez la nouvelle catégorie'
-          )
-      ),
+          decoration: InputDecoration(
+              hintText: getTranslated(context, 'category_field_new')!)),
       actions: [
         cancelButton,
         continueButton,
@@ -108,9 +103,8 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
     );
   }
 
-
-  Widget buildCategoriesList(BuildContext context,
-      AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+  Widget buildCategoriesList(
+      BuildContext context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
     if (snapshot.hasData) {
       return Column(children: <Widget>[
         ListView(
@@ -127,14 +121,13 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
                   onTap: () {
                     Navigator.pushNamed(context, CategoryDetail.routeName,
                         arguments: grimmCategory.id);
-                  }
-              ),
+                  }),
             );
           }).toList(),
         )
       ]);
     } else {
-      return const Center (
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
