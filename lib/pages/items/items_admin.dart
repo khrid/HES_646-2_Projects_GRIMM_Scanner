@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
+import 'package:grimm_scanner/models/grimm_right.dart';
 import 'package:grimm_scanner/pages/items/items_filter.dart';
 
 import 'create_item.dart';
@@ -23,13 +24,18 @@ class _ItemsAdminState extends State<ItemsAdmin> {
   bool? filtersAvailable;
   List filtersCategory = [];
   late String search;
+  var isRight;
   late Stream<QuerySnapshot> searchStream;
   late Query searchQuery;
+  late GrimmRight right;
+  late final CollectionReference _rights =
+      FirebaseFirestore.instance.collection("rights");
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    isRightRole();
     search = "";
     searchQuery =
         FirebaseFirestore.instance.collection("items").orderBy("description");
@@ -70,6 +76,23 @@ class _ItemsAdminState extends State<ItemsAdmin> {
     searchStream = searchQuery.snapshots();
   }
 
+  Future<bool> isRightRole() async {
+    isRight = true;
+    _rights.doc("listItems").get().then((result) {
+      right = GrimmRight.fromJson(result);
+      if (right.permissions.contains(role)) {
+        setState(() {
+          isRight = false;
+        });
+      } else {
+        setState(() {
+          isRight = true;
+        });
+      }
+    });
+    return isRight;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (ModalRoute.of(context)!.settings.arguments is Map) {
@@ -86,6 +109,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
     }
+
     return Scaffold(
         appBar: AppBar(
           title: Text(getTranslated(context, 'appbar_item_list')!),
@@ -93,14 +117,16 @@ class _ItemsAdminState extends State<ItemsAdmin> {
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black,
-          onPressed: createItem,
-          child: Icon(
-            Icons.add,
-            color: Theme.of(context).primaryColor,
-          ),
-        ),
+        floatingActionButton: (isRight == true)
+            ? FloatingActionButton(
+                backgroundColor: Colors.black,
+                onPressed: createItem,
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).primaryColor,
+                ),
+              )
+            : null,
         body: Column(
           children: [
             Card(
@@ -139,14 +165,20 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                   IconButton(
                       onPressed: () {
                         Navigator.of(context).pushNamed(ItemsFilter.routeName,
-                            arguments: {role, refresh, filtersAvailable, filtersCategory});
+                            arguments: {
+                              role,
+                              refresh,
+                              filtersAvailable,
+                              filtersCategory
+                            });
                       },
                       icon: const Icon(Icons.filter_list)),
                 ]),
               ),
             ),
-            Expanded(child: SingleChildScrollView(
-                child: Column(
+            Expanded(
+                child: SingleChildScrollView(
+                    child: Column(
               children: [
                 StreamBuilder<QuerySnapshot>(
                   stream: searchStream,

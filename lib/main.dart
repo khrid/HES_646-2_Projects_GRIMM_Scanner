@@ -110,7 +110,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,],
             //supported languages
-            locale: _locale,
+            locale: _locale, 
             supportedLocales: const [
               Locale('en', 'US'),
               Locale('fr', 'FR'),

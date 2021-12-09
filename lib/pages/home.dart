@@ -18,6 +18,7 @@ import 'package:grimm_scanner/widgets/button_home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'account/accounts_admin.dart';
+import 'items/items_admin.dart';
 import 'items/items_manage_menu.dart';
 
 class Home extends StatefulWidget {
@@ -192,9 +193,43 @@ class _HomeState extends State<Home> {
                     .snapshots(),
                 builder: buildButtonRights,
               ),
+              //Gestion des accès : StreamBuilder pour le button d'accès au droits
+              StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('rights')
+                    .doc("listItems")
+                    .snapshots(),
+                builder: buildButtonItemList,
+              ),
             ],
           ),
         ));
+  }
+
+  Widget buildButtonItemList(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    //print(snapshot.data);
+    if (snapshot.hasData) {
+      if (snapshot.data!.data() != null) {
+        right = GrimmRight.fromJson(snapshot.data);
+
+        if (right.permissions.contains(role)) {
+          return Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+            CustomHomeButton(
+                title: getTranslated(context, 'button_item_list')!,
+                onPressed: navigateToListItem),
+            const SizedBox(
+              height: 10,
+            ),
+          ]);
+        }
+      } else {
+        return Text(getTranslated(context, 'error_simple')!);
+      }
+    }
+    return const SizedBox(
+      height: 0,
+    );
   }
 
   Widget buildButtonAdmin(
@@ -303,6 +338,12 @@ class _HomeState extends State<Home> {
   Future<void> navigateToUsersAdmin() async {
     setState(() {
       Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
+    });
+  }
+  
+  Future<void> navigateToListItem() async {
+    setState(() {
+      Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
     });
   }
 
