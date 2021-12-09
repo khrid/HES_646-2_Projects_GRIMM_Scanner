@@ -54,19 +54,16 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
 
   Widget buildRightsDetail(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     var tab = [];
-
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
-        //print("salut");
-        //print(right.toString());
         if (firstLoad == 1) {
           if (right.permissions.contains("Administrator")) isAdmin = true;
           if (right.permissions.contains("Member")) isMember = true;
-          if (right.permissions.contains("ObjectManager"))
+          if (right.permissions.contains("ObjectManager")) {
             isObjectManager = true;
+          }
           firstLoad = 0;
         }
 
@@ -155,7 +152,6 @@ class _RightsAdminDetailState extends State<RightsAdminDetail> {
                           if (tab.isNotEmpty) {
                             if (_formKey.currentState!.validate()) {
                               updateRight(right);
-                              // print("Changements effectués");
                               Navigator.pop(context);
                             }
                           } else {

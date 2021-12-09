@@ -50,7 +50,6 @@ Widget buildRightsList(
                 horizontalTitleGap: 10,
                 title: Text(grimmRight.description),
                 onTap: () {
-                  //print("GRIMM RIGHT ID"+ grimmRight.id);
                   Navigator.pushNamed(context, RightsAdminDetail.routeName,
                       arguments: grimmRight.id);
                 }),

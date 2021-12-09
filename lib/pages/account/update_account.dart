@@ -268,7 +268,6 @@ class _UserUpdateState extends State<UserUpdate> {
                     if (tab.isNotEmpty) {
                       _user!.updateStatus();
                       Navigator.pop(context);
-                      //print("Désactivation effectuée");
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(getTranslated(

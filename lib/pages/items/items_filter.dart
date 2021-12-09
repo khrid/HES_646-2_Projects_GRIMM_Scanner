@@ -27,22 +27,16 @@ class _ItemsFilterState extends State<ItemsFilter> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //final arg = ModalRoute.of(context)!.settings.arguments as Map;
-    //print(ModalRoute.of(context)!.settings.);
-    //role = ModalRoute.of(context)!.settings.arguments ?? "";
-    //refresh = arg['refresh'] ?? "";
 
     if (firstbuild) {
       final arguments = [];
       arguments
           .addAll(ModalRoute.of(context)!.settings.arguments as LinkedHashSet);
-      print(arguments.elementAt(3).runtimeType);
       role = arguments.elementAt(0);
       refresh = arguments.elementAt(1);
       bool? temp = arguments.elementAt(2);
@@ -50,8 +44,6 @@ class _ItemsFilterState extends State<ItemsFilter> {
       for (var element in tmpCat) {
         categoryStatus.putIfAbsent(element, () => 1);
       }
-
-      print(tmpCat);
 
       if (temp == null) {
         setState(() {
@@ -73,13 +65,13 @@ class _ItemsFilterState extends State<ItemsFilter> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Filtrer"),
+          title: Text(getTranslated(context, "appbar_filtrer")!),
           backgroundColor: Theme.of(context).primaryColor,
           elevation: 0,
         ),
         backgroundColor: Theme.of(context).primaryColor,
         body: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             child: Center(
                 child: Column(children: [
               Text(getTranslated(context, "availability")!,
@@ -235,26 +227,20 @@ class _ItemsFilterState extends State<ItemsFilter> {
   }
 
   void applyFiltersToList() {
-    print(categoryStatus);
     bool? objectStatus;
     if (available && !borrowed) {
-      print("only available");
       objectStatus = true;
     } else if (!available && borrowed) {
-      print("only borrowed");
       objectStatus = false;
     } else {
       objectStatus = null;
     }
-    print(objectStatus);
     List categoryToDisplay = [];
     categoryStatus.forEach((key, value) {
       if (value == 1) {
         categoryToDisplay.add(key);
       }
     });
-    print(categoryToDisplay.length);
-    print(categoryStatus.length);
 
     if (categoryToDisplay.length < 10 ||
         categoryStatus.length == categoryToDisplay.length) {

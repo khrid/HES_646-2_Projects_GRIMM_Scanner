@@ -1,15 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
-import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
-import 'package:grimm_scanner/models/language.dart';
 import 'package:provider/provider.dart';
-
-import '../../main.dart';
 
 class ProfileAdmin extends StatefulWidget {
   static const routeName = "/profile";

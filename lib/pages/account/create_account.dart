@@ -2,15 +2,12 @@
 * Classe pour l'écran de création d'un nouveau compte 
 * Lié directement avec la firebase Authentification
 */
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_user.dart';
 import 'package:grimm_scanner/pages/home.dart';
 import 'package:grimm_scanner/service/authentication_service.dart';
-
-import 'accounts_admin.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   static const routeName = '/create_account';
@@ -273,9 +270,6 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                   if (isObjectManager) {
                     tab.add("ObjectManager");
                   }
-                  User _user = FirebaseAuth.instance.currentUser!;
-                  print("BEFORE");
-                  print(_user);
                   if (tab.isNotEmpty) {
                     if (_key.currentState!.validate()) {
                       GrimmUser grimmUser = GrimmUser(
@@ -288,16 +282,11 @@ class _CreateAccountState extends State<CreateAccountScreen> {
                           password: passwordController.text,
                           grimmUser: grimmUser);
                       if (result is GrimmUser) {
-                        //print("User CREATE" + result.toString());
                         changeErrorMessage("");
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(getTranslated(context,
                                 'snackbar_account_creation_sucess')!)));
-                        print("AFTER");
-                        User _user = FirebaseAuth.instance.currentUser!;
-                        print(_user);
                         Navigator.pushNamed(context, Home.routeName);
-                        // Navigator.pop(context);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(getTranslated(

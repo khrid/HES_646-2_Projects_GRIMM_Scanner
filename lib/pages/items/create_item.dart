@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_item.dart';
 import 'package:grimm_scanner/widgets/custom_field_widget.dart';
-
+import 'dart:developer' as developer;
 import 'edit_item.dart';
 
 class CreateItemScreen extends StatefulWidget {
@@ -33,7 +33,6 @@ class _CreateItemState extends State<CreateItemScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -47,7 +46,6 @@ class _CreateItemState extends State<CreateItemScreen> {
         available: true,
         remark: "remark");
 
-    //print("ItemDetail - GrimmItem - " + grimmItem.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(getTranslated(context, 'appbar_item_creation')!),
@@ -257,7 +255,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                 children: _customFields,
               ),
             ),
-             const SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Container(
@@ -272,7 +270,6 @@ class _CreateItemState extends State<CreateItemScreen> {
                                 width: 1.0, color: Colors.black),
                           ),
                           onPressed: () {
-                            print("click");
                             setState(() {
                               _customFields.add(CustomFieldWidget(
                                   customFieldKey: "", customFieldValue: ""));
@@ -287,7 +284,7 @@ class _CreateItemState extends State<CreateItemScreen> {
                 ],
               ),
             ),
-             const SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -318,9 +315,8 @@ class _CreateItemState extends State<CreateItemScreen> {
                               (element).customFieldValue.toString());
                         }
                       }
-                      print(item);
+                      developer.log(item.toString());
                       await item.saveToFirestore();
-                      //print("Item CREATE" + item.toString());
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(getTranslated(
                               context, 'snackbar_item_create_success')!)));
@@ -346,7 +342,6 @@ class _CreateItemState extends State<CreateItemScreen> {
             side: const BorderSide(width: 1.0, color: Colors.black),
           ),
           onPressed: () {
-            print("click");
             setState(() {
               _customFields.removeLast();
             });

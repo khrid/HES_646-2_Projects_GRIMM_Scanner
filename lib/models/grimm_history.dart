@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'grimm_item.dart';
 
 class GrimmHistory {

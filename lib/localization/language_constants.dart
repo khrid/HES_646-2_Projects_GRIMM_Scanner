@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'app_localization.dart';
 
 const String LAGUAGE_CODE = 'languageCode';
@@ -26,13 +25,13 @@ Future<Locale> getLocale() async {
 Locale _locale(String languageCode) {
   switch (languageCode) {
     case ENGLISH:
-      return Locale(ENGLISH, 'US');
+      return const Locale(ENGLISH, 'US');
     case FRENCH:
-      return Locale(FRENCH, "FR");
+      return const Locale(FRENCH, "FR");
       case GERMAN:
-      return Locale(GERMAN, "DE");
+      return const Locale(GERMAN, "DE");
     default:
-      return Locale(ENGLISH, 'US');
+      return const Locale(ENGLISH, 'US');
   }
 }
 

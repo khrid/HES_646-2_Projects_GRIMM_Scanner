@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grimm_scanner/assets/constants.dart';
 import 'package:grimm_scanner/models/grimm_history.dart';
@@ -26,14 +24,6 @@ class GrimmItem {
   String remark;
 
   Map<dynamic, dynamic>? customFields = <dynamic, dynamic>{};
-
-  /// Default constructor
-  /*GrimmItem(
-      {this.description = "",
-      this.location = "",
-      this.idCategory = "",
-      this.available = true,
-      this.remark = ""});*/
 
   /// Default constructor
   GrimmItem(

@@ -64,9 +64,7 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
                   ],
                 )
               ]),
-        )
-        //drawer: const CustomDrawer(),
-        );
+        ));
   }
 
   Future<void> navigateToCategoriesAdmin() async {
@@ -77,7 +75,6 @@ class _ItemsManageMenuState extends State<ItemsManageMenu> {
 
   Future<void> navigateToItemsAdmin() async {
     setState(() {
-      //print("Role items_manage_menu" + role);
       Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
     });
   }

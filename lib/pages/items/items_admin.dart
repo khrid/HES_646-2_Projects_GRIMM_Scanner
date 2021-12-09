@@ -33,7 +33,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isRightRole();
     search = "";
@@ -187,10 +186,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
               ],
             )))
           ],
-        )
-
-        //drawer: const CustomDrawer(),
-        );
+        ));
   }
 
   Future<void> createItem() async {
@@ -209,7 +205,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
           shrinkWrap: true,
           children: snapshot.data!.docs.map((doc) {
             GrimmItem grimmItem = GrimmItem.fromJson(doc);
-            //print(grimmItem);
             Widget availability = (grimmItem.available)
                 ? const Icon(
                     Icons.check,
@@ -227,7 +222,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                 title: Text(grimmItem.description),
                 subtitle: Text(grimmItem.location),
                 onTap: () {
-                  //print("Role items_admin " + role);
                   var _qr = Constants.grimmQrCodeStartsWith + grimmItem.id;
                   Navigator.pushNamed(context, ItemDetail.routeName,
                       arguments: {'qrCode': _qr, 'role': role});

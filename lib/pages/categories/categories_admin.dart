@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:grimm_scanner/localization/language_constants.dart';
 import 'package:grimm_scanner/models/grimm_category.dart';
-
 import 'categories_detail.dart';
 
 class CategoriesAdmin extends StatefulWidget {
@@ -43,9 +42,7 @@ class _CategoriesAdminState extends State<CategoriesAdmin> {
               .orderBy("name")
               .snapshots(),
           builder: buildCategoriesList,
-        ))
-        //drawer: const CustomDrawer(),
-        );
+        )));
   }
 
   openDialog(BuildContext context) {

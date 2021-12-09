@@ -48,7 +48,6 @@ class _HomeState extends State<Home> {
     prefs.setBool("first_time", true); // activer pour reset le first_time
     bool isFirstTime = prefs.getBool('first_time') ?? false;
     if (isFirstTime) {
-      //print('premier lancement, on switch la variable');
       setState(() {
         _firstLaunch = true;
       });
@@ -56,7 +55,6 @@ class _HomeState extends State<Home> {
       // si on a internet lors du premier lancement
       bool hasInternet = await InternetConnectionChecker().hasConnection;
       if (!await InternetConnectionChecker().hasConnection) {
-        //print('First launch but no Internet, sync needed later');
         prefs.setBool("sync_needed", true);
       } else {
         forceLocalSync();
@@ -67,7 +65,6 @@ class _HomeState extends State<Home> {
   }
 
   void forceLocalSync() {
-    //print('Force sync Firebase');
     FirebaseFirestore.instance.collection("items").snapshots().toList();
     FirebaseFirestore.instance.collection("items").get();
     FirebaseFirestore.instance.collection("category").snapshots().toList();
@@ -90,8 +87,6 @@ class _HomeState extends State<Home> {
   void setPersistenceEnabled() async {
     FirebaseFirestore.instance.settings =
         const Settings(persistenceEnabled: true);
-    /*print("isPersistenceEnabled : " +
-        FirebaseFirestore.instance.settings.persistenceEnabled.toString());*/
   }
 
   @override
@@ -129,8 +124,6 @@ class _HomeState extends State<Home> {
       Future.microtask(() => Navigator.pushNamedAndRemoveUntil(
           context, "/", (Route<dynamic> route) => false));
     }
-    //print("Permissions : " + role);
-    //print("testHomepage");
     return Scaffold(
         appBar: AppBar(
           title: Text(getTranslated(context, 'appbar_menu')!),
@@ -208,7 +201,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonItemList(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -234,7 +226,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonAdmin(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -260,7 +251,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonInventory(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -286,7 +276,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonRights(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -311,7 +300,6 @@ class _HomeState extends State<Home> {
 
   Widget buildButtonScan(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //print(snapshot.data);
     if (snapshot.hasData) {
       if (snapshot.data!.data() != null) {
         right = GrimmRight.fromJson(snapshot.data);
@@ -340,7 +328,7 @@ class _HomeState extends State<Home> {
       Navigator.pushNamed(context, AccountsAdmin.routeName, arguments: role);
     });
   }
-  
+
   Future<void> navigateToListItem() async {
     setState(() {
       Navigator.pushNamed(context, ItemsAdmin.routeName, arguments: role);
@@ -421,13 +409,10 @@ class _HomeState extends State<Home> {
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     // si on a du réseau (mais pas forcément internet...)
-    //print("connection lost : " + connectionLost.toString());
-    //print("connectivity result : " + result.toString());
     bool syncNeeded = prefs.getBool("sync_needed") ?? false;
     if (result != ConnectivityResult.none) {
       // check si on a internet
       bool hasInternet = await InternetConnectionChecker().hasConnection;
-      //print("has internet : " + hasInternet.toString());
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       if (hasInternet && _connectionLost) {
         if (syncNeeded) {
@@ -459,7 +444,6 @@ class _HomeState extends State<Home> {
         duration: const Duration(days: 365),
         backgroundColor: const Color(0xFFB71C1C),
       ));
-      //}
     }
   }
 
