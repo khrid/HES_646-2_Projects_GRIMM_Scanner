@@ -14,7 +14,7 @@ class Language {
   }
 
   static Language getDefaultLanguage() {
-    return languageList()[0];
+    return languageList()[1];
   }
 
   static Language getLanguage(String id) {
@@ -26,7 +26,7 @@ class Language {
        case 'de':
         return languageList()[2];
       default:
-        return languageList()[0];
+        return languageList()[1];
     }
   }
 }

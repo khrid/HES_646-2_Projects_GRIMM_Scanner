@@ -29,9 +29,20 @@ class _LoginState extends State<Login> {
 
   Language? selectedLanguage = Language.getDefaultLanguage();
 
+
+  void _getLocale() async {
+    String localeFromPrefs = await getLocaleCode();
+    print(localeFromPrefs);
+    selectedLanguage = Language.getLanguage(localeFromPrefs);
+    print(selectedLanguage!.name.toString());
+    _changeLanguage(selectedLanguage!);
+  }
+
   void _changeLanguage(Language language) async {
+    //print(language);
     selectedLanguage = language;
     Locale _locale = await setLocale(language.languageCode);
+    print(selectedLanguage!.name.toString());
     App.setLocale(context, _locale);
   }
 
@@ -40,6 +51,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     _passwordVisible = false;
+    //_changeLanguage(selectedLanguage!);
+    _getLocale();
   }
 
   @override
@@ -292,10 +305,10 @@ class _LoginState extends State<Login> {
                           ),
                           onPressed: () async {
                             Language? newLanguage =
-                                Language(1, 'English', 'en');
+                            Language(3, 'Deutsch', 'de');
                             _changeLanguage(newLanguage);
                           },
-                          child: const Text("English")),
+                          child: const Text("Deutsch")),
                       const SizedBox(
                         height: 20,
                       ),
@@ -308,10 +321,10 @@ class _LoginState extends State<Login> {
                           ),
                           onPressed: () async {
                             Language? newLanguage =
-                                Language(3, 'Deutsch', 'de');
+                            Language(1, 'English', 'en');
                             _changeLanguage(newLanguage);
                           },
-                          child: const Text("Deutsch")),
+                          child: const Text("English")),
                     ],
                   )
                 ],

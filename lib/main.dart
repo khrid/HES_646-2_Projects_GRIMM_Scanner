@@ -86,7 +86,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
     initializeFlutterFire();
-    getTestFirebaseValue();
+    //getTestFirebaseValue();
     super.initState();
   }
 

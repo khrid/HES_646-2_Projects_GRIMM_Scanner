@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_localization.dart';
 
-const String LAGUAGE_CODE = 'languageCode';
+const String LANGUAGE_CODE = 'languageCode';
 
 //languages code
 const String ENGLISH = 'en';
@@ -12,17 +12,22 @@ const String GERMAN = 'de';
 
 Future<Locale> setLocale(String languageCode) async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
-  await _prefs.setString(LAGUAGE_CODE, languageCode);
-  return _locale(languageCode);
+  await _prefs.setString(LANGUAGE_CODE, languageCode);
+  return locale(languageCode);
 }
 
 Future<Locale> getLocale() async {
   SharedPreferences _prefs = await SharedPreferences.getInstance();
-  String languageCode = _prefs.getString(LAGUAGE_CODE) ?? "en";
-  return _locale(languageCode);
+  String languageCode = _prefs.getString(LANGUAGE_CODE) ?? "fr";
+  return locale(languageCode);
 }
 
-Locale _locale(String languageCode) {
+Future<String> getLocaleCode() async {
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  return _prefs.getString(LANGUAGE_CODE) ?? "fr";
+}
+
+Locale locale(String languageCode) {
   switch (languageCode) {
     case ENGLISH:
       return const Locale(ENGLISH, 'US');
