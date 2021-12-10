@@ -42,9 +42,6 @@ class _ItemsAdminState extends State<ItemsAdmin> {
   }
 
   refresh(bool? objectStatus, List categoryToDisplay) {
-    print(" ---> state cat " + filtersCategory.toString());
-    print(" ---> param cat " + categoryToDisplay.toString());
-    print(" ---> search " + search);
     setState(() {
       searchQuery =
           FirebaseFirestore.instance.collection("items").orderBy("description");
@@ -52,26 +49,22 @@ class _ItemsAdminState extends State<ItemsAdmin> {
       if (objectStatus != null) {
         searchQuery =
             searchQuery.where("available", isEqualTo: filtersAvailable);
-        print(searchQuery.parameters);
       }
 
       filtersCategory = categoryToDisplay;
       if (categoryToDisplay.isNotEmpty) {
-        print(" ---> state cat " + filtersCategory.toString());
         // limitation firebase, wherein que 10 elements à la fois
 
         searchQuery = searchQuery.where("idCategory", whereIn: filtersCategory);
-        print(searchQuery.parameters);
       }
 
-      if (search.isNotEmpty) {
+      /*if (search.isNotEmpty) {
         searchQuery = searchQuery
             .where('description', isGreaterThanOrEqualTo: search)
             .where('description', isLessThan: search + 'z');
         print(searchQuery.parameters);
-      }
+      }*/
     });
-    print(searchQuery.parameters);
     searchStream = searchQuery.snapshots();
   }
 
@@ -140,7 +133,7 @@ class _ItemsAdminState extends State<ItemsAdmin> {
                   onSubmitted: (value) {
                     setState(() {
                       if (value.isNotEmpty) {
-                        search = value[0].toUpperCase() + value.substring(1);
+                        search = value;
                         refresh(filtersAvailable, filtersCategory);
                       }
                     });
@@ -205,29 +198,34 @@ class _ItemsAdminState extends State<ItemsAdmin> {
           shrinkWrap: true,
           children: snapshot.data!.docs.map((doc) {
             GrimmItem grimmItem = GrimmItem.fromJson(doc);
-            Widget availability = (grimmItem.available)
-                ? const Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  )
-                : const Icon(
-                    Icons.clear,
-                    color: Colors.red,
-                  );
-            return Card(
-              child: ListTile(
-                leading: availability,
-                minLeadingWidth: 10,
-                horizontalTitleGap: 10,
-                title: Text(grimmItem.description),
-                subtitle: Text(grimmItem.location),
-                onTap: () {
-                  var _qr = Constants.grimmQrCodeStartsWith + grimmItem.id;
-                  Navigator.pushNamed(context, ItemDetail.routeName,
-                      arguments: {'qrCode': _qr, 'role': role});
-                },
-              ),
-            );
+            Widget card = const SizedBox(height: 0,);
+            if (grimmItem.description.toLowerCase().contains(search.toLowerCase())) {
+              Widget availability = (grimmItem.available)
+                  ? const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    )
+                  : const Icon(
+                      Icons.clear,
+                      color: Colors.red,
+                    );
+              card = Card(
+                child: ListTile(
+                  leading: availability,
+                  minLeadingWidth: 10,
+                  horizontalTitleGap: 10,
+                  title: Text(grimmItem.description),
+                  subtitle: Text(grimmItem.location),
+                  onTap: () {
+                    var _qr = Constants.grimmQrCodeStartsWith + grimmItem.id;
+                    Navigator.pushNamed(context, ItemDetail.routeName,
+                        arguments: {'qrCode': _qr, 'role': role});
+                  },
+                ),
+              );
+            }
+
+            return card;
           }).toList(),
         )
       ]);
