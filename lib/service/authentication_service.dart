@@ -26,7 +26,7 @@ class AuthenticationService {
   /// sync the user status with firebase
   Stream<GrimmUser?> get user {
     return _auth.authStateChanges().map((User? user) {
-      return _userFromFirebaseUser(user);
+      return _userFromFirebaseUser(user!);
     });
   }
 
