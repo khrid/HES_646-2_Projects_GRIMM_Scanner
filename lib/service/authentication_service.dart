@@ -26,7 +26,7 @@ class AuthenticationService {
   /// sync the user status with firebase
   Stream<GrimmUser?> get user {
     return _auth.authStateChanges().map((User? user) {
-      return _userFromFirebaseUser(user!);
+      return _userFromFirebaseUser(user);
     });
   }
 
@@ -38,7 +38,7 @@ class AuthenticationService {
       User? user = result.user;
       developer.log(
           "AuthenticationService - signIn - returned user uid = " + user!.uid);
-      return _userFromFirebaseUser(user!);
+      return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       developer.log(
           "AuthenticationService - signIn - FireBaseAuthException message = " +
