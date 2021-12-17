@@ -24,23 +24,23 @@ In order to use the application, users have to login to their existing account o
 
 
 ## Built with
-• Dart v202.8531 
-• Flutter v58.0.1
+- Dart v202.8531 
+- Flutter v58.0.1
+
+
+## Libraries 
+Several libraries were used to develop the functionalities ofour project. They can be found in the pubspec.yaml file.
+
+
+## Folder structure
+- assets: files that are use by all the application. The main dart file is constants.dart,
+- localization: files required for the translation of the app,
+- models: models of the collectionsand documentsfrom Firebase,
+- pages: allthe visible pages of the application, login, scan, etc...,
+- service: provides the authentication servicefor Firebase Authentication,
+- utils: files that are “toolboxes” for the application, in this case QR tools,
+- widgets: custom widgets that were developed for the need of the application.
 
 
 ## Contributors 
 It's a school project so actual contributors are 4 students in HES-SO Valais/Wallis in Switzerland.
-
-## Libraries 
-
-Several libraries were used to develop the functionalities ofour project. They can be found in the pubspec.yaml file.
-
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
